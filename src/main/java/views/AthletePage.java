@@ -105,7 +105,7 @@ public class AthletePage extends JPanel {
     }     
     public void setBtnsMode(boolean mode) {
         //editable or not regime
-        if (mode == true) {changeBtn.setText("Выйти");}
+        if (mode) {changeBtn.setText("Выйти");}
         else {changeBtn.setText("Изменить");}
         delBtn.setVisible(mode);
         addBtn.setVisible(mode);
