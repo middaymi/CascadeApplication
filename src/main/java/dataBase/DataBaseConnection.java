@@ -10,7 +10,8 @@ import java.util.logging.Logger;
 public class DataBaseConnection {
     
     private static DataBaseConnection DataBaseInstance = null;
-    private String dbURL = "jdbc:sqlserver://91.123.24.45;databaseName=cascade;integratedSecurity=false;user=sa;password=1908London";
+//    private String dbURL = "jdbc:sqlserver://91.123.24.45;databaseName=cascade;integratedSecurity=false;user=sa;password=1908London";
+    private String dbURL = "jdbc:sqlserver://localhost;instanceName=MSSQLSERVER;databaseName=TestDB;integratedSecurity=true;";
     private Connection DBconnection;
     
     private DataBaseConnection() { 

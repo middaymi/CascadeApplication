@@ -60,7 +60,6 @@ public class CompetitionIsuAthleteResult {
         // calculate total
         totalScore = elementScore + componentScore - deductions; 
         totalScore = Math.round(totalScore * 100.0f) / 100.0f;
-        
     }
     
     public void checkRank(HashMap<Integer, ElementData> elements, int rank) {

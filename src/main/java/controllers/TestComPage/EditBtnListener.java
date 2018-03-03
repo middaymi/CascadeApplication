@@ -81,7 +81,7 @@ public class EditBtnListener implements ActionListener{
                         break;
                     case(5):
                         JOptionPane.showMessageDialog(Manager.getTestCompPage(),
-                                "Информация по спортивным балтам доступна " +
+                                "Информация по спортивным балетам доступна " +
                                 "для редактирования только в таблице!",
                                 "Внимание!", JOptionPane.WARNING_MESSAGE);
                         break;
