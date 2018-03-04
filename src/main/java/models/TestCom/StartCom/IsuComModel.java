@@ -26,11 +26,11 @@ import views.Manager;
 import views.TestCom.StartCom.SingleStComPage;
 
 public class IsuComModel extends StComModel {
-    
+
     //athlets take part in selected competition  and their results   
     private HashMap<Integer, CompetitionIsuAthleteResult> athletesByComp = new HashMap<>();
     private Competition competition;
-    private ArrayList<Component> components = new ArrayList<>(); 
+    private ArrayList<Component> components = new ArrayList<>();
     private HashMap<Integer, ElementData> allElements = new HashMap<>();
     private HashMap<Integer, IsuElementType> allTypes = new HashMap<>();
     private float factor = 0;
@@ -38,177 +38,181 @@ public class IsuComModel extends StComModel {
     //generate empty or full protocol
     private int mode;
     private boolean isFinished = false;
-    
+
     private SingleStComPage singleComPage;
-    
+
     private CompetitionIsuAthleteResult CIAR;
-    
-    private IsuComModel() {}
-    
-    private static IsuComModel stComModelInstance = null;  
+
+    private HashMap<Integer, CompetitionIsuAthleteResult> CIARS;
+
+    private IsuComModel() {
+    }
+
+    private static IsuComModel stComModelInstance = null;
+
     public static IsuComModel getModelInstance() {
         if (stComModelInstance == null) {
             stComModelInstance = new IsuComModel();
         }
         return stComModelInstance;
     }
-    
+
     private Competition getSelCompetition() {
         int index = TestComModel.getTestComModelInstance().selRow();
         competition = TestComModel.getTestComModelInstance().
-                      getCompetitions().get(index);
+                getCompetitions().get(index);
         return competition;
     }
-    
+
     //judges***
     /*get judges, TAKING PART IN COMPETITION from DB
     save to array as data*/
     private void setJudges() {
-        tcModel = TestComModel.getTestComModelInstance();        
-        int selRow = tcModel.selRow();   
+        tcModel = TestComModel.getTestComModelInstance();
+        int selRow = tcModel.selRow();
         singleComPage = Manager.getSingleComPage();
-        String query;        
-        PreparedStatement prst = null;        
-        ResultSet rs = null;                         
+        String query;
+        PreparedStatement prst = null;
+        ResultSet rs = null;
         //database 
-        try {           
+        try {
             query = "SELECT JUDGE.ID, JUDGE.Surname, JUDGE.Name, " +
-                              "JUDGE.Middlename " +
-                        "FROM JUDGE, COMPETITION_JUDGE_LINK " +
-                        "WHERE COMPETITION_JUDGE_LINK.IDjudge = JUDGE.id " +
-                              "AND COMPETITION_JUDGE_LINK.IDcompetition = " + 
-                              tcModel.getValueAt(selRow, 1) + ";";
+                    "JUDGE.Middlename " +
+                    "FROM JUDGE, COMPETITION_JUDGE_LINK " +
+                    "WHERE COMPETITION_JUDGE_LINK.IDjudge = JUDGE.id " +
+                    "AND COMPETITION_JUDGE_LINK.IDcompetition = " +
+                    tcModel.getValueAt(selRow, 1) + ";";
             prst = getDBC().prepareStatement(query);
-            rs = prst.executeQuery();             
+            rs = prst.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(StComModel.class.getName()).
-                   log(Level.SEVERE, 
-                   "Do not take judges from DB for SFPstartComPage", ex);
-        }          
+                    log(Level.SEVERE,
+                            "Do not take judges from DB for SFPstartComPage", ex);
+        }
         //data        
-        try { 
+        try {
             //clear data
-            getJudgesByComp().clear(); 
+            getJudgesByComp().clear();
             singleComPage.getLstModel().clear();
             //get data   
             int i = 1;
-            while (rs.next()) {            
+            while (rs.next()) {
                 Judge judge = new Judge();
                 judge.setId(rs.getInt(1));
                 judge.setSurname(rs.getString(2));
                 judge.setName(rs.getString(3));
-                judge.setMiddlename(rs.getString(4));                
-                getJudgesByComp().add(judge);  
-                String str = "<html>"+ i + ". " + judge.getSurname() + " " +
-                                        judge.getName() +
-                                        "<p align=left>" + 
-                                        judge.getMiddlename() + 
-                             "</html>";                         
-                singleComPage.getLstModel().addElement(str);                
+                judge.setMiddlename(rs.getString(4));
+                getJudgesByComp().add(judge);
+                String str = "<html>" + i + ". " + judge.getSurname() + " " +
+                        judge.getName() +
+                        "<p align=left>" +
+                        judge.getMiddlename() +
+                        "</html>";
+                singleComPage.getLstModel().addElement(str);
                 i++;
             }
             prst.close();
             rs.close();
         } catch (SQLException ex) {
-                Logger.getLogger(StComModel.class.getName()).
-                       log(Level.SEVERE, 
-                "Do not set judges for SFPstartComPage", ex);
-        }        
+            Logger.getLogger(StComModel.class.getName()).
+                    log(Level.SEVERE,
+                            "Do not set judges for Competition", ex);
+        }
     }
-    
+
     //athlets***
     /*get athletes, TAKING PART IN COMPETITION from DB
     save to array as data*/
     private void setAthletes() {
-        tcModel = TestComModel.getTestComModelInstance(); 
+        tcModel = TestComModel.getTestComModelInstance();
         int selRow = tcModel.selRow();
-        String query;        
-        PreparedStatement prst = null;        
-        ResultSet rs = null;                                 
-        try {           
+        String query;
+        PreparedStatement prst = null;
+        ResultSet rs = null;
+        try {
             query = "SELECT DISTINCT ATHLETE.ID, " +
-                            "ATHLETE.Surname, ATHLETE.Name, " +
-                            "ATHLETE.Middlename, ATHLETE.Birthday " +
-                        "FROM COMPETITION, COMPETITION_ATHLETE_LINK, " +
-                            "ATHLETE " +
-                        "WHERE COMPETITION_ATHLETE_LINK.IDcompetition = " + 
-                    tcModel.getValueAt(selRow, 1) +  
+                    "ATHLETE.Surname, ATHLETE.Name, " +
+                    "ATHLETE.Middlename, ATHLETE.Birthday " +
+                    "FROM COMPETITION, COMPETITION_ATHLETE_LINK, " +
+                    "ATHLETE " +
+                    "WHERE COMPETITION_ATHLETE_LINK.IDcompetition = " +
+                    tcModel.getValueAt(selRow, 1) +
                     "AND ATHLETE.ID = COMPETITION_ATHLETE_LINK.IDathlete;";
             prst = getDBC().prepareStatement(query);
-            rs = prst.executeQuery();           
+            rs = prst.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(StComModel.class.getName()).
-                   log(Level.SEVERE, 
-           "Do not take athlets from DB for SFPstartComPage", ex);
-        } 
+                    log(Level.SEVERE,
+                            "Do not take athlets from DB for SFPstartComPage", ex);
+        }
         //data
         try {
             //clear the data
-            getAthletesByComp().clear();  
+            getAthletesByComp().clear();
             singleComPage.getAthlCmb().removeAllItems();
             //get data        
-            while (rs.next()) {            
+            while (rs.next()) {
                 Athlete athlete = new Athlete();
                 athlete.setId(rs.getInt(1));
                 athlete.setName(rs.getString(3));
                 athlete.setSurname(rs.getString(2));
-                athlete.setMiddlename(rs.getString(4)); 
+                athlete.setMiddlename(rs.getString(4));
                 athlete.setBirthday(rs.getDate(5));
                 singleComPage.getAthlCmb().addItem(athlete);
-            }            
+            }
             rs.close();
             prst.close();
             singleComPage.getAthlCmb().setSelectedItem(null);
             singleComPage.getAthlCmb().addActionListener(new controllers.TestComPage.SingleComPage.
-                                                              SetAthlete()); 
-            
+                    SetAthlete());
+
         } catch (SQLException ex) {
-                Logger.getLogger(StComModel.class.getName()).
-                       log(Level.SEVERE, 
-               "Do not set athlets for SingleStartCompetition class", ex);
-        }        
+            Logger.getLogger(StComModel.class.getName()).
+                    log(Level.SEVERE,
+                            "Do not set athlets for SingleStartCompetition class", ex);
+        }
     }
-    
+
     //element types***
     /*get element types from DB
     save to array as data*/
-    private void setTypes() {                
-        String query;        
-        PreparedStatement prst = null;        
-        ResultSet rs = null;                                 
-        try {           
+    private void setTypes() {
+        String query;
+        PreparedStatement prst = null;
+        ResultSet rs = null;
+        try {
             query = "SELECT * FROM ISU_ELEMENT_TYPE";
             prst = getDBC().prepareStatement(query);
-            rs = prst.executeQuery();          
-            while(rs.next()) {
+            rs = prst.executeQuery();
+            while (rs.next()) {
                 IsuElementType type = new IsuElementType();
                 type.setId(rs.getInt(1));
                 type.setFullName(rs.getString(2));
                 type.setDescription(rs.getString(3));
-                getAllTypes().put(type.getId(), type);                  
+                getAllTypes().put(type.getId(), type);
             }
             prst.close();
-            rs.close();                        
-            
+            rs.close();
+
         } catch (SQLException ex) {
             Logger.getLogger(StComModel.class.getName()).
-                   log(Level.SEVERE, 
-           "Do not take element's types from DB", ex);
-        } 
+                    log(Level.SEVERE,
+                            "Do not take element's types from DB", ex);
+        }
     }
-    
+
     //elements***
     /*get all elements from DB
     save to array as data*/
     private void setElements() {
-        String query;        
-        PreparedStatement prst = null;        
-        ResultSet rs = null;                                 
-        try {           
+        String query;
+        PreparedStatement prst = null;
+        ResultSet rs = null;
+        try {
             query = "SELECT * FROM ISU_ELEMENT";
             prst = getDBC().prepareStatement(query);
-            rs = prst.executeQuery();          
-            while(rs.next()) {
+            rs = prst.executeQuery();
+            while (rs.next()) {
                 ElementData element = new ElementData();
                 element.setId(rs.getInt(1));
                 element.setAbbreviation(rs.getString(2));
@@ -229,116 +233,196 @@ public class IsuComModel extends StComModel {
                 allElements.put(element.getId(), element);
             }
             IsuElementsData.setData(allElements);
-        rs.close();
-        prst.close();
+            rs.close();
+            prst.close();
         } catch (SQLException ex) {
-                Logger.getLogger(StComModel.class.getName()).
-                       log(Level.SEVERE, 
-               "Do not set elementsIsu", ex);
-        }         
+            Logger.getLogger(StComModel.class.getName()).
+                    log(Level.SEVERE,
+                            "Do not set elementsIsu", ex);
+        }
     }
-    
+
     //selected rank***
     private void setRank() {
-        tcModel = TestComModel.getTestComModelInstance(); 
+        tcModel = TestComModel.getTestComModelInstance();
         int selRow = tcModel.selRow();
-        String query;        
-        PreparedStatement prst = null;        
-        ResultSet rs = null;                                 
-        try {           
-            query = "SELECT * FROM RANK WHERE ID = " + 
-                     tcModel.getCompetitions().get(selRow).getRankId() + ";";
+        String query;
+        PreparedStatement prst = null;
+        ResultSet rs = null;
+        try {
+            query = "SELECT * FROM RANK WHERE ID = " +
+                    tcModel.getCompetitions().get(selRow).getRankId() + ";";
             prst = getDBC().prepareStatement(query);
-            rs = prst.executeQuery();          
+            rs = prst.executeQuery();
             //get items
-            while (rs.next()) {                            
+            while (rs.next()) {
                 rank.setId(rs.getInt(1));
                 rank.setFullName(rs.getString(2));
                 rank.setRequirements(rs.getString(3));
-                rank.setProgramStructure(rs.getString(4)); 
-                rank.setProgramsCount(rs.getInt(5));     
+                rank.setProgramStructure(rs.getString(4));
+                rank.setProgramsCount(rs.getInt(5));
             }
             prst.close();
             rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(StComModel.class.getName()).
-                   log(Level.SEVERE, 
-           "Do not take selected rank from DB", ex);
+                    log(Level.SEVERE,
+                            "Do not take selected rank from DB", ex);
         }
     }
-    
+
     //components***
-    private void setComponents(){
+    private void setComponents() {
         components.clear();
         singleComPage.getCompPanel().removeAll();
-        String query;        
-        PreparedStatement prst = null;        
+        String query;
+        PreparedStatement prst = null;
         ResultSet rs = null;
-        try {           
+        try {
             query = "SELECT COMPONENT_RANK_LINK.IDcomponent, " +
-                            "COMPONENT_RANK_LINK.IDrank, " +
-                            "COMPONENT.FullNameENG, COMPONENT.FullNameRUS, " +
-                            "COMPONENT.Description " +
+                    "COMPONENT_RANK_LINK.IDrank, " +
+                    "COMPONENT.FullNameENG, COMPONENT.FullNameRUS, " +
+                    "COMPONENT.Description " +
                     "FROM COMPONENT_RANK_LINK, COMPONENT " +
                     "WHERE IDrank = " + competition.getRankId() + " " +
-                    "AND COMPONENT_RANK_LINK.IDcomponent = COMPONENT.ID;";             
+                    "AND COMPONENT_RANK_LINK.IDcomponent = COMPONENT.ID;";
             prst = getDBC().prepareStatement(query);
-            rs = prst.executeQuery();                      
-            while (rs.next()) {   
+            rs = prst.executeQuery();
+            while (rs.next()) {
                 Component component = new Component();
                 component.setId(rs.getInt(1));
                 component.setRankId(rs.getInt(2));
                 component.setFullNameENG(rs.getString(3));
                 component.setFullNameRUS(rs.getString(4));
                 component.setDescription(rs.getString(5));
-                components.add(component);                                
+                components.add(component);
             }
             prst.close();
             rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(StComModel.class.getName()).
-                   log(Level.SEVERE, 
-           "Do not take selected rank from DB", ex);
+                    log(Level.SEVERE,
+                            "Do not take selected rank from DB", ex);
         }
     }
-    
-    public void setAllData() { 
+
+    public void setAllData() {
         //set mode empty
         mode = 0;
-        
+
         //get a competition
         getSelCompetition();
-        
+
         //get the last link of panel
         singleComPage = Manager.getSingleComPage();
-                
+
         //set name of competition and rank
         singleComPage.setFulllName(competition.getFullName());
         setRank();
-        singleComPage.setRank(rank.getFullName());              
-        
+        singleComPage.setRank(rank.getFullName());
+
         //clearing arrays are at these methods
         singleComPage.getElRows().clear();
         setAthletes();
-        setJudges(); 
+        setJudges();
         setTypes();
         setElements();
         setComponents();
-        this.factor = IsuElementsData.getFactor(this.competition.getRankId());        
-        singleComPage.createLbls();        
+        this.factor = IsuElementsData.getFactor(this.competition.getRankId());
+        singleComPage.createLbls();
     }
-    
+
+    public void setAllDataForFinishedCompetition() {
+        //set mode empty
+        //????
+        mode = 1;
+
+        //get a competition
+        getSelCompetition();
+
+        //get the last link of panel
+        singleComPage = Manager.getSingleComPage();
+
+        //set name of competition and rank
+        singleComPage.setFulllName(competition.getFullName());
+        setRank();
+        singleComPage.setRank(rank.getFullName());
+
+        //clearing arrays are at these methods
+        singleComPage.getElRows().clear();
+        setAthletes();
+        singleComPage.createLbls();
+
+        //get result data
+        getCIARsFromDB();
+    }
+
     public boolean checkDeductionsAndComponentsValue(String deductions) {
-        Pattern p = Pattern.compile("^\\d+?((\\.|\\,)[0-9]{0,2})?$");  
-        Matcher m = p.matcher(deductions);  
+        Pattern p = Pattern.compile("^\\d+?((\\.|\\,)[0-9]{0,2})?$");
+        Matcher m = p.matcher(deductions);
         return m.matches();
-    } 
+    }
+
+    private void getCIARsFromDB() {
+        //all final results by competition
+        CIARS = new HashMap<>();
+        PreparedStatement prst = null;
+        ResultSet rs = null;
+        String query;
+
+        try {
+            query = "SELECT R.IDathlete, A.Surname, A.Name, A.Middlename, " +
+                    "A.IDrank, A.Sex,\n" +
+                    "R.ID as IDresult, R.Place, R.SumResult,\n" +
+                    "R.isDone, R.StartNumber, R.SumOfAllElements, R.SumOfAllComponents,\n" +
+                    "R.Deductions\n" +
+                    "FROM RESULT as R, ATHLETE as A \n" +
+                    "WHERE IDcompetition = " + competition.getId() + " " +
+                    "AND R.IDathlete = A.ID;";
+
+            prst = getDBC().prepareStatement(query);
+            rs = prst.executeQuery();
+
+            while (rs.next()) {
+                Athlete athlete = new Athlete();
+                athlete.setId(rs.getInt(1));
+                athlete.setSurname(rs.getString(2));
+                athlete.setName(rs.getString(3));
+                athlete.setMiddlename(rs.getString(4));
+                athlete.setIdrank(rs.getInt(5));
+                athlete.setSex(rs.getBoolean(6));
+
+                CompetitionIsuAthleteResult CIAR =
+                        new CompetitionIsuAthleteResult(athlete);
+
+                //result field
+                CIAR.setResultId(rs.getInt(7));
+                CIAR.setPlace(rs.getInt(8));
+                CIAR.setTotalScore(rs.getFloat(9));
+                CIAR.setIsDone(rs.getBoolean(10));
+                CIAR.setStartNumber(rs.getInt(11));
+                CIAR.setElementScore(rs.getFloat(12));
+                CIAR.setComponentScore(rs.getFloat(13));
+                CIAR.setDeductions(rs.getFloat(14));
+
+                CIARS.put(athlete.getId(), CIAR);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(IsuComModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+
+
+
+
     
 //    private boolean isAthleteResultInDB(ArrayList<Judge>judges) {
 //        PreparedStatement prst = null;
 //        ResultSet rs = null;
 //        String query;
-//        
+//
 //        try {
 //            query = "SELECT R.IDathlete, A.Surname, A.Name, A.Middlename, " +
 //                    "A.IDrank, A.Sex,\n" +
@@ -346,15 +430,15 @@ public class IsuComModel extends StComModel {
 //                    "R.isDone, R.StartNumber, R.SumOfAllElements, R.SumOfAllComponents,\n" +
 //                    "R.Deductions\n" +
 //                    "FROM RESULT as R, ATHLETE as A \n" +
-//                    "WHERE IDcompetition = " + competition.getId() + " " + 
+//                    "WHERE IDcompetition = " + competition.getId() + " " +
 //                    "AND R.IDathlete = A.ID;";
-//                        
+//
 //            prst = getDBC().prepareStatement(query);
 //            rs = prst.executeQuery();
-//            
-//            //all final results by competition 
+//
+//            //all final results by competition
 //            HashMap<Integer, CompetitionIsuAthleteResult> CIARS = new HashMap<>();
-//            while (rs.next()) {                
+//            while (rs.next()) {
 //                Athlete athlete = new Athlete();
 //                athlete.setId(rs.getInt(1));
 //                athlete.setSurname(rs.getString(2));
@@ -362,9 +446,9 @@ public class IsuComModel extends StComModel {
 //                athlete.setMiddlename(rs.getString(4));
 //                athlete.setIdrank(rs.getInt(5));
 //                athlete.setSex(rs.getBoolean(6));
-//                CompetitionIsuAthleteResult CIAR = 
+//                CompetitionIsuAthleteResult CIAR =
 //                        new CompetitionIsuAthleteResult(athlete);
-//                
+//
 //                //result field
 //                CIAR.setResultId(rs.getInt(7));
 //                CIAR.setPlace(rs.getInt(8));
@@ -374,19 +458,19 @@ public class IsuComModel extends StComModel {
 //                CIAR.setElementScore(rs.getFloat(12));
 //                CIAR.setComponentScore(rs.getFloat(13));
 //                CIAR.setDeductions(rs.getFloat(14));
-//                
+//
 //                ElementIsu elIsu = new ElementIsu();
-//                
+//
 //                ComponentIsu compIsu = new ComponentIsu();
-//                
+//
 //                //compIsu.setJudgesValues(getCompJudMarks(athlete.getId()));
 //
-//                CIARS.put(athlete.getId(), CIAR);                
+//                CIARS.put(athlete.getId(), CIAR);
 //            }
-//            
+//
 //        } catch (SQLException ex) {
 //            Logger.getLogger(IsuComModel.class.getName()).log(Level.SEVERE, null, ex);
-//        }        
+//        }
 //    }
     
 //    private HashMap<Integer, ComponentValue> getCompJudMarks(int athleteId) {
@@ -472,8 +556,10 @@ public class IsuComModel extends StComModel {
         return athletesByComp;
     }
 
-    public CompetitionIsuAthleteResult getCIAR() {
-        return CIAR;
+    public CompetitionIsuAthleteResult getCIAR() { return CIAR; }
+
+    public CompetitionIsuAthleteResult getCIAR(int athleteId) {
+        return CIARS.get(athleteId);
     }
 
     public void setCIAR(CompetitionIsuAthleteResult CIAR) {

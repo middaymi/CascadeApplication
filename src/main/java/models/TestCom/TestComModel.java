@@ -30,7 +30,7 @@ public class TestComModel extends AbstractTableModel {
     //table headers
     private String titles[] = {"Тип", "IDсор", "IDтипа", "Название", 
                                "<html>Внешн/<p>внутр<html>", "Дата и время", 
-                               "Адрес", "Описание", "IDРазряда"};    
+                               "Адрес", "Описание", "IDРазряда", "isFinished"};
     //viewing in table column names_rus
     private ArrayList <String> columnNames = new ArrayList();    
     //list of columns type 
@@ -169,6 +169,9 @@ public class TestComModel extends AbstractTableModel {
                             break;
                         case ("IDrank"):
                             rowCompetition.setRankId(rs.getInt(i + 1));                            
+                            break;
+                        case ("isFinished"):
+                            rowCompetition.setFinish(rs.getBoolean(i + 1));
                             break;
                     }                        
                 }

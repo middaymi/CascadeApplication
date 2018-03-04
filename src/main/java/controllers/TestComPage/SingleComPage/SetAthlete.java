@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import models.TestCom.StartCom.IsuComModel;
@@ -28,11 +30,29 @@ public class SetAthlete implements ActionListener {
         manager = Manager.getManagerInstance();
         singleComPage = manager.getSingleComPage();
         isuComModel = IsuComModel.getModelInstance();
-        
+
+        //athlete is selected
         if (singleComPage.getAthlCmb().getSelectedItem() != null) {
+
+
+
+            //competition is finished
+            if (isuComModel.getCompetition().isFinished()) {
+
+                //create new data
+                Athlete athlete = (Athlete)(singleComPage.getAthlCmb().getSelectedItem());
+                CompetitionIsuAthleteResult CIAR = isuComModel.getCIAR(athlete.getId());
+                CIARtoFront(CIAR);
+                return;
+            }
+
+
+
             //new for save
-            isuComModel.setFinished(false);
-            
+            //isuComModel.setFinished(false);
+            singleComPage.enableAddElemBtn(true);
+            singleComPage.enableFinBtn(true);
+
             //set disabled radioBtns points/marks
             singleComPage.setEnabledPoints(false);
             singleComPage.setEnabledMarks(false);
@@ -137,6 +157,15 @@ public class SetAthlete implements ActionListener {
             }
         }
         return 0;
+    }
+
+    private void CIARtoFront(CompetitionIsuAthleteResult ciar) {
+        String[] texts = {  String.valueOf(ciar.getStartNumber()),
+                            String.valueOf(ciar.getTotalScore()),
+                            String.valueOf(ciar.getElementScore()),
+                            String.valueOf(ciar.getComponentScore()),
+                            String.valueOf(ciar.getDeductions())};
+        singleComPage.setReusltsToTopPnl(texts);
     }
 }
 

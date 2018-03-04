@@ -48,7 +48,7 @@ public class StComModel {
     private HashMap<Integer, PointsTable> standards = new HashMap<>();
     
     private ArrayList<ArrayList<MarkCellData>> marksList = 
-                   new ArrayList<ArrayList<MarkCellData>>();
+                   new ArrayList();
     
     Competition competition;
     
@@ -208,6 +208,10 @@ public class StComModel {
             stComPage.setFields(marksList, 100);
         }
     }
+
+    public void setAllDataForFinishedCompetition() {
+        // TODO: disable fiels if competition is finished
+    }
     
     //athlets***
     /*get athletes, TAKING PART IN COMPETITION from DB
@@ -254,7 +258,7 @@ public class StComModel {
         } catch (SQLException ex) {
                 Logger.getLogger(StComModel.class.getName()).
                        log(Level.SEVERE, 
-               "Do not set athlets for SFPstartComPage", ex);
+               "Do not set athlets for Competition", ex);
         }        
     }
     
@@ -276,6 +280,7 @@ public class StComModel {
                         "WHERE COMPETITION_JUDGE_LINK.IDjudge = JUDGE.id " +
                               "AND COMPETITION_JUDGE_LINK.IDcompetition = " + 
                               tcModel.getValueAt(selRow, 1) + ";";
+            System.out.println(query);
             prst = DBC.prepareStatement(query);
             rs = prst.executeQuery();             
         } catch (SQLException ex) {
@@ -385,7 +390,7 @@ public class StComModel {
                        log(Level.SEVERE, 
                 "Do not set elements for SFPstartComPage", ex);
         }        
-    }  
+    }
     
     /**
      * TODO
