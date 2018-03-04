@@ -29,6 +29,7 @@ public class TestComColumnModel {
         columnModel.removeColumn((TableColumn)columnModel.getColumn(1));
         columnModel.removeColumn((TableColumn)columnModel.getColumn(1));
         columnModel.removeColumn((TableColumn)columnModel.getColumn(6));
+        columnModel.removeColumn((TableColumn) columnModel.getColumn(6));
         columnModel.moveColumn(1, 0);        
         renderCenter.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
         renderToolTipText.setToolTipText("Отметка ставится у внешнего соревнования");

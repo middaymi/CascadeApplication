@@ -70,6 +70,8 @@ public class SingleStComPage extends JPanel {
     
     //btns
     private JButton savePrBtn;
+    private JButton addElemBtn;
+    private JButton finBtn;
     
     //array of gui elements
     private ArrayList<ElementRow> elRows = new ArrayList<>();    
@@ -100,7 +102,7 @@ public class SingleStComPage extends JPanel {
         createFinishBtn();
         createRadioBtns();
         createSaveProtocolBtn();             
-        addElement(); 
+        createAddElemBtn();
         setEditableTopPnl(false);        
         deductionsTF.setEditable(true);
     }
@@ -346,7 +348,7 @@ public class SingleStComPage extends JPanel {
     }  
           
     private void createFinishBtn() {
-        JButton finBtn = new JButton("<html>Подвести итог<p align=center>" +
+        finBtn = new JButton("<html>Подвести итог<p align=center>" +
                                                      "по спортсмену<html>");
         finBtn.setSize(430, 100);
         finBtn.setLocation(2688, 700);
@@ -408,15 +410,15 @@ public class SingleStComPage extends JPanel {
         elRows.add(el); 
     }
     
-    public void addElement() { 
-        JButton btn = new JButton("Добавить элемент");
-        btn.setSize(300, 70);
-        btn.setLocation(50, 1060);
-        btn.setBackground(Color.LIGHT_GRAY); 
-        CommonSettings.settingFont30(btn);
-        this.add(btn);
-               
-        btn.addActionListener(new ActionListener() {
+    public void createAddElemBtn() {
+        addElemBtn = new JButton("Добавить элемент");
+        addElemBtn.setSize(300, 70);
+        addElemBtn.setLocation(50, 1060);
+        addElemBtn.setBackground(Color.LIGHT_GRAY);
+        CommonSettings.settingFont30(addElemBtn);
+        this.add(addElemBtn);
+
+        addElemBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (athlCmb.getSelectedItem() != null) {
@@ -456,8 +458,14 @@ public class SingleStComPage extends JPanel {
                          IsuComModel.getModelInstance().getComponentsList(),
                          IsuComModel.getModelInstance().getFactor());
     }
-    
-    
+
+    //enable/disable add element function
+    public void enableAddElemBtn(boolean value) {
+        addElemBtn.setEnabled(value);
+    }
+
+    public void enableFinBtn(boolean value) { finBtn.setEnabled(value); }
+
     //GETTERS|SETTERS***********************************************************
     public DefaultListModel getLstModel() {
         return lstModel;
@@ -523,6 +531,8 @@ public class SingleStComPage extends JPanel {
         return savePrBtn;
     }
 
+    public JButton getAddElemBtnBtn() { return addElemBtn; }
+
     public void setEnabledSavePrBtn(boolean value) {
         this.savePrBtn.setEnabled(value);
     }
@@ -557,6 +567,14 @@ public class SingleStComPage extends JPanel {
         for (JTextField tf : fields) {
             tf.setEditable(value);
         }        
+    }
+
+    public void setReusltsToTopPnl(String[] textOfFields) {
+        startTF.setText(textOfFields[0]);
+        totalScoreTF.setText(textOfFields[1]);
+        elementScoreTF.setText(textOfFields[2]);
+        componentScoreTF.setText(textOfFields[3]);
+        deductionsTF.setText(textOfFields[4]);
     }
     
     public void setTotalScore(String str) {

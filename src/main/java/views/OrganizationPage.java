@@ -135,7 +135,7 @@ public class OrganizationPage extends JPanel {
         legalAddressField = new JTextField(orgData.getLegalAddress());
         actualAddressField = new JTextField(orgData.getActualAddress());         
     }
-    //posible to change or not    
+    //possible to change or not
     public void setEditableTextFiels(boolean b) {
         fullNameField.setEditable(b);
         phoneNumberField.setEditable(b);

@@ -49,6 +49,8 @@ public class FinishComByAthlete implements ActionListener{
                     compRow.setEnabledCompRowComponents(false);
                 }
                 //singleComPage.setEditableTopPnl(false);
+                singleComPage.enableAddElemBtn(false);
+                singleComPage.enableFinBtn(false);
 
                 //get a result
                 CompetitionIsuAthleteResult CIAR = IsuComModel.getModelInstance().getCIAR();
