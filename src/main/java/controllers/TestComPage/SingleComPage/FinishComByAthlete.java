@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +32,10 @@ public class FinishComByAthlete implements ActionListener{
         
         if (singleComPage.getAthlCmb().getSelectedItem() != null) {
             if (checkAmountInputAllValues()) {
+
+                //mark as finished
+                setFinishedFlagInDB();
+
                 //enable btn save protocol in pdf
                 isuComModel.setMode(1);
 
@@ -85,7 +90,19 @@ public class FinishComByAthlete implements ActionListener{
             "Ошибка", JOptionPane.WARNING_MESSAGE);
             return;
         }       
-    }  
+    }
+
+    private void setFinishedFlagInDB() {
+        String query = String.format("update COMPETITION set isFinished = 1 where ID = %s;",
+                isuComModel.getCompetition().getId());
+        Statement st = null;
+        try {
+            st = isuComModel.getDBC().createStatement();
+            st.executeUpdate(query);
+        } catch (SQLException | NullPointerException ex) {
+            ex.getStackTrace();
+        }
+    }
     
     //add an athlete result
     private void addAthleteResult(CompetitionIsuAthleteResult CIAR) {

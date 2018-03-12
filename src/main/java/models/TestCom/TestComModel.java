@@ -327,11 +327,12 @@ public class TestComModel extends AbstractTableModel {
             while (rs.next()) {
                 tempID = rs.getInt(1)+ 1;
                 newRow.setId(tempID);
+                System.out.println("NEW ID + " + tempID);
             }            
             
             //add empty row
             query = "INSERT INTO COMPETITION " +
-                    "VALUES (1, '', 0, GETDATE(), '', '', null);";               
+                    "VALUES (1, '', 0, GETDATE(), '', '', null, 0);";
 
             System.out.println(query);
             PreparedStatement pstmt = DBC.prepareStatement(query);

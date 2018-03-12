@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 public class ComponentIsu {
     
-    private int componentId = 0; //+
+    private int componentId = 0;
     private float scores = 0;   
-    private HashMap<Integer, ComponentValue> judgesValues = new HashMap<>(); //+    
+    private HashMap<Integer, ComponentValue> judgesValues = new HashMap<>();
 
     public int getComponentId() {
         return componentId;
@@ -23,6 +23,9 @@ public class ComponentIsu {
 
     public void setJudgesValues(HashMap<Integer, ComponentValue> judgesValues) {
         this.judgesValues = judgesValues;
+    }
+    public void addJudgesValues(Integer compValID, ComponentValue compValue) {
+        judgesValues.put(compValID, compValue);
     }
 
     public float getScores() {

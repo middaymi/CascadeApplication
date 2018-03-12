@@ -47,8 +47,7 @@ public class StComModel {
     
     private HashMap<Integer, PointsTable> standards = new HashMap<>();
     
-    private ArrayList<ArrayList<MarkCellData>> marksList = 
-                   new ArrayList();
+    private ArrayList<ArrayList<MarkCellData>> marksList = new ArrayList();
     
     Competition competition;
     
@@ -187,6 +186,7 @@ public class StComModel {
         //remove all components at
         stComPage.getMainPanel().removeAll();
         int competitionKind = (int) tcModel.getValueAt(tcModel.selRow(), 2);
+
         if (competitionKind == 2) {
             loadOFPTables();
         }
@@ -745,4 +745,6 @@ public class StComModel {
     public void setMode(int mode) {
         this.mode = mode;
     }
+
+    public void clearResults() {}
 }

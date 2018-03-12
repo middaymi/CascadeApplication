@@ -499,7 +499,7 @@ public class SingleStComPage extends JPanel {
         return elRows;
     }
     
-    public ArrayList<ComponentRow> getCompRows() {
+    public ArrayList<ComponentRow>  getCompRows() {
         return compRows;
     }
 

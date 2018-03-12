@@ -57,7 +57,7 @@ public class ComponentRow extends JPanel {
         
         this.componentData = component;
         componentIsu.setComponentId(componentData.getId());
-        
+
         createNumberLbl();
         createEmpty1Lbl();
         createComponentLbl();
@@ -78,7 +78,7 @@ public class ComponentRow extends JPanel {
         CommonSettings.settingNarrowLightGrayBorder(number);
         this.add(number);                
     }
-    
+
     private void createEmpty1Lbl() {
         empty1.setSize(500, 70);
         empty1.setLocation(120, 0); 
@@ -134,6 +134,9 @@ public class ComponentRow extends JPanel {
                 @Override
                 public void changedUpdate(DocumentEvent e) {
                     if (singleStComPage.getAthlCmb().getSelectedItem() != null) {
+                        if (isuComModel.getCompetition().isFinished()) {
+                            return;
+                        }
                         ComponentValue componentValue = 
                                 componentIsu.getJudgesValues().get(judge.getId());                        
                         //gettext by entered field

@@ -16,6 +16,8 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import lombok.Data;
 import models.TestCom.StartCom.IsuComModel;
 import models.TestCom.TestComModel;
 import views.CommonSettings;
@@ -30,6 +32,10 @@ public class ElementRow extends JPanel {
     public void setJudgeMarks(ArrayList<JComboBox> judgeMarks) {
         this.judgeMarks = judgeMarks;
     }
+    public void setElementTypeCmb(int typeID) {elementTypeCmb.setSelectedItem(typeID);}
+    public void setElementCmb(int elementID) {elementCmb.setSelectedItem(elementID);}
+    public void setInfo(String infoVal) {info.setSelectedItem(infoVal);}
+    public void setBase(String baseVal) {base.setText(baseVal);}
 
     private JLabel numbLabel;
     private JComboBox elementTypeCmb;
@@ -89,6 +95,10 @@ public class ElementRow extends JPanel {
         CommonSettings.settingFont30(numbLabel);
         CommonSettings.settingNarrowLightGrayBorder(numbLabel);
         this.add(numbLabel);                
+    }
+
+    public void setTextNumbLbl(String text) {
+        numbLabel.setText(text);
     }
     
     //flag for changing base value by selecting element
@@ -247,7 +257,7 @@ public class ElementRow extends JPanel {
             int mark = elVal.getMark();
             int elId = elVal.getElementId();
             int judId = elVal.getJudgeId();
-            
+
             if(!elVal.isSaved()) {
                 //insert to database
                 query = "INSERT INTO ALL_RESULTS_ELEMENTS " +
@@ -309,4 +319,6 @@ public class ElementRow extends JPanel {
             c.setForeground(Color.WHITE);
         }
     }
+
+
 }
