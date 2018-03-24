@@ -27,7 +27,6 @@ public class SetAthlete implements ActionListener {
 
         //athlete is selected
         if (singleComPage.getAthlCmb().getSelectedItem() != null) {
-
             Athlete athlete = (Athlete) (singleComPage.getAthlCmb().getSelectedItem());
 
             //competition is finished for Athlete
@@ -60,30 +59,6 @@ public class SetAthlete implements ActionListener {
             singleComPage.setEnabledMarks(false);
             singleComPage.setSelectedRadioBtn(singleComPage.getMarks());
             //singleComPage.setEditableTopPnl(true);
-
-//            //clear last data
-//            //elements
-//            for (ElementRow row : singleComPage.getElRows()) {
-//                singleComPage.getElPanel().remove(row);
-//                row.setScoreText("");
-//            }
-//            singleComPage.getElPanel().updateUI();
-//            singleComPage.getElPanel().repaint();
-//            singleComPage.getElRows().clear();
-//            //components
-//            for (ComponentRow row : singleComPage.getCompRows()) {
-//                row.setTextJMFields("");
-//                row.setEnabledCompRowComponents(true);
-//                //row.setComponentIsu(new ComponentIsu());
-//                row.setScoreText("");
-//                singleComPage.getCompPanel().repaint();
-//                //singleComPage.getCompPanel().updateUI();
-//            }
-//            //top panel
-//            singleComPage.setTextDeductions("");
-//            singleComPage.setTotalScore("");
-//            singleComPage.setElementScore("");
-//            singleComPage.setComponentScore("");
 
             //create new data
             CompetitionIsuAthleteResult CIAR = new CompetitionIsuAthleteResult(athlete);

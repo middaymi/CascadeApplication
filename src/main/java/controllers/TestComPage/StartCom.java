@@ -53,13 +53,6 @@ public class StartCom implements ActionListener {
                     }
 
                     manager.choosePanel(62);
-
-                    //competition is finished
-                    if (competition.isFinished()) {
-                        model.setAllDataForFinishedCompetition();
-                        return;
-                    }
-
                     model.setAllData();
                     break;
 

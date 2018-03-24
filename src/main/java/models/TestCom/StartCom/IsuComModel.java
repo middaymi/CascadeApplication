@@ -55,6 +55,7 @@ public class IsuComModel extends StComModel {
         //if finished = true(1)
         String query = String.format("select * from RESULT where RESULT.IDathlete = %d and RESULT.IDcompetition = %d",
                 athleteID, competition.getId());
+
         PreparedStatement prst = null;
         ResultSet rs = null;
 
@@ -349,7 +350,7 @@ public class IsuComModel extends StComModel {
         //set mode empty
         mode = 0;
 
-        //get a competition
+        //get and set a competition
         getSelCompetition();
 
         //get the last link of panel
@@ -368,39 +369,6 @@ public class IsuComModel extends StComModel {
         setElements();
         setComponents();
         this.factor = IsuElementsData.getFactor(this.competition.getRankId());
-        singleComPage.createLbls();
-    }
-
-    public void setAllDataForFinishedCompetition() {
-        //set mode empty
-        //????
-        mode = 1;
-
-        //get a competition
-        getSelCompetition();
-
-        //get the last link of panel
-        singleComPage = Manager.getSingleComPage();
-
-        //set name of competition and rank
-        singleComPage.setFulllName(competition.getFullName());
-        setRank();
-        singleComPage.setRank(rank.getFullName());
-
-        //clearing arrays are at these methods
-        singleComPage.getElRows().clear();
-
-        setJudges();
-        setAthletes();
-        setComponents();
-        setTypes();
-        setElements();
-
-        this.factor = IsuElementsData.getFactor(this.competition.getRankId());
-
-        //get result data
-//        getCIARsFromDB();
-
         singleComPage.createLbls();
     }
 
@@ -418,14 +386,14 @@ public class IsuComModel extends StComModel {
         String query;
 
         try {
-            query = "SELECT R.IDathlete, A.Surname, A.Name, A.Middlename, " +
-                    "A.IDrank, A.Sex, " +
-                    "R.ID as IDresult, R.Place, R.SumResult, " +
-                    "R.isDone, R.StartNumber, R.SumOfAllElements, R.SumOfAllComponents, " +
-                    "R.Deductions " +
-                    "FROM RESULT as R, ATHLETE as A " +
-                    "WHERE IDcompetition = " + competition.getId() + " " +
-                    "AND R.IDathlete = A.ID;";
+            query = String.format("select R.IDathlete, A.Surname, A.Name, A.Middlename, A.IDrank, A.Sex, " +
+                    "R.ID as IDresult, R.Place, R.SumResult, R.isDone, R.StartNumber, R.SumOfAllElements, " +
+                    "R.SumOfAllComponents, R.Deductions, CPAL.isFinished " +
+                    "from ATHLETE as A " +
+                    "join RESULT as R on A.ID = R.IDathlete " +
+                    "join COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL on " +
+                    "R.IDcompetition = CPAL.IDcompetition and A.ID = CPAL.idAthlete " +
+                    "where R.IDcompetition = %d", competition.getId());
 
             prst = getDBC().prepareStatement(query);
             rs = prst.executeQuery();
@@ -451,6 +419,7 @@ public class IsuComModel extends StComModel {
                 CIAR.setElementScore(rs.getFloat(12));
                 CIAR.setComponentScore(rs.getFloat(13));
                 CIAR.setDeductions(rs.getFloat(14));
+                CIAR.setFinished(rs.getBoolean(15));
 
                 CIARS.put(athlete.getId(), CIAR);
             }

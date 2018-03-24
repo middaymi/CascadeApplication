@@ -210,7 +210,6 @@ public class StComModel {
     }
 
     public void setAllDataForFinishedCompetition() {
-        // TODO: disable fiels if competition is finished
     }
     
     //athlets***
