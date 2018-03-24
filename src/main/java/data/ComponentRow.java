@@ -134,7 +134,8 @@ public class ComponentRow extends JPanel {
                 @Override
                 public void changedUpdate(DocumentEvent e) {
                     if (singleStComPage.getAthlCmb().getSelectedItem() != null) {
-                        if (isuComModel.getCompetition().isFinished()) {
+                        Athlete athlete = (Athlete) singleStComPage.getAthlCmb().getSelectedItem();
+                        if (isuComModel.isFinishedCompetitionForAthlete(athlete.getId())) {
                             return;
                         }
                         ComponentValue componentValue = 
@@ -170,7 +171,6 @@ public class ComponentRow extends JPanel {
                         JOptionPane.INFORMATION_MESSAGE);  
                         return;
                     }
-                    System.out.println("CHANGED");
                 }
             });                          
         }         

@@ -27,30 +27,34 @@ public class SetAthlete implements ActionListener {
 
         //athlete is selected
         if (singleComPage.getAthlCmb().getSelectedItem() != null) {
+
             Athlete athlete = (Athlete) (singleComPage.getAthlCmb().getSelectedItem());
+
+            isuComModel.clearResults();
+
+            //create new data and set startNumber to field and data object
+            CompetitionIsuAthleteResult CIAR;
+            if (isuComModel.getCIARS().get(athlete.getId()) == null) {
+                CIAR = new CompetitionIsuAthleteResult(athlete);
+                ++startNumber;
+                CIAR.setStartNumber(startNumber);
+            } else {
+                CIAR = isuComModel.getCIARS().get(athlete.getId());
+                startNumber = CIAR.getStartNumber();
+            }
+            singleComPage.setStartTF(String.valueOf(startNumber));
+            singleComPage.getStartTF().setEditable(false);
 
             //competition is finished for Athlete
             if (isuComModel.isFinishedCompetitionForAthlete(athlete.getId())) {
-
-                isuComModel.clearResults();
-
-                //create new data
-                isuComModel.getCIARsFromDB();
-                CompetitionIsuAthleteResult CIAR = isuComModel.getCIAR(athlete.getId());
                 CIARtoFront(CIAR);
                 isuComModel.setCIAR(CIAR);
-
-                //allcommon data was downloaded when was a competition checkout
-
                 isuComModel.getComponentsResultFromDB();
                 isuComModel.setComponentResultsToFields();
 //                isuComModel.getElementsResultFromDB(athlete.getId());
                 return;
             }
 
-
-            //new for save
-            //isuComModel.setFinished(false);
             singleComPage.enableAddElemBtn(true);
             singleComPage.enableFinBtn(true);
 
@@ -58,22 +62,14 @@ public class SetAthlete implements ActionListener {
             singleComPage.setEnabledPoints(false);
             singleComPage.setEnabledMarks(false);
             singleComPage.setSelectedRadioBtn(singleComPage.getMarks());
-            //singleComPage.setEditableTopPnl(true);
-
-            //create new data
-            CompetitionIsuAthleteResult CIAR = new CompetitionIsuAthleteResult(athlete);
-
-            //set satrtNumber to field and data object
-            ++startNumber;
-            singleComPage.setStartTF(String.valueOf(startNumber));
-            singleComPage.getStartTF().setEditable(false);
-            CIAR.setStartNumber(startNumber);
+            //singleComPage.setEditableTopPnl(true)
 
             //set competition_performance_athlete_link
             CIAR.setCompetitionAthlId(getCompetitionAthlId(athlete));
 
             //save main object by selected athlete to isuModel class
             isuComModel.setCIAR(CIAR);
+            isuComModel.addCIARtoCIARs(athlete.getId(), CIAR);
 
             //set new ComponentIsu for each Component
             for (ComponentRow row : singleComPage.getCompRows()) {
@@ -91,9 +87,6 @@ public class SetAthlete implements ActionListener {
 
             //add new element-row
             singleComPage.addElementRow();
-
-        } else {
-            return;
         }
     }
 
@@ -108,7 +101,7 @@ public class SetAthlete implements ActionListener {
                     "IDcompetition = " + isuComModel.getCompetition().getId() + ";";
             String str1 = "INSERT INTO COMPETITION_PERFORMANCE_ATHLETE_LINK VALUES (" +
                     isuComModel.getCompetition().getId() + ", " + athlete.getId() +
-                    ", null);";
+                    ", null, 0);";
 
             prst = isuComModel.getDBC().prepareStatement(str);
             rs = prst.executeQuery();

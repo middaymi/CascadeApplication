@@ -1,10 +1,7 @@
 package controllers.TestComPage.SingleComPage;
 
-import data.CompetitionIsuAthleteResult;
-import data.ComponentIsu;
-import data.ComponentRow;
-import data.ElementIsu;
-import data.ElementRow;
+import data.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
@@ -29,12 +26,14 @@ public class FinishComByAthlete implements ActionListener{
         manager = Manager.getManagerInstance();
         singleComPage = manager.getSingleComPage();
         isuComModel = IsuComModel.getModelInstance();
-        
+
         if (singleComPage.getAthlCmb().getSelectedItem() != null) {
+            Athlete athlete = (Athlete) (singleComPage.getAthlCmb().getSelectedItem());
+
             if (checkAmountInputAllValues()) {
 
                 //mark as finished
-                setFinishedFlagInDB();
+                setFinishedFlagInDB(athlete.getId());
 
                 //enable btn save protocol in pdf
                 isuComModel.setMode(1);
@@ -59,7 +58,7 @@ public class FinishComByAthlete implements ActionListener{
 
                 //get a result
                 CompetitionIsuAthleteResult CIAR = IsuComModel.getModelInstance().getCIAR();
-
+                CIAR.setFinished(true);
                 //calculating values and check rank
                 CIAR.calculate(IsuComModel.getModelInstance().getFactor());
                 CIAR.checkRank(IsuComModel.getModelInstance().getAllElements(), 
@@ -92,9 +91,10 @@ public class FinishComByAthlete implements ActionListener{
         }       
     }
 
-    private void setFinishedFlagInDB() {
-        String query = String.format("update COMPETITION set isFinished = 1 where ID = %s;",
-                isuComModel.getCompetition().getId());
+    private void setFinishedFlagInDB(int IDathlete) {
+        String query = String.format("update COMPETITION_PERFORMANCE_ATHLETE_LINK " +
+                "set isFinished = 1 where IDathlete = %d and IDcompetition = %d;",
+                isuComModel.getCompetition().getId(), IDathlete);
         Statement st = null;
         try {
             st = isuComModel.getDBC().createStatement();

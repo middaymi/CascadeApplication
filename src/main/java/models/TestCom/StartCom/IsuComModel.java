@@ -1,5 +1,6 @@
 package models.TestCom.StartCom;
 
+import com.sun.xml.bind.v2.model.core.ID;
 import data.*;
 import data.Component;
 import models.TestCom.TestComModel;
@@ -72,6 +73,7 @@ public class IsuComModel extends StComModel {
         return false;
     }
 
+    //clear gui
     public void clearResults() {
         //elements
         for (ElementRow row : singleComPage.getElRows()) {
@@ -95,6 +97,7 @@ public class IsuComModel extends StComModel {
         singleComPage.setTotalScore("");
         singleComPage.setElementScore("");
         singleComPage.setComponentScore("");
+        singleComPage.setStartNumber("");
     }
 
     private Competition getSelCompetition() {
@@ -347,6 +350,7 @@ public class IsuComModel extends StComModel {
     }
 
     public void setAllData() {
+
         //set mode empty
         mode = 0;
 
@@ -370,6 +374,8 @@ public class IsuComModel extends StComModel {
         setComponents();
         this.factor = IsuElementsData.getFactor(this.competition.getRankId());
         singleComPage.createLbls();
+
+        getCIARsFromDB();
     }
 
     public boolean checkDeductionsAndComponentsValue(String deductions) {
@@ -485,42 +491,73 @@ public class IsuComModel extends StComModel {
         }
     }
 
-    public void getElementsResultFromDB(int athleteID) {
+    public void getElementsResultFromDB(int IDathlete) {
         PreparedStatement prst = null;
         ResultSet rs = null;
         float score;
         int elementNumber = 1;
 
         //get all elementRow without marks. IDType, IDisuElement, Info, Base
-        String withoutMarks = String.format("select IE.IDelementType, ARE.IDisuElement, Info, Base " +
-                "from ALL_RESULTS_ELEMENTS as ARE " +
-                "join ISU_ELEMENT as IE on ARE.IDisuElement = IE.ID " +
-                "join COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL on ARE.IDcompetitionPerformanceAthleteLink = CPAL.ID " +
-                "where CPAL.IDcompetition = %d and CPAL.IDathlete = %d", competition.getId(), athleteID);
+//        String withoutMarks = String.format("select IE.IDelementType, ARE.IDisuElement, Info, Base " +
+//                "from ALL_RESULTS_ELEMENTS as ARE " +
+//                "join ISU_ELEMENT as IE on ARE.IDisuElement = IE.ID " +
+//                "join COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL on ARE.IDcompetitionPerformanceAthleteLink = CPAL.ID " +
+//                "where CPAL.IDcompetition = %d and CPAL.IDathlete = %d", competition.getId(), IDathlete);
 
-        String withMarks = String.format("select IDType, IDisuElement, IDjudge, Mark " +
+        String withMarks = String.format("select IDType, IDisuElement, Info, Base, IDjudge, Mark " +
                 "from (select IDcompetitionPerformanceAthleteLink, Base, Info, Mark, IDjudge, IDcompetition, IDathlete, IDisuElement " +
                 "from ALL_RESULTS_ELEMENTS as ARE " +
                 "join COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL on ARE.IDcompetitionPerformanceAthleteLink = CPAL.ID " +
                 "where CPAL.IDcompetition = %d and IDathlete = %d) as tech " +
-                "join (select E.FullNameRUS, E.Abbreviation, T.ID as IDType, T.FullName, E.ID from ISU_ELEMENT as E join ISU_ELEMENT_TYPE as T on E.IDelementType = T.ID) as elem\n" +
-                "on tech.IDisuElement = elem.ID", competition.getId(), athleteID);
+                "join (select E.FullNameRUS, E.Abbreviation, T.ID as IDType, T.FullName, E.ID from ISU_ELEMENT as E join ISU_ELEMENT_TYPE as T on E.IDelementType = T.ID) as elem " +
+                "on tech.IDisuElement = elem.ID", competition.getId(), IDathlete);
         try {
             //common info for elementRow without marks
-            prst = getDBC().prepareStatement(withoutMarks);
+            prst = getDBC().prepareStatement(withMarks);
             rs = prst.executeQuery();
 
             int judgesNumbers = singleComPage.getLstModel().getSize();
+            int iter = 1;
+
+            ElementRow elRow = null;
+            ElementIsu elIsu = null;
+            int elementTypeId = 0;
+            int elementId = 0;
+            Integer judgeId = null;
+            int mark = 0;
+
             while (rs.next()) {
-                ElementRow elRow = new ElementRow(getStComModelInstance().getJudgesByComp(), allElements, allTypes, elementNumber++);
-                ElementIsu elIsu = new ElementIsu();
 
-                elIsu.setElementTypeId(rs.getInt(1));
-                elIsu.setElementId(rs.getInt(2));
-                elIsu.setInfo(rs.getString(3));
-                elIsu.setBaseValue(rs.getFloat(4));
+                if (iter == 1) {
+                    elRow = new ElementRow(getStComModelInstance().getJudgesByComp(), allElements, allTypes, elementNumber++);
+                    elIsu = new ElementIsu();
 
-//                elRow.setTextNumbLbl(String.valueOf(elementNumber++));
+                    //to data
+                    elementTypeId = rs.getInt(1);
+                    elementId = rs.getInt(2);
+                    elIsu.setElementTypeId(elementTypeId);
+                    elIsu.setInfo(rs.getString(3));
+                    elIsu.setBaseValue(rs.getFloat(4));
+                }
+
+                //fill elementVal
+                ElementValue elVal = new ElementValue();
+                judgeId = rs.getInt(5);
+                mark = rs.getInt(6);
+
+                elVal.setElementId(elementId);
+                elVal.setJudgeId(judgeId);
+                elVal.setMark(mark);
+                elVal.setSaved(true);
+
+                //add a mark to result row
+                elIsu.addJudgeValue(judgeId, elVal);
+
+                iter++;
+
+                //to front
+                el
+                elRow.setTextNumbLbl(String.valueOf(elementNumber));
                 elIsu.setName(String.valueOf(allElements.get(elIsu.getElementId())));
                 elRow.setElementTypeCmb(elIsu.getElementTypeId());
                 elRow.setElementCmb(elIsu.getElementId());
@@ -569,9 +606,15 @@ public class IsuComModel extends StComModel {
         return CIAR;
     }
 
-    public CompetitionIsuAthleteResult getCIAR(int athleteId) {
-        return CIARS.get(athleteId);
+    public CompetitionIsuAthleteResult getCIAR(int IDathlete) {
+        return CIARS.get(IDathlete);
     }
+
+    public CompetitionIsuAthleteResult addCIARtoCIARs(int IDathlete, CompetitionIsuAthleteResult ciar) {
+        return CIARS.put(IDathlete, ciar);
+    }
+
+    public HashMap<Integer, CompetitionIsuAthleteResult> getCIARS() { return CIARS;}
 
     public void setCIAR(CompetitionIsuAthleteResult CIAR) {
         this.CIAR = CIAR;

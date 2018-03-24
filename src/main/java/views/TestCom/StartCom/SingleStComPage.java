@@ -588,4 +588,6 @@ public class SingleStComPage extends JPanel {
     public void setComponentScore(String str) {
         this.componentScoreTF.setText(str);
     }
+
+    public void setStartNumber(String str) { this.startTF.setText(str); }
 }
