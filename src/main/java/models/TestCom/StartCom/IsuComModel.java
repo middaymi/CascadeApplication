@@ -556,7 +556,6 @@ public class IsuComModel extends StComModel {
                 iter++;
 
                 //to front
-                el
                 elRow.setTextNumbLbl(String.valueOf(elementNumber));
                 elIsu.setName(String.valueOf(allElements.get(elIsu.getElementId())));
                 elRow.setElementTypeCmb(elIsu.getElementTypeId());

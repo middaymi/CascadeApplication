@@ -407,7 +407,7 @@ public class SingleStComPage extends JPanel {
         elPanel.add(el);
         elPanel.repaint();
         elPanel.updateUI();
-        elRows.add(el); 
+//        elRows.add(el);
     }
     
     public void createAddElemBtn() {

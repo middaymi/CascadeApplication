@@ -47,11 +47,11 @@ public class SetAthlete implements ActionListener {
 
             //competition is finished for Athlete
             if (isuComModel.isFinishedCompetitionForAthlete(athlete.getId())) {
-                CIARtoFront(CIAR);
                 isuComModel.setCIAR(CIAR);
+                CIARtoFront(CIAR);
                 isuComModel.getComponentsResultFromDB();
                 isuComModel.setComponentResultsToFields();
-//                isuComModel.getElementsResultFromDB(athlete.getId());
+                isuComModel.getElementsResultFromDB(athlete.getId());
                 return;
             }
 
