@@ -352,6 +352,11 @@ public class TestComModel extends AbstractTableModel {
         } catch (SQLException ex) {
             Logger.getLogger(TestComModel.class.getName()).log(Level.SEVERE,
                        "Not insert a new row into DB or not get row ID", ex);
+
+
+
+
+
             return;            
         }
     }

@@ -17,14 +17,15 @@ public class SetAthlete implements ActionListener {
     int startNumber = 0;
 
     public void actionPerformed(ActionEvent e) {
-        isuComModel.upDoNothingWithListenersFlag();
-
         manager = Manager.getManagerInstance();
         singleComPage = manager.getSingleComPage();
         isuComModel = IsuComModel.getModelInstance();
 
+        if (isuComModel.isDoNothingWithListenersFlagUp()) { return; }
+
         //athlete is selected
         if (singleComPage.getAthlCmb().getSelectedItem() != null) {
+            isuComModel.upDoNothingWithListenersFlag();
 
             // clear gui
             isuComModel.clearElementAndComponentsRow();
@@ -32,7 +33,7 @@ public class SetAthlete implements ActionListener {
             //get selected athlete
             Athlete athlete = (Athlete) (singleComPage.getAthlCmb().getSelectedItem());
             HashMap<Integer, CompetitionIsuAthleteResult> CIARS = isuComModel.getCIARS();
-            //isuComModel.setCIAR(CIARS.get(athlete.getId()));
+            isuComModel.setCIAR(CIARS.get(athlete.getId()));
 
             // start number
             if (CIARS.get(athlete.getId()).getStartNumber() == 0) {
@@ -70,7 +71,6 @@ public class SetAthlete implements ActionListener {
             //add new element-row
             //singleComPage.addElementRow();
 
-
             singleComPage.enableAddElemBtn(true);
             singleComPage.enableFinBtn(true);
 
@@ -78,18 +78,19 @@ public class SetAthlete implements ActionListener {
             singleComPage.setEnabledPoints(false);
             singleComPage.setEnabledMarks(false);
             singleComPage.setSelectedRadioBtn(singleComPage.getMarks());
-            //singleComPage.setEditableTopPnl(true)
 
             isuComModel.downDoNothingWithListenersFlag();
         }
     }
 
     private void CIARtoFront(CompetitionIsuAthleteResult ciar) {
-        String[] texts = {String.valueOf(ciar.getStartNumber()),
-                String.valueOf(ciar.getTotalScore()),
-                String.valueOf(ciar.getElementScore()),
-                String.valueOf(ciar.getComponentScore()),
-                String.valueOf(ciar.getDeductions())};
+        String[] texts = {
+                String.valueOf(ciar.getStartNumber()).equals("0.0") ? "" : String.valueOf(ciar.getStartNumber()),
+                String.valueOf(ciar.getTotalScore()).equals("0.0") ? "" : String.valueOf(ciar.getTotalScore()),
+                String.valueOf(ciar.getElementScore()).equals("0.0") ? "" : String.valueOf(ciar.getElementScore()),
+                String.valueOf(ciar.getComponentScore()).equals("0.0") ? "" : String.valueOf(ciar.getComponentScore()),
+                String.valueOf(ciar.getDeductions()).equals("0.0") ? "" : String.valueOf(ciar.getDeductions())
+        };
         singleComPage.setReusltsToTopPnl(texts);
     }
 }

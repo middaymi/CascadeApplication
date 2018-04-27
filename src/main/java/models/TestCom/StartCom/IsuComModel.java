@@ -355,9 +355,13 @@ public class IsuComModel extends StComModel {
     }
 
     public void setAllData() {
+        upDoNothingWithListenersFlag();
 
         //set mode empty
         mode = 0;
+
+        CIARS.clear();
+        CIAR = null;
 
         //get and set a competition
         getSelCompetition();
@@ -369,10 +373,10 @@ public class IsuComModel extends StComModel {
         singleComPage.setFullName(competition.getFullName());
         setRank();
         singleComPage.setRank(rank.getFullName());
-        singleComPage.setStartNumber("");
 
         //clearing arrays are at these methods
         singleComPage.getElRows().clear();
+        singleComPage.getCompRows().clear();
 
         //add to competition_performance_athlete_link
         setAthletes();
@@ -384,8 +388,11 @@ public class IsuComModel extends StComModel {
         setTypes();
         setElements();
         setComponents();
+
         this.factor = IsuElementsData.getFactor(this.competition.getRankId());
         singleComPage.createLbls();
+        downDoNothingWithListenersFlag();
+
     }
 
     public boolean checkDeductionsAndComponentsValue(String deductions) {
@@ -502,7 +509,8 @@ public class IsuComModel extends StComModel {
                 if (text.equals("0.0")) text = "";
                 tf.setText(text);
             }
-            compRow.setScoreText(String.valueOf(compRow.getComponentIsu().getScores()));
+            String scoreValue = String.valueOf(compRow.getComponentIsu().getScores());
+            compRow.setScoreText(scoreValue.equals("0.0") ? "" : scoreValue);
         }
     }
 

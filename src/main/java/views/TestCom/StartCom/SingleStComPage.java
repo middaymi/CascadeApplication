@@ -315,6 +315,7 @@ public class SingleStComPage extends JPanel {
     }
             
     private void createElJudLabels(int i, int judgesCount) {
+
         //i = element(1) or component labels(2)
         //j = count of judges
         for (int k = 1; k <= judgesCount; k++) {
