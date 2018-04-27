@@ -745,5 +745,5 @@ public class StComModel {
         this.mode = mode;
     }
 
-    public void clearResults() {}
+    public void clearElementAndComponentsRow() {}
 }

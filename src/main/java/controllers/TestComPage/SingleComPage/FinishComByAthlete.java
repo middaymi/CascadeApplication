@@ -93,7 +93,7 @@ public class FinishComByAthlete implements ActionListener{
 
     private void setFinishedFlagInDB(int IDathlete) {
         String query = String.format("update COMPETITION_PERFORMANCE_ATHLETE_LINK " +
-                "set isFinished = 1 where IDathlete = %d and IDcompetition = %d;",
+                "set isFinished = 1 where IDcompetition = %d and IDathlete = %d;",
                 isuComModel.getCompetition().getId(), IDathlete);
         Statement st = null;
         try {

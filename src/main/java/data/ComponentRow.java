@@ -120,8 +120,7 @@ public class ComponentRow extends JPanel {
             CommonSettings.settingFont30(judgeMark);
             CommonSettings.settingNarrowLightGrayBorder(judgeMark);
             this.add(judgeMark);   
-            judgeMarks.add(judgeMark);  
-            //ComponentValue componentValue = new ComponentValue();
+            judgeMarks.add(judgeMark);
             judgeMark.getDocument().addDocumentListener(new DocumentListener() {
                 @Override
                 public void insertUpdate(DocumentEvent e) { 
@@ -135,7 +134,9 @@ public class ComponentRow extends JPanel {
                 public void changedUpdate(DocumentEvent e) {
                     if (singleStComPage.getAthlCmb().getSelectedItem() != null) {
                         Athlete athlete = (Athlete) singleStComPage.getAthlCmb().getSelectedItem();
-                        if (isuComModel.isFinishedCompetitionForAthlete(athlete.getId())) {
+
+                        if (isuComModel.isFinishedCompetitionForAthlete(athlete.getId()) ||
+                            isuComModel.isDoNothingWithListenersFlagUp()) {
                             return;
                         }
                         ComponentValue componentValue = 

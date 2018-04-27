@@ -81,7 +81,7 @@ public class IsuElementsData {
         } else if (info.equals("<< e")) {
             Integer lowId = element.getBaseV2();
             element = data.get(lowId);
-            base = element.getBaseV();            
+            base = element.getBaseV();
         } else if (info.equals("x") && element.getElementTypeId() == 1) {
             base = 1.1f * element.getBase();  
         } else if (info.equals("x <") && element.getElementTypeId() == 1) {

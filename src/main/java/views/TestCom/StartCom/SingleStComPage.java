@@ -1,9 +1,7 @@
 package views.TestCom.StartCom;
 
-import data.Component;
-import data.ComponentRow;
-import data.ElementRow;
-import data.Judge;
+import data.*;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -407,7 +405,15 @@ public class SingleStComPage extends JPanel {
         elPanel.add(el);
         elPanel.repaint();
         elPanel.updateUI();
-//        elRows.add(el);
+        elRows.add(el);
+    }
+
+    public void addElementRow(int number, ElementIsu elIsu) {
+        ElementRow el = new ElementRow(number, elIsu);
+        elPanel.add(el);
+        elPanel.repaint();
+        elPanel.updateUI();
+        elRows.add(el);
     }
     
     public void createAddElemBtn() {
@@ -475,7 +481,7 @@ public class SingleStComPage extends JPanel {
         this.lstModel = lstModel;
     }
 
-    public void setFulllName(String fullName) {
+    public void setFullName(String fullName) {
         this.fulllNamelbl.setText("Название: " + fullName);
     }
 
@@ -590,4 +596,8 @@ public class SingleStComPage extends JPanel {
     }
 
     public void setStartNumber(String str) { this.startTF.setText(str); }
+
+    public void setComponentsRow(ComponentRow row) {
+        compRows.add(row);
+    }
 }
