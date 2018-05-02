@@ -24,7 +24,7 @@ import views.Manager;
 
 public class SingleStComPage extends JPanel {
     
-    private JLabel fulllNamelbl;
+    private JLabel fullNamelbl;
     private JLabel  rankLbl;
     
     //top panel
@@ -107,14 +107,14 @@ public class SingleStComPage extends JPanel {
     
     //full name competition and rank lbl
     private void createWelLbls() {
-        fulllNamelbl = new JLabel();    
-        fulllNamelbl.setSize(1050, 70);
-        fulllNamelbl.setLocation(250, 30);
-        CommonSettings.settingFont30(fulllNamelbl);
-        CommonSettings.settingGrayBorder(fulllNamelbl);
-        fulllNamelbl.setBackground(Color.LIGHT_GRAY);
-        fulllNamelbl.setOpaque(true);
-        this.add(fulllNamelbl);                
+        fullNamelbl = new JLabel();
+        fullNamelbl.setSize(1050, 70);
+        fullNamelbl.setLocation(250, 30);
+        CommonSettings.settingFont30(fullNamelbl);
+        CommonSettings.settingGrayBorder(fullNamelbl);
+        fullNamelbl.setBackground(Color.LIGHT_GRAY);
+        fullNamelbl.setOpaque(true);
+        this.add(fullNamelbl);
                 
         rankLbl = new JLabel();        
         rankLbl.setSize(720, 70);
@@ -415,6 +415,7 @@ public class SingleStComPage extends JPanel {
         elPanel.repaint();
         elPanel.updateUI();
         elRows.add(el);
+
     }
     
     public void createAddElemBtn() {
@@ -483,7 +484,7 @@ public class SingleStComPage extends JPanel {
     }
 
     public void setFullName(String fullName) {
-        this.fulllNamelbl.setText("Название: " + fullName);
+        this.fullNamelbl.setText("Название: " + fullName);
     }
 
     public void setRank(String rank) {        
@@ -582,6 +583,14 @@ public class SingleStComPage extends JPanel {
         elementScoreTF.setText(textOfFields[2]);
         componentScoreTF.setText(textOfFields[3]);
         deductionsTF.setText(textOfFields[4]);
+    }
+
+    public void clearTopPanelResults() {
+        startTF.setText("");
+        totalScoreTF.setText("");
+        elementScoreTF.setText("");
+        componentScoreTF.setText("");
+        deductionsTF.setText("");
     }
     
     public void setTotalScore(String str) {

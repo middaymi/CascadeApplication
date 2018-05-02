@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 public class IsuComModel extends StComModel {
 
     //athlets take part in selected competition  and their results   
-//    private HashMap<Integer, CompetitionIsuAthleteResult> athletesByComp = new HashMap<>();
     private List<Athlete> athletesByComp = new ArrayList<>();
     private Competition competition;
     private ArrayList<Component> components = new ArrayList<>();
@@ -94,11 +93,7 @@ public class IsuComModel extends StComModel {
         }
 
         //top panel
-        singleComPage.setTextDeductions("");
-        singleComPage.setTotalScore("");
-        singleComPage.setElementScore("");
-        singleComPage.setComponentScore("");
-        singleComPage.setStartNumber("");
+        singleComPage.clearTopPanelResults();
     }
 
     private Competition getSelCompetition() {
@@ -355,6 +350,9 @@ public class IsuComModel extends StComModel {
     }
 
     public void setAllData() {
+        //get the last link of panel
+        singleComPage = Manager.getSingleComPage();
+
         upDoNothingWithListenersFlag();
 
         //set mode empty
@@ -362,12 +360,10 @@ public class IsuComModel extends StComModel {
 
         CIARS.clear();
         CIAR = null;
+        singleComPage.clearTopPanelResults();
 
         //get and set a competition
         getSelCompetition();
-
-        //get the last link of panel
-        singleComPage = Manager.getSingleComPage();
 
         //set name of competition and rank
         singleComPage.setFullName(competition.getFullName());
@@ -378,7 +374,8 @@ public class IsuComModel extends StComModel {
         singleComPage.getElRows().clear();
         singleComPage.getCompRows().clear();
 
-        //add to competition_performance_athlete_link
+        /*add to competition_performance_athlete_link
+        and set ciar for all athletes by competition*/
         setAthletes();
         for (Athlete athlete : athletesByComp) {
             CIARS.get(athlete.getId()).setCompetitionAthlId(getCompetitionAthlId(athlete));
@@ -452,7 +449,7 @@ public class IsuComModel extends StComModel {
     }
 
     public List<Integer> getJudgesIDs() {
-        return  getJudgesByComp().stream()
+        return getJudgesByComp().stream()
                 .map(Judge::getId)
                 .collect(Collectors.toList());
     }
@@ -555,11 +552,6 @@ public class IsuComModel extends StComModel {
         return id;
     }
 
-
-    private void clearCIARElementList(CompetitionIsuAthleteResult ciar) {
-        ciar.getElementsList().clear();
-    }
-
     public void getElementsResultFromDB(int IDathlete) {
         PreparedStatement prst = null;
         ResultSet rs = null;
@@ -575,12 +567,10 @@ public class IsuComModel extends StComModel {
                 "on tech.IDisuElement = elem.ID", competition.getId(), IDathlete);
         try {
 
-            clearCIARElementList(CIAR);
-            //common info for elementRow without marks
+            CIARS.get(IDathlete).getElementsList().clear();
             prst = getDBC().prepareStatement(withMarks);
             rs = prst.executeQuery();
 
-            ElementRow elRow = null;
             ElementIsu elIsu = null;
 
             int elementTypeId = 0;
@@ -608,7 +598,7 @@ public class IsuComModel extends StComModel {
                     elIsu.setBaseValue(rs.getFloat(4));
 
                     //to athlete ciar
-                    CIAR.getElementsList().add(elIsu);
+                    CIARS.get(IDathlete).getElementsList().add(elIsu);
                 }
 
                 //fill elementVal
@@ -700,7 +690,15 @@ public class IsuComModel extends StComModel {
         this.isFinished = isFinished;
     }
 
-    public static boolean isDoNothingWithListenersFlagUp() {return doNothingWithListenersFlag;}
-    public static void upDoNothingWithListenersFlag() {doNothingWithListenersFlag = true;}
-    public static void downDoNothingWithListenersFlag() {doNothingWithListenersFlag = false;}
+    public static boolean isDoNothingWithListenersFlagUp() {
+        return doNothingWithListenersFlag;
+    }
+
+    public static void upDoNothingWithListenersFlag() {
+        doNothingWithListenersFlag = true;
+    }
+
+    public static void downDoNothingWithListenersFlag() {
+        doNothingWithListenersFlag = false;
+    }
 }

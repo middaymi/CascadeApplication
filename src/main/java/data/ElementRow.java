@@ -63,11 +63,11 @@ public class ElementRow extends JPanel {
         this.types = types;
 
         createNumbLbl();
-        createElementTypeCmb("");
-        createElementCmb("");
+        createElementTypeCmb(null);
+        createElementCmb(null);
         createInfo("");
         createBase();
-        createJudge();
+        createJudge(null);
         createResult();
 
         this.setLayout(null);
@@ -79,6 +79,10 @@ public class ElementRow extends JPanel {
 
     public ElementRow(int number, ElementIsu elIsu) {
         IsuComModel model = IsuComModel.getModelInstance();
+        HashMap<Integer, ElementData> elements = model.getAllElements();
+        HashMap<Integer, IsuElementType> types = model.getAllTypes();
+        elementIsu = elIsu;
+
         numbLabel = new JLabel(number + 1 + ".");
 
         elementTypeCmb = new JComboBox();
@@ -88,14 +92,17 @@ public class ElementRow extends JPanel {
         score = new JLabel();
 
         int judgesNumbers = elIsu.getJudgesValues().size();
+        this.judges = model.getJudgesByComp();
+        this.elements = elements;
+        this.types = types;
 
         createNumbLbl();
-        createElementTypeCmb(model.getAllTypes().get(elIsu.getElementTypeId()).getFullName());
-        createElementCmb(model.getAllElements().get(elIsu.getElementId()).getFullNameRus());
+        createElementTypeCmb(types.get(elIsu.getElementTypeId()));
+        createElementCmb(elements.get(elIsu.getElementId()));
         createInfo(elIsu.getInfo());
         createBase();
-        createFillJudgeValues(elIsu);
-//        createResult();
+        createJudge(elIsu);
+        createResult();
 
         this.setLayout(null);
         this.setSize(1720 + judgesNumbers * 140 + 150, 70);
@@ -112,10 +119,6 @@ public class ElementRow extends JPanel {
         this.add(numbLabel);
     }
 
-    public void setTextNumbLbl(String text) {
-        numbLabel.setText(text);
-    }
-
     //flag for changing base value by selecting element
     int flag = 0;
 
@@ -128,7 +131,7 @@ public class ElementRow extends JPanel {
     }
 
 
-    private void createElementTypeCmb(String nameOfElementType) {
+    private void createElementTypeCmb(IsuElementType elementType) {
         elementTypeCmb.setSize(500, 70);
         elementTypeCmb.setLocation(120, 0);
         CommonSettings.settingFont30(elementTypeCmb);
@@ -137,15 +140,16 @@ public class ElementRow extends JPanel {
         //get types
         isuComModel = IsuComModel.getModelInstance();
 
+        //add all types
+        for (IsuElementType type : isuComModel.getAllTypes().values()) {
+            elementTypeCmb.addItem(type);
+        }
+
         //select selected item
-        if (nameOfElementType.equals("")) {
-            for (IsuElementType type : isuComModel.getAllTypes().values()) {
-                elementTypeCmb.addItem(type);
-            }
+        if (elementType == null) {
             elementTypeCmb.setSelectedItem(null);
         } else {
-            elementTypeCmb.addItem(nameOfElementType);
-            elementTypeCmb.setSelectedItem(nameOfElementType);
+            elementTypeCmb.setSelectedItem(elementType);
         }
 
         //if type is selected
@@ -171,18 +175,21 @@ public class ElementRow extends JPanel {
         });
     }
 
-    private void createElementCmb(String nameOfElement) {
+    private void createElementCmb(ElementData element) {
         elementCmb.setSize(800, 70);
         elementCmb.setLocation(620, 0);
         CommonSettings.settingFont30(elementCmb);
         this.add(elementCmb);
 
+        for (ElementData elem : isuComModel.getAllElements().values()) {
+            elementCmb.addItem(elem);
+        }
+
         //select selected item
-        if (nameOfElement.equals("")) {
+        if (element == null) {
             elementCmb.setSelectedItem(null);
         } else {
-            elementCmb.addItem(nameOfElement);
-            elementCmb.setSelectedItem(nameOfElement);
+            elementCmb.setSelectedItem(element);
         }
 
         //if type and element are selected
@@ -240,25 +247,9 @@ public class ElementRow extends JPanel {
         this.add(base);
     }
 
-    private void createFillJudgeValues(ElementIsu elIsu) {
-        judgeMarks.clear();
-        judges = isuComModel.getJudgesByComp();
-        for (int i = 0; i < judges.size(); i++) {
-            JComboBox judgeMark = new JComboBox();
-            judgeMark.setSize(140, 70);
-            judgeMark.setLocation(1720 + i * 140, 0);
-            CommonSettings.settingFont30(judgeMark);
-            this.add(judgeMark);
-            int mark = (elIsu.getJudgesValues().get(judges.get(i).getId())).getMark();
-            judgeMark.addItem(mark);
-            judgeMark.setSelectedItem(mark);
-        }
-    }
-
-    private void createJudge() {
+    private void createJudge(ElementIsu elemIsu) {
         for (int i = 0; i < judges.size(); i++) {
             Judge judge = judges.get(i);
-            int index = i;
             JComboBox judgeMark = new JComboBox();
             judgeMark.setSize(140, 70);
             judgeMark.setLocation(1720 + i * 140, 0);
@@ -274,8 +265,9 @@ public class ElementRow extends JPanel {
                 public void actionPerformed(ActionEvent e) {
                     //athlete is selected and radioBtns are disabled
                     if (elementCmb.getSelectedItem() != null &&
-                            !isuComModel.isFinished()) {
-                        //to ElementValue                        
+                            !isuComModel.isFinished() &&
+                            !isuComModel.isDoNothingWithListenersFlagUp()) {
+                        //to ElementValue
                         elementValue.setElementId(
                                 ((ElementData) elementCmb.getSelectedItem()).getId());
                         elementValue.setJudgeId(judge.getId());
@@ -288,7 +280,11 @@ public class ElementRow extends JPanel {
                     }
                 }
             });
-            judgeMark.setSelectedItem(null);
+            if (elemIsu != null) {
+                judgeMark.setSelectedItem(String.valueOf(elemIsu.getJudgesValues().get(judge.getId()).getMark()));
+            } else {
+                judgeMark.setSelectedItem(null);
+            }
         }
     }
 

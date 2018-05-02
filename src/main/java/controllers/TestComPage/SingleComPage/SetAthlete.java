@@ -5,6 +5,7 @@ import models.TestCom.StartCom.IsuComModel;
 import views.Manager;
 import views.TestCom.StartCom.SingleStComPage;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -21,7 +22,9 @@ public class SetAthlete implements ActionListener {
         singleComPage = manager.getSingleComPage();
         isuComModel = IsuComModel.getModelInstance();
 
-        if (isuComModel.isDoNothingWithListenersFlagUp()) { return; }
+        if (isuComModel.isDoNothingWithListenersFlagUp()) {
+            return;
+        }
 
         //athlete is selected
         if (singleComPage.getAthlCmb().getSelectedItem() != null) {
@@ -62,17 +65,51 @@ public class SetAthlete implements ActionListener {
             isuComModel.getCIARsFromDB();
             CIARtoFront(CIARS.get(athlete.getId()));
 
-
             //ELEMENTS
-//            isuComModel.getElementsResultFromDB(athlete.getId());
-//            for (int i = 0; i < CIAR.getElementsList().size(); i++) {
-//                singleComPage.addElementRow(i, CIAR.getElementsList().get(i));
-//            }
-            //add new element-row
-            //singleComPage.addElementRow();
+            isuComModel.getElementsResultFromDB(athlete.getId());
+            for (int i = 0; i < CIARS.get(athlete.getId()).getElementsList().size(); i++) {
+                singleComPage.addElementRow(i, CIARS.get(athlete.getId()).getElementsList().get(i));
+            }
 
-            singleComPage.enableAddElemBtn(true);
-            singleComPage.enableFinBtn(true);
+            //CHECK FOR FINISH
+            boolean activateEditBtns = true;
+            //if finished
+            if (isuComModel.isFinishedCompetitionForAthlete(athlete.getId())) {
+                activateEditBtns = false;
+
+                //to do not editable components
+                for (ComponentRow row : singleComPage.getCompRows()) {
+                    for (JTextField mark : row.getJudgeMarks()) {
+                        mark.setEditable(activateEditBtns);
+                    }
+                }
+
+                //to do not editable elements
+                for (ElementRow row : singleComPage.getElRows()) {
+                    row.setEnabledElRowComponents(activateEditBtns);
+                }
+
+                //SCORES
+                CIARS.get(athlete.getId()).calculate(isuComModel.getFactor());
+                //enter scores to fields
+                int index = 0;
+                for (ElementIsu elData : CIARS.get(athlete.getId()).getElementsList()) {
+                    ElementRow elRow = singleComPage.getElRows().get(index++);
+                    elRow.setScoreText(String.valueOf(elData.getScores()));
+                }
+                index = 0;
+                for (ComponentIsu compData : CIARS.get(athlete.getId()).getComponentsList()) {
+                    ComponentRow compRow = singleComPage.getCompRows().get(index++);
+                    compRow.setScoreText(String.valueOf(compData.getScores()));
+                }
+
+            } else {
+                //add new empty element-row
+                singleComPage.addElementRow();
+            }
+
+            singleComPage.enableAddElemBtn(activateEditBtns);
+            singleComPage.enableFinBtn(activateEditBtns);
 
             //set disabled radioBtns points/marks
             singleComPage.setEnabledPoints(false);
@@ -94,4 +131,3 @@ public class SetAthlete implements ActionListener {
         singleComPage.setReusltsToTopPnl(texts);
     }
 }
-
