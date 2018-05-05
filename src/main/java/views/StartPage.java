@@ -3,6 +3,9 @@ package views;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class StartPage extends JPanel{
         
     private JButton organizationBtn;
@@ -53,7 +56,7 @@ public class StartPage extends JPanel{
     //size, location, font
     private void setButtonsSizeLocationAdd(int x, int y, JButton btn) {
         //location: 2 rows(x), 3 columns(y)
-        btn.setSize(600, 360);
+        btn.setSize(calcW(600), calcH(360));
         CommonSettings.settingFont50(btn);
         CommonSettings.settingLightGrayBorder(btn);
         //btn's painting
@@ -69,26 +72,26 @@ public class StartPage extends JPanel{
         
         if (x == 1) {
             switch(y) {
-                case 1: btn.setLocation(584, 420);
+                case 1: btn.setLocation(calcW(584), calcH(420));
                         this.add(organizationBtn);
                         break;
-                case 2: btn.setLocation(1284, 420);
+                case 2: btn.setLocation(calcW(1284), calcH(420));
                         this.add(employeeBtn);
                         break;
-                case 3: btn.setLocation(1984, 420);                     
+                case 3: btn.setLocation(calcW(1984), calcH(420));
                         this.add(athleteBtn);
                         break;
             }
         }
         if (x == 2) {
             switch(y) {
-                case 1: btn.setLocation(934, 880);
+                case 1: btn.setLocation(calcW(934), calcH(880));
                         this.add(performanceBtn);
                         break;
-                case 2: btn.setLocation(1634, 880);
+                case 2: btn.setLocation(calcW(1634), calcH(880));
                         this.add(testCompetitionBtn);
                         break;
             }
         }
     }
-}    
+}
