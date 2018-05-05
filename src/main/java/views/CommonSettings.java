@@ -5,6 +5,8 @@ import java.awt.Font;
 import javax.swing.JComponent;
 import javax.swing.border.LineBorder;
 
+import static utils.Layout.calcW;
+
 public class CommonSettings {
     
     private static LineBorder  lightGrayLineBorder = null; 
@@ -48,40 +50,34 @@ public class CommonSettings {
     //set grayLineBoard
     private static LineBorder lightGrayLineBorderInstance() {
         if (lightGrayLineBorder == null)
-            lightGrayLineBorder = new LineBorder(Color.LIGHT_GRAY, 
-                                      (int)(0.00125 * Manager.getWidth()));
+            lightGrayLineBorder = new LineBorder(Color.LIGHT_GRAY, calcW(4));
         return lightGrayLineBorder;        
     }
     private static LineBorder grayLineBorderInstance() {
         if (grayLineBorder == null)
-            grayLineBorder = new LineBorder(Color.GRAY, 
-                                 (int)(0.00125 * Manager.getWidth()));
+            grayLineBorder = new LineBorder(Color.GRAY, calcW(4));
         return grayLineBorder;        
     }
     
     private static LineBorder narrowLightGrayBorder() {
         if (narrowLightGrayBorder == null)
-            narrowLightGrayBorder = new LineBorder(Color.LIGHT_GRAY, 
-                                 (int)(Manager.getWidthWithInsets())/1584);
+            narrowLightGrayBorder = new LineBorder(Color.LIGHT_GRAY, calcW(2));
         return narrowLightGrayBorder;        
     }
     
     private static Font font30Instance() {
         if (font30 == null)
-            font30 = new Font("TimesNewRoman", Font.PLAIN, 
-                             (3*Manager.getWidth()/320));
+            font30 = new Font("TimesNewRoman", Font.PLAIN, calcW(30));
         return font30;
     }
      private static Font font30BoldInstance() {
         if (fontBold30 == null)
-            fontBold30 = new Font("TimesNewRoman", Font.BOLD, 
-                             (3*Manager.getWidth()/320));
+            fontBold30 = new Font("TimesNewRoman", Font.BOLD, calcW(30));
         return fontBold30;
     }
     private static Font font50Instance() {
         if (font50 == null)
-            font50 = new Font("TimesNewRoman", Font.PLAIN, 
-                             (Manager.getWidth()/64));
+            font50 = new Font("TimesNewRoman", Font.PLAIN, calcW(50));
         return font50;
     }
 }

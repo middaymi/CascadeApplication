@@ -1,6 +1,5 @@
 package utils;
 
-
 import views.Manager;
 
 public class Layout {
