@@ -14,7 +14,6 @@ public class SaveDeduction implements ActionListener {
    
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("IT WORKED");
         isuComModel = IsuComModel.getModelInstance();
         singleStComPage = Manager.getSingleComPage();
         
@@ -24,7 +23,7 @@ public class SaveDeduction implements ActionListener {
             JTextField tf = singleStComPage.getDeductions();
             if (isuComModel.checkDeductionsAndComponentsValue(tf.getText())) {
                 float deduction = Float.valueOf(tf.getText());
-                //set dedutions to element
+                //set deductions to element
                 isuComModel.getCIAR().setDeductions(deduction);                
             } else {
                 JOptionPane.showMessageDialog(Manager.getSingleComPage(),

@@ -6,6 +6,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import static utils.Layout.calcW;
+
 public class EmployeeColumnModel {
     
     private JTable table;
@@ -29,11 +31,11 @@ public class EmployeeColumnModel {
             TableColumn column = (TableColumn)e.nextElement();
             if (column.getHeaderValue() == "Опыт") {
                table.getColumn("Опыт").setCellRenderer(render);
-               column.setPreferredWidth(50);
+               column.setPreferredWidth(calcW(50));
             } else if (column.getHeaderValue() == "ДР") {
                table.getColumn("ДР").setCellRenderer(render);
             } else if (column.getHeaderValue() == "Образование") {
-                column.setPreferredWidth(500);
+                column.setPreferredWidth(calcW(500));
             }            
         }
         table.setColumnModel(columnModel);

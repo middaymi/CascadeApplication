@@ -21,5 +21,4 @@ public class Season {
     public String toString() {
         return getPeriod();
     }
-    
 }
