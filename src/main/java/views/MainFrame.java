@@ -33,7 +33,7 @@ public class MainFrame extends JFrame {
         imgPnl = new ImagePanel();        
         try {   
             imgPnl.setImage(ImageIO.read
-                           (new File("images\\13.jpg")));
+                           (new File("images//13.jpg")));
         } catch (IOException ex) {
             Logger.getLogger(MainFrame.class.getName()).
                              log(Level.SEVERE, "no image", ex);

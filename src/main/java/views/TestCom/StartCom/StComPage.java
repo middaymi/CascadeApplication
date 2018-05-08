@@ -156,7 +156,7 @@ public class StComPage extends JPanel {
         int i = 0;
         for (Element value : values) {
             HeaderTextArea label = new HeaderTextArea(false, i++, value.getFullName(), 
-                                       new Dimension(calcW(125 * judges.size()), calcH(100)));
+                                       new Dimension(calcW(125) * judges.size(), calcH(100)));
             mainPanel.add(label);            
             int j = 0;        
             for (Judge judge : judges) {
@@ -191,11 +191,11 @@ public class StComPage extends JPanel {
             }
             //if glasial
             if (tcModel.getCompetitions().get(tcModel.selRow()).getKind().getId() == 3) {
-                panel.setSize(calcW(125 * matrix.get(0).size()), calcH(100 * matrix.size()));
-                mainPanel.setPreferredSize(new Dimension(calcW(400 + panel.getWidth()), calcH(200 + panel.getHeight())));
+                panel.setSize(calcW(125) * matrix.get(0).size(), calcH(100) * matrix.size());
+                mainPanel.setPreferredSize(new Dimension(calcW(400) + panel.getWidth(), calcH(200) + panel.getHeight()));
             } else {
-                panel.setSize(calcW(250 * matrix.get(0).size()), calcH(100 * matrix.size()));
-                mainPanel.setPreferredSize(new Dimension(calcW(400 + panel.getWidth()), calcH(100 + panel.getHeight())));
+                panel.setSize(calcW(250) * matrix.get(0).size(), calcH(100) * matrix.size());
+                mainPanel.setPreferredSize(new Dimension(calcW(400) + panel.getWidth(), calcH(100) + panel.getHeight()));
             }
             
             //crop mainScrl if it possible
