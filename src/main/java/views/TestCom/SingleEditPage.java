@@ -12,6 +12,9 @@ import models.TestCom.TestComModel;
 import views.CommonSettings;
 import views.Manager;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class SingleEditPage extends JPanel {
     private JLabel welcome;
     private Manager manager;
@@ -66,8 +69,8 @@ public class SingleEditPage extends JPanel {
         String str = tcModel.getValueAt(sel, 0) + ". " +
                      tcModel.getValueAt(sel, 3);
         welcome = new JLabel(str);
-        welcome.setSize(800, 70);
-        welcome.setLocation(2084, 30);
+        welcome.setSize(calcW(800), calcH(70));
+        welcome.setLocation(calcW(2084), calcH(30));
         welcome.setVisible(true);
         welcome.setOpaque(true);
         welcome.setBackground(Color.LIGHT_GRAY);
@@ -83,8 +86,8 @@ public class SingleEditPage extends JPanel {
         if (i == 3) lbl.setText("<html>Разряды <p>" + 
                                 "Для подтверждения выбора разряда нажмите ✔.</html>");
         lbl.setVisible(true);
-        lbl.setSize(800, 100);
-        lbl.setLocation(284 + (i-1)*900, 200);
+        lbl.setSize(calcW(800), calcH(100));
+        lbl.setLocation(calcW(284 + (i-1)*900), calcH(200));
         CommonSettings.settingFont30(lbl);
         CommonSettings.settingGrayBorder(lbl);
         lbl.setOpaque(true);
@@ -101,8 +104,8 @@ public class SingleEditPage extends JPanel {
         lst.setFocusable(false);  
         
         JScrollPane scrl = new JScrollPane(lst);
-        scrl.setSize(800, 950);
-        scrl.setLocation(284 + (i-1)*900, 310);
+        scrl.setSize(calcW(800), calcH(950));
+        scrl.setLocation(calcW(284 + (i-1)*900), calcH(310));
         this.add(scrl);
         if (i == 1) {
             athlLstModel = new DefaultListModel();
@@ -120,8 +123,8 @@ public class SingleEditPage extends JPanel {
         btn = new JButton("-");
         CommonSettings.settingFont30(btn);
         btn.setFocusable(false);
-        btn.setSize(100, 100);
-        btn.setLocation(284 + i*900 - 200, 1380);
+        btn.setSize(calcW(100), calcH(100));
+        btn.setLocation(calcW(284 + i*900 - 200), calcH(1380));
         btn.setBackground(Color.LIGHT_GRAY);
         this.add(btn);
         if (i == 1) {
@@ -141,8 +144,8 @@ public class SingleEditPage extends JPanel {
         cmb = new JComboBox();        
         CommonSettings.settingFont30(cmb);
         cmb.setEditable(false);
-        cmb.setSize(690, 100);
-        cmb.setLocation(284 + (i-1)*900, 1270);
+        cmb.setSize(calcW(690), calcH(100));
+        cmb.setLocation(calcW(284 + (i-1)*900), calcH(1270));
         this.add(cmb);        
         if (i == 1) athlCombo = cmb;
         else if (i == 2) judCombo = cmb;
@@ -150,8 +153,8 @@ public class SingleEditPage extends JPanel {
         //btns
         btn = new JButton("+");      
         btn.setFocusable(false);
-        btn.setSize(100, 100);
-        btn.setLocation(284 + i*900 - 200, 1270);
+        btn.setSize(calcW(100), calcH(100));
+        btn.setLocation(calcW(284 + i*900 - 200), calcH(1270));
         CommonSettings.settingFont30(btn);
         btn.setBackground(Color.LIGHT_GRAY);
         this.add(btn); 
@@ -172,15 +175,15 @@ public class SingleEditPage extends JPanel {
         rankCombo = new JComboBox();        
         CommonSettings.settingFont30(getRankCombo());
         getRankCombo().setEditable(false);
-        getRankCombo().setSize(690, 100);
-        getRankCombo().setLocation(2084, 320);        
+        getRankCombo().setSize(calcW(690), calcH(100));
+        getRankCombo().setLocation(calcW(2084), calcH(320));
         this.add(getRankCombo());        
         
         //btn
         setRankBtn = new JButton("✔");      
         setRankBtn.setFocusable(false);
-        setRankBtn.setSize(100, 100);
-        setRankBtn.setLocation(2784, 320);
+        setRankBtn.setSize(calcW(100), calcH(100));
+        setRankBtn.setLocation(calcW(2784), calcH(320));
         CommonSettings.settingFont30(setRankBtn);
         setRankBtn.setBackground(Color.LIGHT_GRAY);
         this.add(setRankBtn); 

@@ -5,6 +5,9 @@ import data.MarkCellData;
 import java.awt.Color;
 import views.CommonSettings;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class MarkTextField extends JTextField{
       
     private MarkCellData data;
@@ -15,7 +18,7 @@ public class MarkTextField extends JTextField{
     public MarkTextField(MarkCellData data) {
         this.savedDB = false;
         this.data = data;
-        this.setSize(200, 100);        
+        this.setSize(calcW(200), calcH(100));
         this.setVisible(true);
         this.setOpaque(true);
         this.setBackground(Color.LIGHT_GRAY);

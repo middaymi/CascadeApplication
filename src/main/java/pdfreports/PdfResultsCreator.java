@@ -330,7 +330,8 @@ public class PdfResultsCreator {
     private Font setFont(int size) {
         try {
             BaseFont myAarial = null; //подключаем файл шрифта, который поддерживает кириллицу
-            myAarial = BaseFont.createFont("C:\\windows\\fonts\\times.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//            myAarial = BaseFont.createFont("C:\\windows\\fonts\\times.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            myAarial = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
             Font myFont = new Font(myAarial, size);
             return myFont;
         } catch (DocumentException | IOException ex) {
@@ -340,14 +341,15 @@ public class PdfResultsCreator {
     }
 
     private Font setFont() {
-        return setFont(14);
+        return setFont(12);
     }
 
     private Font setBoldFont() {
         try {
             BaseFont myAarial = null; //подключаем файл шрифта, который поддерживает кириллицу
-            myAarial = BaseFont.createFont("C:\\windows\\fonts\\times.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            Font myFont = new Font(myAarial, 14, Font.BOLD);
+//            myAarial = BaseFont.createFont("C:\\windows\\fonts\\times.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            myAarial =  BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
+            Font myFont = new Font(myAarial, 12, Font.BOLD);
             return myFont;
         } catch (DocumentException | IOException ex) {
             Logger.getLogger(PdfResultsCreator.class.getName()).log(Level.SEVERE, null, ex);
@@ -501,7 +503,7 @@ public class PdfResultsCreator {
 
         PdfPCell cell = new PdfPCell();
         cell.setBorder(PdfPCell.NO_BORDER);
-        cell.setMinimumHeight(14f);
+        cell.setMinimumHeight(12f);
         for (int i = 0; i < this.numberOfJudges + 6; i++) {
             cell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             cell.setPhrase(new Phrase(headers[i], myBoldFont));
@@ -547,7 +549,7 @@ public class PdfResultsCreator {
         cell.setMinimumHeight(20);
         isuTable.addCell(cell);
         //set Heighth back
-        cell.setMinimumHeight(14f);
+        cell.setMinimumHeight(12f);
         //Filling in Table with Components
         //1. Captiion
         cell.setColspan(3);

@@ -346,8 +346,7 @@ public class IsuComModel extends StComModel {
             Logger.getLogger(StComModel.class.getName()).
                     log(Level.SEVERE,
                             "Do not take selected rank from DB", ex);
-        }
-    }
+        }    }
 
     public void setAllData() {
         //get the last link of panel
@@ -416,6 +415,7 @@ public class IsuComModel extends StComModel {
 
             prst = getDBC().prepareStatement(query);
             rs = prst.executeQuery();
+            System.out.println(query);
 
             while (rs.next()) {
                 Athlete athlete = new Athlete();

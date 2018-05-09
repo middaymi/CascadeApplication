@@ -8,7 +8,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import models.OrganizationModel;
 
-public class OrganizationPage extends JPanel {
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
+ public class OrganizationPage extends JPanel {
     
     private JButton changeBtn; 
     
@@ -53,8 +56,8 @@ public class OrganizationPage extends JPanel {
     private void createChangeButton() {
         changeBtn = new JButton("Изменить");
         changeBtn.setBackground(Color.LIGHT_GRAY);
-        changeBtn.setSize(250, 100);
-        changeBtn.setLocation(1984, 1430);
+        changeBtn.setSize(calcW(250), calcH(100));
+        changeBtn.setLocation(calcW(1984), calcH(1430));
         CommonSettings.settingFont30(changeBtn);
         this.add(changeBtn);
         changeBtn.addActionListener(new controllers.OrganizationPage.
@@ -94,8 +97,8 @@ public class OrganizationPage extends JPanel {
     //set Labels size, location, font, border
     private void setSizeLocationFontBorderLabel(JLabel lbl, int x) {
         CommonSettings.settingFontBold30(lbl);
-        lbl.setSize(320, 100);
-        lbl.setLocation(934, 230 + 120 * x);
+        lbl.setSize(calcW(320), calcH(100));
+        lbl.setLocation(calcW(934), calcH(230 + 120 * x));
         CommonSettings.settingGrayBorder(lbl);
         this.add(lbl);
     }
@@ -117,8 +120,8 @@ public class OrganizationPage extends JPanel {
     //set TextFields size, location, font, border
     private void setSizeLocationFontBorder(JTextField txtField, int x){
         CommonSettings.settingFont30(txtField);
-        txtField.setSize(960, 100);
-        txtField.setLocation(1274, 230 + 120 * x);
+        txtField.setSize(calcW(960), calcH(100));
+        txtField.setLocation(calcW(1274), calcH(230 + 120 * x));
         CommonSettings.settingGrayBorder(txtField);
         this.add(txtField);        
     } 

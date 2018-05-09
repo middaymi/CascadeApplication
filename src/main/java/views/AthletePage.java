@@ -11,6 +11,9 @@ import javax.swing.JTable;
 import javax.swing.table.TableRowSorter;
 import models.MultiLineCell;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class AthletePage extends JPanel {
     
     private ArrayList athData;
@@ -45,7 +48,7 @@ public class AthletePage extends JPanel {
         table = new JTable(athModel);
         table.setVisible(true);
         table.setOpaque(true);
-        table.setRowHeight(90);
+        table.setRowHeight(calcH(90));
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.setEnabled(false);
         CommonSettings.settingFontBold30(table.getTableHeader());
@@ -65,8 +68,8 @@ public class AthletePage extends JPanel {
         //scrlPane.setBackground(new Color(80, 80, 80, 30));
         //scrlPane.getViewport().setBackground(new Color(80, 80, 80, 30));
                 
-        scrlPane.setSize(3000, 1190);
-        scrlPane.setLocation(84, 230);
+        scrlPane.setSize(calcW(3000), calcH(1190));
+        scrlPane.setLocation(calcW(84), calcH(230));
         this.add(scrlPane);
     }  
     
@@ -74,8 +77,8 @@ public class AthletePage extends JPanel {
     private void setChangeBtnSettings() {
         changeBtn = new JButton("Изменить");        
         changeBtn.setBackground(Color.LIGHT_GRAY);
-        changeBtn.setSize(250, 100);
-        changeBtn.setLocation(2834, 1440);
+        changeBtn.setSize(calcW(250), calcH(100));
+        changeBtn.setLocation(calcW(2834), calcH(1440));
         CommonSettings.settingFont30(changeBtn);
         this.add(changeBtn);
         changeBtn.addActionListener(new controllers.AthletePage.
@@ -84,8 +87,8 @@ public class AthletePage extends JPanel {
     private void setDelBtnSettings() {
         delBtn = new JButton("Удалить");        
         delBtn.setBackground(Color.LIGHT_GRAY);
-        delBtn.setSize(250, 100);
-        delBtn.setLocation(2554, 1440);
+        delBtn.setSize(calcW(250), calcH(100));
+        delBtn.setLocation(calcW(2554), calcH(1440));
         delBtn.setVisible(false);
         CommonSettings.settingFont30(delBtn);
         this.add(delBtn);
@@ -95,8 +98,8 @@ public class AthletePage extends JPanel {
     private void setAddBtnSettings() {
         addBtn = new JButton("Добавить");        
         addBtn.setBackground(Color.LIGHT_GRAY);
-        addBtn.setSize(250, 100);
-        addBtn.setLocation(2274, 1440);
+        addBtn.setSize(calcW(250), calcH(100));
+        addBtn.setLocation(calcW(2274), calcH(1440));
         addBtn.setVisible(false);
         CommonSettings.settingFont30(addBtn);
         this.add(addBtn);

@@ -23,6 +23,9 @@ import models.TestCom.TestComModel;
 import views.CommonSettings;
 import views.TestCom.StartCom.SingleStComPage;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class ElementRow extends JPanel {
 
     private JLabel numbLabel;
@@ -71,8 +74,8 @@ public class ElementRow extends JPanel {
         createResult();
 
         this.setLayout(null);
-        this.setSize(1720 + judges.size() * 140 + 150, 70);
-        this.setLocation(0, 70 + i * 70);
+        this.setSize(calcW(1720 + judges.size() * 140 + 150), calcH(70));
+        this.setLocation(0, calcH(70 + i * 70));
         this.setVisible(true);
         this.setFocusable(true);
     }
@@ -105,14 +108,14 @@ public class ElementRow extends JPanel {
         createResult();
 
         this.setLayout(null);
-        this.setSize(1720 + judgesNumbers * 140 + 150, 70);
-        this.setLocation(0, 70 + number * 70);
+        this.setSize(calcW(1720 + judgesNumbers * 140 + 150), calcH(70));
+        this.setLocation(0, calcH(70 + number * 70));
         this.setVisible(true);
         this.setFocusable(true);
     }
 
     private void createNumbLbl() {
-        numbLabel.setSize(120, 70);
+        numbLabel.setSize(calcW(120), calcH(70));
         numbLabel.setLocation(0, 0);
         CommonSettings.settingFont30(numbLabel);
         CommonSettings.settingNarrowLightGrayBorder(numbLabel);
@@ -132,8 +135,8 @@ public class ElementRow extends JPanel {
 
 
     private void createElementTypeCmb(IsuElementType elementType) {
-        elementTypeCmb.setSize(500, 70);
-        elementTypeCmb.setLocation(120, 0);
+        elementTypeCmb.setSize(calcW(500), calcH(70));
+        elementTypeCmb.setLocation(calcW(120), 0);
         CommonSettings.settingFont30(elementTypeCmb);
         this.add(elementTypeCmb);
 
@@ -176,8 +179,8 @@ public class ElementRow extends JPanel {
     }
 
     private void createElementCmb(ElementData element) {
-        elementCmb.setSize(800, 70);
-        elementCmb.setLocation(620, 0);
+        elementCmb.setSize(calcW(800), calcH(70));
+        elementCmb.setLocation(calcW(620), 0);
         CommonSettings.settingFont30(elementCmb);
         this.add(elementCmb);
 
@@ -216,8 +219,8 @@ public class ElementRow extends JPanel {
     }
 
     private void createInfo(String nameOfInfo) {
-        info.setSize(150, 70);
-        info.setLocation(1420, 0);
+        info.setSize(calcW(150), calcH(70));
+        info.setLocation(calcW(1420), 0);
         CommonSettings.settingFont30(info);
         this.add(info);
         for (String info : IsuElementsData.getInfoValues()) {
@@ -240,8 +243,8 @@ public class ElementRow extends JPanel {
     }
 
     private void createBase() {
-        base.setSize(150, 70);
-        base.setLocation(1570, 0);
+        base.setSize(calcW(150), calcH(70));
+        base.setLocation(calcW(1570), 0);
         CommonSettings.settingFont30(base);
         CommonSettings.settingNarrowLightGrayBorder(base);
         this.add(base);
@@ -251,8 +254,8 @@ public class ElementRow extends JPanel {
         for (int i = 0; i < judges.size(); i++) {
             Judge judge = judges.get(i);
             JComboBox judgeMark = new JComboBox();
-            judgeMark.setSize(140, 70);
-            judgeMark.setLocation(1720 + i * 140, 0);
+            judgeMark.setSize(calcW(140), calcH(70));
+            judgeMark.setLocation(calcW(1720 + i * 140), 0);
             CommonSettings.settingFont30(judgeMark);
             this.add(judgeMark);
             judgeMarks.add(judgeMark);
@@ -289,8 +292,8 @@ public class ElementRow extends JPanel {
     }
 
     private void createResult() {
-        score.setSize(150, 70);
-        score.setLocation(1720 + judges.size() * 140, 0);
+        score.setSize(calcW(150), calcH(70));
+        score.setLocation(calcW(1720 + judges.size() * 140), 0);
         CommonSettings.settingFont30(score);
         CommonSettings.settingNarrowLightGrayBorder(score);
         this.add(score);

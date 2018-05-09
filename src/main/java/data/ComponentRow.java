@@ -18,6 +18,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class ComponentRow extends JPanel {
     private JLabel number;
     private JLabel empty1;
@@ -63,12 +66,12 @@ public class ComponentRow extends JPanel {
         createResult();
 
         this.setLayout(null);
-        this.setSize(1720 + judges.size() * 140 + 150, 70);
-        this.setLocation(0, 70 + number * 70);
+        this.setSize(calcW(1720 + judges.size() * 140 + 150), calcH(70));
+        this.setLocation(0, calcH(70 + number * 70));
     }
 
     private void createNumberLbl() {
-        number.setSize(120, 70);
+        number.setSize(calcW(120), calcH(70));
         number.setLocation(0, 0);
         CommonSettings.settingFont30(number);
         CommonSettings.settingNarrowLightGrayBorder(number);
@@ -76,30 +79,30 @@ public class ComponentRow extends JPanel {
     }
 
     private void createEmpty1Lbl() {
-        empty1.setSize(500, 70);
-        empty1.setLocation(120, 0);
+        empty1.setSize(calcW(500), calcH(70));
+        empty1.setLocation(calcW(120), 0);
         CommonSettings.settingNarrowLightGrayBorder(empty1);
         this.add(empty1);
     }
 
     private void createComponentLbl() {
-        component.setSize(800, 70);
-        component.setLocation(620, 0);
+        component.setSize(calcW(800), calcH(70));
+        component.setLocation(calcW(620), 0);
         CommonSettings.settingFont30(component);
         CommonSettings.settingNarrowLightGrayBorder(component);
         this.add(component);
     }
 
     private void createEmpty2Lbl() {
-        empty2.setSize(150, 70);
-        empty2.setLocation(1420, 0);
+        empty2.setSize(calcW(150), calcH(70));
+        empty2.setLocation(calcW(1420), 0);
         CommonSettings.settingNarrowLightGrayBorder(empty2);
         this.add(empty2);
     }
 
     private void createFactorLbl() {
-        factor.setSize(150, 70);
-        factor.setLocation(1570, 0);
+        factor.setSize(calcW(150), calcH(70));
+        factor.setLocation(calcW(1570), 0);
         CommonSettings.settingFont30(factor);
         CommonSettings.settingNarrowLightGrayBorder(factor);
         this.add(factor);
@@ -110,8 +113,8 @@ public class ComponentRow extends JPanel {
             Judge judge = judges.get(i);
             int index = i;
             JTextField judgeMark = new JTextField();
-            judgeMark.setSize(140, 70);
-            judgeMark.setLocation(1720 + i * 140, 0);
+            judgeMark.setSize(calcW(140), calcH(70));
+            judgeMark.setLocation(calcW(1720 + i * 140), 0);
             judgeMark.setText("");
             CommonSettings.settingFont30(judgeMark);
             CommonSettings.settingNarrowLightGrayBorder(judgeMark);
@@ -184,8 +187,8 @@ public class ComponentRow extends JPanel {
     }
 
     private void createResult() {
-        score.setSize(150, 70);
-        score.setLocation(1720 + judges.size() * 140, 0);
+        score.setSize(calcW(150), calcH(70));
+        score.setLocation(calcW(1720 + judges.size() * 140), 0);
         CommonSettings.settingFont30(score);
         CommonSettings.settingNarrowLightGrayBorder(score);
         this.add(score);

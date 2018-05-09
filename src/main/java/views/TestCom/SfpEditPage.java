@@ -12,6 +12,9 @@ import models.TestCom.TestComModel;
 import views.CommonSettings;
 import views.Manager;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class SfpEditPage extends JPanel {    
     private JLabel welcome;
     private Manager manager;
@@ -73,8 +76,8 @@ public class SfpEditPage extends JPanel {
         String str = tcModel.getValueAt(sel, 0) + ". " +
                      tcModel.getValueAt(sel, 3);
         welcome = new JLabel(str);
-        welcome.setSize(800, 70);
-        welcome.setLocation(2084, 30);
+        welcome.setSize(calcW(800), calcH(70));
+        welcome.setLocation(calcW(2084), calcH(30));
         welcome.setVisible(true);
         welcome.setOpaque(true);
         welcome.setBackground(Color.LIGHT_GRAY);
@@ -89,8 +92,8 @@ public class SfpEditPage extends JPanel {
         if (i == 2) lbl.setText("Список спортсменов");
         if (i == 3) lbl.setText("Список судей");
         lbl.setVisible(true);
-        lbl.setSize(800, 100);
-        lbl.setLocation(284 + (i-1)*900, 200);
+        lbl.setSize(calcW(800), calcH(100));
+        lbl.setLocation(calcW(284 + (i-1)*900), calcH(200));
         CommonSettings.settingFont30(lbl);
         CommonSettings.settingGrayBorder(lbl);
         lbl.setOpaque(true);
@@ -107,8 +110,8 @@ public class SfpEditPage extends JPanel {
         lst.setFocusable(false);  
         
         JScrollPane scrl = new JScrollPane(lst);
-        scrl.setSize(800, 950);
-        scrl.setLocation(284 + (i-1)*900, 310);
+        scrl.setSize(calcW(800), calcH(950));
+        scrl.setLocation(calcW(284 + (i-1)*900), calcH(310));
         this.add(scrl);
         if (i == 1) {
             elLstModel = new DefaultListModel();            
@@ -131,8 +134,8 @@ public class SfpEditPage extends JPanel {
         btn = new JButton("-");
         CommonSettings.settingFont30(btn);
         btn.setFocusable(false);
-        btn.setSize(100, 100);
-        btn.setLocation(284 + i*900 - 200, 1380);
+        btn.setSize(calcW(100), calcH(100));
+        btn.setLocation(calcW(284 + i*900 - 200), calcH(1380));
         btn.setBackground(Color.LIGHT_GRAY);
         this.add(btn);
         if (i == 1) {
@@ -157,8 +160,8 @@ public class SfpEditPage extends JPanel {
         cmb = new JComboBox();        
         CommonSettings.settingFont30(cmb);
         cmb.setEditable(false);
-        cmb.setSize(690, 100);
-        cmb.setLocation(284 + (i-1)*900, 1270);
+        cmb.setSize(calcW(690), calcH(100));
+        cmb.setLocation(calcW(284 + (i-1)*900), calcH(1270));
         this.add(cmb);
         if (i == 1) elCombo = cmb;
         else if (i == 2) athlCombo = cmb;
@@ -167,8 +170,8 @@ public class SfpEditPage extends JPanel {
         //btns
         btn = new JButton("+");      
         btn.setFocusable(false);
-        btn.setSize(100, 100);
-        btn.setLocation(284 + i*900 - 200, 1270);
+        btn.setSize(calcW(100), calcH(100));
+        btn.setLocation(calcW(284 + i*900 - 200), calcH(1270));
         CommonSettings.settingFont30(btn);
         btn.setBackground(Color.LIGHT_GRAY);
         this.add(btn); 

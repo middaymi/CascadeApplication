@@ -18,7 +18,7 @@ import views.TestCom.StartCom.SingleStComPage;
 public class SaveProtocol implements ActionListener {
     int numberOfJudges;
     String athleteName;
-    String compeitionName;
+    String competitionName;
     String dateOfEvent;
     ArrayList<ElementIsu> elementsIsu = new ArrayList<>();
     int mode;
@@ -48,7 +48,7 @@ public class SaveProtocol implements ActionListener {
         if (singleStComPage.getAthlCmb().getSelectedItem() != null) {
             numberOfJudges = isuComModel.getJudgesByComp().size();
             athleteName = CIAR.getAthlete().toString();
-            compeitionName = competition.getFullName();
+            competitionName = competition.getFullName();
             dateOfEvent = competition.getDate();
             elementsIsu = CIAR.getElementsList();
             mode = isuComModel.getMode();
@@ -63,7 +63,7 @@ public class SaveProtocol implements ActionListener {
             componentsIsu = CIAR.getComponentsList();       
 
             PdfResultsCreator pdf = new PdfResultsCreator();         
-            pdf.PdfResultsSetIsuData(numberOfJudges, compeitionName, athleteName, dateOfEvent,
+            pdf.PdfResultsSetIsuData(numberOfJudges, competitionName, athleteName, dateOfEvent,
                                      elementsIsu, mode, grade, deductions, componentsSum,
                                      elementsSum, totalScore, components, factor,
                                      startNumber, componentsIsu);

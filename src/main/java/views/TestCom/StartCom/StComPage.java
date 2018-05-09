@@ -19,6 +19,9 @@ import models.TestCom.StartCom.StComModel;
 import models.TestCom.TestComModel;
 import views.CommonSettings;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class StComPage extends JPanel {
     private TestComModel tcModel;
     private StComModel stComModel;
@@ -48,8 +51,8 @@ public class StComPage extends JPanel {
 
     private void createWelcomeLabel() {
         welcome = new JLabel();
-        welcome.setSize(800, 70);
-        welcome.setLocation(2318, 30);
+        welcome.setSize(calcW(800), calcH(70));
+        welcome.setLocation(calcW(2318), calcH(30));
         welcome.setVisible(true);
         welcome.setOpaque(true);
         welcome.setBackground(Color.LIGHT_GRAY);
@@ -62,11 +65,11 @@ public class StComPage extends JPanel {
         stComModel = StComModel.getStComModelInstance();
         
         mainPanel.setLayout(null);
-        mainPanel.setSize(5000, 5000);            
+        mainPanel.setSize(calcW(5000), calcH(5000));
         mainScrl = new JScrollPane(mainPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                               JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
         //mainScrl.setSize(2588, 1400);
-        mainScrl.setLocation(50, 177); 
+        mainScrl.setLocation(calcW(50), calcH(177));
         mainScrl.getViewport().setBackground(Color.ORANGE);
         mainScrl.setVisible(true);
         this.add(mainScrl);
@@ -76,16 +79,16 @@ public class StComPage extends JPanel {
         CommonSettings.settingFont30(judLst);        
         judLst.setModel(lstModel);
         judScrl = new JScrollPane(judLst);
-        judScrl.setSize(430, 600);
-        judScrl.setLocation(2688, 277);        
+        judScrl.setSize(calcW(430), calcH(600));
+        judScrl.setLocation(calcW(2688), calcH(277));
         this.add(judScrl);
     }
     
     private void createJudgeLabel() {
         JLabel judLbl = new JLabel("Список судей");
         judLbl.setHorizontalTextPosition(JLabel.CENTER);
-        judLbl.setSize(430, 100);
-        judLbl.setLocation(2688, 177);
+        judLbl.setSize(calcW(430), calcH(100));
+        judLbl.setLocation(calcW(2688), calcH(177));
         judLbl.setVisible(true);
         judLbl.setOpaque(true);
         judLbl.setBackground(Color.LIGHT_GRAY);
@@ -97,8 +100,8 @@ public class StComPage extends JPanel {
     private void createFinishBtn() {
         JButton finBtn = new JButton("<html>Подвести<p align=center>" +
                                                         "итоги<html>");
-        finBtn.setSize(430, 100);
-        finBtn.setLocation(2688, 1000);
+        finBtn.setSize(calcW(430), calcH(100));
+        finBtn.setLocation(calcW(2688), calcH(1000));
         finBtn.setBackground(Color.LIGHT_GRAY);
         CommonSettings.settingGrayBorder(finBtn);
         CommonSettings.settingFontBold30(finBtn);
@@ -109,8 +112,8 @@ public class StComPage extends JPanel {
     private void createPdfBtn() {
         JButton savePdf = new JButton("<html>Сохранить<p align=center>" +
                                                         "в PDF<html>");
-        savePdf.setSize(430, 100);
-        savePdf.setLocation(2688, 1130);
+        savePdf.setSize(calcW(430), calcH(100));
+        savePdf.setLocation(calcW(2688), calcH(1130));
         savePdf.setBackground(Color.LIGHT_GRAY);
         CommonSettings.settingGrayBorder(savePdf);
         CommonSettings.settingFontBold30(savePdf);
@@ -153,12 +156,12 @@ public class StComPage extends JPanel {
         int i = 0;
         for (Element value : values) {
             HeaderTextArea label = new HeaderTextArea(false, i++, value.getFullName(), 
-                                       new Dimension(125 * judges.size(), 100));
+                                       new Dimension(calcW(125) * judges.size(), calcH(100)));
             mainPanel.add(label);            
             int j = 0;        
             for (Judge judge : judges) {
                 ++j;
-                HeaderTextArea label1 = new HeaderTextArea(false, k++, String.valueOf(j), 100, true);  
+                HeaderTextArea label1 = new HeaderTextArea(false, k++, String.valueOf(j), calcH(100), true);
                 mainPanel.add(label1);
             }
         }                        
@@ -188,26 +191,26 @@ public class StComPage extends JPanel {
             }
             //if glasial
             if (tcModel.getCompetitions().get(tcModel.selRow()).getKind().getId() == 3) {
-                panel.setSize(125 * matrix.get(0).size(), 100 * matrix.size());
-                mainPanel.setPreferredSize(new Dimension(400 + panel.getWidth(), 200 + panel.getHeight()));
+                panel.setSize(calcW(125) * matrix.get(0).size(), calcH(100) * matrix.size());
+                mainPanel.setPreferredSize(new Dimension(calcW(400) + panel.getWidth(), calcH(200) + panel.getHeight()));
             } else {
-                panel.setSize(250 * matrix.get(0).size(), 100 * matrix.size());
-                mainPanel.setPreferredSize(new Dimension(400 + panel.getWidth(), 100 + panel.getHeight()));
+                panel.setSize(calcW(250) * matrix.get(0).size(), calcH(100) * matrix.size());
+                mainPanel.setPreferredSize(new Dimension(calcW(400) + panel.getWidth(), calcH(100) + panel.getHeight()));
             }
             
             //crop mainScrl if it possible
-            if (mainPanel.getPreferredSize().width < 2588) {
-                mainScrl.setSize(mainPanel.getPreferredSize().width + 20, 1400);
+            if (mainPanel.getPreferredSize().width < calcW(2588)) {
+                mainScrl.setSize(mainPanel.getPreferredSize().width + calcW(20), calcH(1400));
             } else {
-                mainScrl.setSize(2588, 1400);
+                mainScrl.setSize(calcW(2588), calcH(1400));
             }
-            if (mainPanel.getPreferredSize().height < 1400) {
-                mainScrl.setSize(mainScrl.getWidth(), mainPanel.getPreferredSize().height + 20);
+            if (mainPanel.getPreferredSize().height < calcH(1400)) {
+                mainScrl.setSize(mainScrl.getWidth(), mainPanel.getPreferredSize().height + calcH(20));
             } else {
-                mainScrl.setSize(mainScrl.getWidth(), 1400);
+                mainScrl.setSize(mainScrl.getWidth(), calcH(1400));
             }
             
-            panel.setLocation(400, top);             
+            panel.setLocation(calcW(400), top);
             mainPanel.add(panel);            
         }
     }

@@ -22,6 +22,9 @@ import models.TestCom.StartCom.IsuComModel;
 import views.CommonSettings;
 import views.Manager;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class SingleStComPage extends JPanel {
     
     private JLabel fullNamelbl;
@@ -108,8 +111,8 @@ public class SingleStComPage extends JPanel {
     //full name competition and rank lbl
     private void createWelLbls() {
         fullNamelbl = new JLabel();
-        fullNamelbl.setSize(1050, 70);
-        fullNamelbl.setLocation(250, 30);
+        fullNamelbl.setSize(calcW(1050), calcH(70));
+        fullNamelbl.setLocation(calcW(250), calcH(30));
         CommonSettings.settingFont30(fullNamelbl);
         CommonSettings.settingGrayBorder(fullNamelbl);
         fullNamelbl.setBackground(Color.LIGHT_GRAY);
@@ -117,8 +120,8 @@ public class SingleStComPage extends JPanel {
         this.add(fullNamelbl);
                 
         rankLbl = new JLabel();        
-        rankLbl.setSize(720, 70);
-        rankLbl.setLocation(50, 120);
+        rankLbl.setSize(calcW(720), calcH(70));
+        rankLbl.setLocation(calcW(50), calcH(120));
         CommonSettings.settingFont30(rankLbl);
         CommonSettings.settingGrayBorder(rankLbl);
         rankLbl.setBackground(Color.LIGHT_GRAY);
@@ -129,16 +132,16 @@ public class SingleStComPage extends JPanel {
     private void createAthlChoose() {
         //lbl 
         JLabel athl = new JLabel("Спортсмен: ");
-        athl.setSize(720, 50);
-        athl.setLocation(50, 200);
+        athl.setSize(calcW(720), calcH(50));
+        athl.setLocation(calcW(50), calcH(200));
         CommonSettings.settingFont30(athl);        
         this.add(athl);
            
         //combo
         athlCmb = new JComboBox();        
         CommonSettings.settingFont30(athlCmb);        
-        athlCmb.setSize(650, 70);
-        athlCmb.setLocation(50, 250);
+        athlCmb.setSize(calcW(650), calcH(70));
+        athlCmb.setLocation(calcW(50), calcH(250));
         athlCmb.setEditable(false);        
         this.add(athlCmb); 
         athlCmb.setSelectedItem(null);    
@@ -149,16 +152,16 @@ public class SingleStComPage extends JPanel {
         tf = new JTextField();
         
         lbl.setHorizontalTextPosition(JLabel.CENTER);
-        lbl.setSize(270, 70);
-        lbl.setLocation(1000 + i * 270, 180);
+        lbl.setSize(calcW(270), calcH(70));
+        lbl.setLocation(calcW(1000 + i * 270), calcH(180));
         lbl.setVisible(true);
         lbl.setOpaque(true);
         lbl.setBackground(Color.LIGHT_GRAY);
         CommonSettings.settingGrayBorder(lbl);
         CommonSettings.settingFont30(lbl);
                 
-        tf.setSize(270, 70);
-        tf.setLocation(1000 + i*270, 250);
+        tf.setSize(calcW(270), calcH(70));
+        tf.setLocation(calcW(1000 + i*270), calcH(250));
         tf.setVisible(true);
         tf.setOpaque(true);        
         CommonSettings.settingGrayBorder(tf);
@@ -200,8 +203,8 @@ public class SingleStComPage extends JPanel {
     private void createJud() {
         JLabel judLbl = new JLabel("Список судей");
         judLbl.setHorizontalTextPosition(JLabel.CENTER);
-        judLbl.setSize(430, 70);
-        judLbl.setLocation(2688, 180);
+        judLbl.setSize(calcW(430), calcH(70));
+        judLbl.setLocation(calcW(2688), calcH(180));
         judLbl.setVisible(true);
         judLbl.setOpaque(true);
         judLbl.setBackground(Color.LIGHT_GRAY);
@@ -213,18 +216,18 @@ public class SingleStComPage extends JPanel {
         JScrollPane judScrl = new JScrollPane(judLst);        
         CommonSettings.settingFont30(judLst);        
         judLst.setModel(lstModel);        
-        judScrl.setSize(430, 400);
-        judScrl.setLocation(2688, 250);        
+        judScrl.setSize(calcW(430), calcH(400));
+        judScrl.setLocation(calcW(2688), calcH(250));
         this.add(judScrl);          
     }
     
     private void createElScrl() {
         elPanel = new JPanel();
         getElPanel().setLayout(null); 
-        getElPanel().setMinimumSize(new Dimension(2595, 700));
+        getElPanel().setMinimumSize(new Dimension(calcW(2595), calcH(700)));
         elScrl = new JScrollPane(getElPanel(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                               JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);          
-        elScrl.setLocation(50, 350); 
+        elScrl.setLocation(calcW(50), calcH(350));
         getElPanel().setLocation(0, 0);
         elScrl.setVisible(true);
         this.add(elScrl);
@@ -233,10 +236,10 @@ public class SingleStComPage extends JPanel {
     private void createCompScrl() {
         compPanel = new JPanel();
         compPanel.setLayout(null); 
-        compPanel.setMinimumSize(new Dimension(2595, 450));
+        compPanel.setMinimumSize(new Dimension(calcW(2595), calcH(450)));
         compScrl = new JScrollPane(compPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                                               JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);         
-        compScrl.setLocation(50, 1160); 
+        compScrl.setLocation(calcW(50), calcH(1160));
         compPanel.setLocation(0, 0);
         compScrl.setVisible(true);        
         this.add(compScrl);
@@ -250,18 +253,18 @@ public class SingleStComPage extends JPanel {
         baseValue = new JLabel("BaseValue");
         scores = new JLabel("Scores");
         
-        n.setSize(120, 70);
-        elementTypes.setSize(500, 70);
-        elements.setSize(800, 70);
-        info.setSize(150, 70);
-        baseValue.setSize(150, 70);
-        scores.setSize(150, 70);
+        n.setSize(calcW(120), calcH(70));
+        elementTypes.setSize(calcW(500), calcH(70));
+        elements.setSize(calcW(800), calcH(70));
+        info.setSize(calcW(150), calcH(70));
+        baseValue.setSize(calcW(150), calcH(70));
+        scores.setSize(calcW(150), calcH(70));
         
         n.setLocation(0, 0);
-        elementTypes.setLocation(120, 0);
-        elements.setLocation(620, 0);
-        info.setLocation(1420, 0);
-        baseValue.setLocation(1570, 0);
+        elementTypes.setLocation(calcW(120), 0);
+        elements.setLocation(calcW(620), 0);
+        info.setLocation(calcW(1420), 0);
+        baseValue.setLocation(calcW(1570), 0);
         
         if (number == 1) {            
             getElPanel().add(n);
@@ -321,36 +324,36 @@ public class SingleStComPage extends JPanel {
         for (int k = 1; k <= judgesCount; k++) {
             JLabel lbl = new JLabel(); 
             lbl.setText("J" + k); 
-            lbl.setSize(140, 70);              
+            lbl.setSize(calcW(140), calcH(70));
             lbl.setOpaque(true);
             lbl.setBackground(Color.LIGHT_GRAY);
             CommonSettings.settingGrayBorder(lbl);
             CommonSettings.settingFont30(lbl); 
             lbl.setBackground(Color.LIGHT_GRAY);
-            lbl.setLocation(1720 + (k - 1) * 140, 0);
+            lbl.setLocation(calcW(1720 + (k - 1) * 140), 0);
             if (i == 1) {getElPanel().add(lbl);}
             else if (i == 2) {getCompPanel().add(lbl);}
         } 
-        scores.setLocation(1720 + judgesCount * 140, 0);
+        scores.setLocation(calcW(1720 + judgesCount * 140), 0);
         if (i == 1) {                         
             getElPanel().setPreferredSize
-                      (new Dimension(1720 + judgesCount * 140 + 150, 10000));                          
+                      (new Dimension(calcW(1720 + judgesCount * 140 + 150), calcH(10000)));
             getElPanel().add(scores);             
         } else if (i == 2) { 
             getCompPanel().setPreferredSize
-                      (new Dimension(1720 + judgesCount * 140 + 150, 
+                      (new Dimension(calcW(1720 + judgesCount * 140 + 150),
                       getCompPanel().getHeight())); 
             getCompPanel().add(scores);           
         }  
         
-        elScrl.setSize(1720 + judgesCount * 140 + 150 + 20, 700);                                   
+        elScrl.setSize(calcW(1720 + judgesCount * 140 + 150 + 20), calcH(700));
     }  
           
     private void createFinishBtn() {
         finBtn = new JButton("<html>Подвести итог<p align=center>" +
                                                      "по спортсмену<html>");
-        finBtn.setSize(430, 100);
-        finBtn.setLocation(2688, 700);
+        finBtn.setSize(calcW(430), calcH(100));
+        finBtn.setLocation(calcW(2688), calcH(700));
         finBtn.setBackground(Color.LIGHT_GRAY);
         CommonSettings.settingGrayBorder(finBtn);
         CommonSettings.settingFontBold30(finBtn);
@@ -362,8 +365,8 @@ public class SingleStComPage extends JPanel {
     private void createSaveProtocolBtn() {
         savePrBtn = new JButton("<html>Сохранить<p align=center>" +
                                             "протокол в PDF<html>");
-        savePrBtn.setSize(430, 100);
-        savePrBtn.setLocation(2688, 960);
+        savePrBtn.setSize(calcW(430), calcH(100));
+        savePrBtn.setLocation(calcW(2688), calcH(960));
         savePrBtn.setBackground(Color.LIGHT_GRAY);
         CommonSettings.settingGrayBorder(savePrBtn);
         CommonSettings.settingFontBold30(savePrBtn);
@@ -391,8 +394,8 @@ public class SingleStComPage extends JPanel {
         CommonSettings.settingFont30(points);
         CommonSettings.settingGrayBorder(rbPanel);
         rbPanel.setBackground(Color.LIGHT_GRAY);
-        rbPanel.setSize(430, 100);
-        rbPanel.setLocation(2688, 830);
+        rbPanel.setSize(calcW(430), calcH(100));
+        rbPanel.setLocation(calcW(2688), calcH(830));
         rbPanel.setVisible(true);
         rbPanel.setOpaque(true);         
         this.add(rbPanel);      
@@ -420,8 +423,8 @@ public class SingleStComPage extends JPanel {
     
     public void createAddElemBtn() {
         addElemBtn = new JButton("Добавить элемент");
-        addElemBtn.setSize(300, 70);
-        addElemBtn.setLocation(50, 1060);
+        addElemBtn.setSize(calcW(300), calcH(70));
+        addElemBtn.setLocation(calcW(50), calcH(1060));
         addElemBtn.setBackground(Color.LIGHT_GRAY);
         CommonSettings.settingFont30(addElemBtn);
         this.add(addElemBtn);
@@ -451,8 +454,8 @@ public class SingleStComPage extends JPanel {
             compPanel.add(componentRow); 
             compRows.add(componentRow);            
         }
-        compScrl.setSize(1720 + judges.size() * 140 + 150 + 10, 
-                        (components.size() + 1) * 70 + 10);        
+        compScrl.setSize(calcW(1720 + judges.size() * 140 + 150 + 10),
+                calcH((components.size() + 1) * 70 + 10));
     }
     
     public void createLbls() {  
