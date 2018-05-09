@@ -44,21 +44,12 @@ public class StartCom implements ActionListener {
                 //SINGLE
                 case (4):
                     model = IsuComModel.getModelInstance();
-
-                    //competition is finished
-                    if (competition.isFinished()) {
-                        manager.choosePanel(62);
-                        model.setAllDataForFinishedCompetition();
-                        return;
-                    }
-
-                    if (competition.getRankId() == 0) {
+                    if (competition.getRankId() == null) {
                         JOptionPane.showMessageDialog(Manager.getTestCompPage(),
                                 "Установите разряд в форме редактирования для проведения соревнования!",
                                 "Ошибка", JOptionPane.WARNING_MESSAGE);
                         return;
                     }
-
                     manager.choosePanel(62);
                     model.setAllData();
                     break;

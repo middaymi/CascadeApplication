@@ -1,8 +1,5 @@
 package data;
 
-/**
- * Created by beaver on 02.05.17.
- */
 public class IsuElementValue {
 
     private ElementData element;

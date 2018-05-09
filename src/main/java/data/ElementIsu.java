@@ -4,10 +4,10 @@ package data;
 
 import java.util.HashMap;
 
-public class ElementIsu {    
-    
-    private int elementId = 0; //+
+public class ElementIsu {
+
     private int elementTypeId = 0; //+
+    private int elementId = 0; //+
     private String name = ""; //+
     private String info = ""; //+
     private float baseValue = 0.0f; //+
@@ -68,5 +68,9 @@ public class ElementIsu {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void addJudgeValue(Integer judgeId, ElementValue elval) {
+        judgesValues.put(judgeId, elval);
     }
 }

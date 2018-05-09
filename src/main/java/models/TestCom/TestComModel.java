@@ -327,11 +327,12 @@ public class TestComModel extends AbstractTableModel {
             while (rs.next()) {
                 tempID = rs.getInt(1)+ 1;
                 newRow.setId(tempID);
+                System.out.println("NEW ID + " + tempID);
             }            
             
             //add empty row
             query = "INSERT INTO COMPETITION " +
-                    "VALUES (1, '', 0, GETDATE(), '', '', null);";               
+                    "VALUES (1, '', 0, GETDATE(), '', '', null, 0);";
 
             System.out.println(query);
             PreparedStatement pstmt = DBC.prepareStatement(query);
@@ -351,6 +352,11 @@ public class TestComModel extends AbstractTableModel {
         } catch (SQLException ex) {
             Logger.getLogger(TestComModel.class.getName()).log(Level.SEVERE,
                        "Not insert a new row into DB or not get row ID", ex);
+
+
+
+
+
             return;            
         }
     }

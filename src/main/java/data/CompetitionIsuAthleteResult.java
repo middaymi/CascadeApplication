@@ -12,6 +12,7 @@ public class CompetitionIsuAthleteResult {
     private float componentScore = 0;
     private float deductions = 0;
     private boolean isDone = false;
+    private boolean isFinished = false;
     private int competitionAthlId = 0;
     private int place = 0;
     private  int resultId = 0;
@@ -95,7 +96,6 @@ public class CompetitionIsuAthleteResult {
     public float getElementScore() {
         return elementScore;
     }
-
     public void setElementScore(float elementScore) {
         this.elementScore = Math.round(elementScore * 100.0f) / 100.0f;
     }
@@ -103,7 +103,6 @@ public class CompetitionIsuAthleteResult {
     public float getComponentScore() {
         return componentScore;
     }
-
     public void setComponentScore(float componentScore) {
         this.componentScore = Math.round(componentScore * 100.0f) / 100.0f;
     }
@@ -111,7 +110,6 @@ public class CompetitionIsuAthleteResult {
     public float getDeductions() {
         return deductions;
     }
-
     public void setDeductions(float deductions) {
         this.deductions = deductions;
     }
@@ -159,8 +157,10 @@ public class CompetitionIsuAthleteResult {
     public int getResultId() {
         return resultId;
     }
-
     public void setResultId(int resultId) {
         this.resultId = resultId;
     }
+
+    public boolean isFinished() { return this.isFinished; }
+    public void setFinished(boolean finish) { this.isFinished = finish; }
 }

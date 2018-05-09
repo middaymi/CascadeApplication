@@ -2,9 +2,9 @@ package data;
 
 public class ElementValue {
     
-    private int elementId; //+
-    private int judgeId; //+
-    private int mark; //+
+    private int elementId;
+    private int judgeId;
+    private int mark;
     private float value;
     
     private boolean isSaved = false;
@@ -48,4 +48,5 @@ public class ElementValue {
     public void setSaved(boolean isSaved) {
         this.isSaved = isSaved;
     }
+
 }

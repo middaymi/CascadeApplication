@@ -1,34 +1,28 @@
 package models.TestCom.StartCom;
 
-import data.Athlete;
-import data.Competition;
-import data.CompetitionIsuAthleteResult;
-import data.Component;
-import data.ComponentIsu;
-import data.ComponentValue;
-import data.ElementData;
-import data.ElementIsu;
-import data.IsuElementType;
-import data.IsuElementsData;
-import data.Judge;
-import data.Rank;
+import controllers.TestComPage.SingleComPage.SetAthlete;
+import data.*;
+import models.TestCom.TestComModel;
+import views.Manager;
+import views.TestCom.StartCom.SingleStComPage;
+
+import javax.swing.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import models.TestCom.TestComModel;
-import views.Manager;
-import views.TestCom.StartCom.SingleStComPage;
+import java.util.stream.Collectors;
 
 public class IsuComModel extends StComModel {
 
     //athlets take part in selected competition  and their results   
-    private HashMap<Integer, CompetitionIsuAthleteResult> athletesByComp = new HashMap<>();
+    private List<Athlete> athletesByComp = new ArrayList<>();
     private Competition competition;
     private ArrayList<Component> components = new ArrayList<>();
     private HashMap<Integer, ElementData> allElements = new HashMap<>();
@@ -42,8 +36,9 @@ public class IsuComModel extends StComModel {
     private SingleStComPage singleComPage;
 
     private CompetitionIsuAthleteResult CIAR;
+    private HashMap<Integer, CompetitionIsuAthleteResult> CIARS = new HashMap<>();
 
-    private HashMap<Integer, CompetitionIsuAthleteResult> CIARS;
+    private static boolean doNothingWithListenersFlag = false;
 
     private IsuComModel() {
     }
@@ -55,6 +50,50 @@ public class IsuComModel extends StComModel {
             stComModelInstance = new IsuComModel();
         }
         return stComModelInstance;
+    }
+
+    public boolean isFinishedCompetitionForAthlete(int athleteID) {
+        //if finished = true(1)
+        String query = String.format("select * from RESULT where RESULT.IDathlete = %d and RESULT.IDcompetition = %d",
+                athleteID, competition.getId());
+
+        PreparedStatement prst = null;
+        ResultSet rs = null;
+
+        try {
+            prst = getDBC().prepareStatement(query);
+            rs = prst.executeQuery();
+
+            if (rs.next()) {
+                return true;
+            }
+        } catch (SQLException ex) {
+            ex.getStackTrace();
+        }
+        return false;
+    }
+
+    //clear gui
+    public void clearElementAndComponentsRow() {
+        //elements
+        for (ElementRow row : singleComPage.getElRows()) {
+            singleComPage.getElPanel().remove(row);
+            //row.setScoreText("");
+        }
+        singleComPage.getElPanel().updateUI();
+        singleComPage.getElPanel().repaint();
+        singleComPage.getElRows().clear();
+
+        //components
+        for (ComponentRow row : singleComPage.getCompRows()) {
+            row.setTextJMFields("");
+            row.setEnabledCompRowComponents(true);
+            row.setScoreText("");
+            singleComPage.getCompPanel().repaint();
+        }
+
+        //top panel
+        singleComPage.clearTopPanelResults();
     }
 
     private Competition getSelCompetition() {
@@ -148,8 +187,10 @@ public class IsuComModel extends StComModel {
         //data
         try {
             //clear the data
-            getAthletesByComp().clear();
+            athletesByComp.clear();
+            CIARS.clear();
             singleComPage.getAthlCmb().removeAllItems();
+
             //get data        
             while (rs.next()) {
                 Athlete athlete = new Athlete();
@@ -158,13 +199,15 @@ public class IsuComModel extends StComModel {
                 athlete.setSurname(rs.getString(2));
                 athlete.setMiddlename(rs.getString(4));
                 athlete.setBirthday(rs.getDate(5));
+                CompetitionIsuAthleteResult CIAR = new CompetitionIsuAthleteResult(athlete);
+                CIARS.put(athlete.getId(), CIAR);
+                athletesByComp.add(athlete);
                 singleComPage.getAthlCmb().addItem(athlete);
             }
             rs.close();
             prst.close();
             singleComPage.getAthlCmb().setSelectedItem(null);
-            singleComPage.getAthlCmb().addActionListener(new controllers.TestComPage.SingleComPage.
-                    SetAthlete());
+            singleComPage.getAthlCmb().addActionListener(new controllers.TestComPage.SingleComPage.SetAthlete());
 
         } catch (SQLException ex) {
             Logger.getLogger(StComModel.class.getName()).
@@ -307,54 +350,46 @@ public class IsuComModel extends StComModel {
     }
 
     public void setAllData() {
-        //set mode empty
-        mode = 0;
-
-        //get a competition
-        getSelCompetition();
-
         //get the last link of panel
         singleComPage = Manager.getSingleComPage();
 
+        upDoNothingWithListenersFlag();
+
+        //set mode empty
+        mode = 0;
+
+        CIARS.clear();
+        CIAR = null;
+        singleComPage.clearTopPanelResults();
+
+        //get and set a competition
+        getSelCompetition();
+
         //set name of competition and rank
-        singleComPage.setFulllName(competition.getFullName());
+        singleComPage.setFullName(competition.getFullName());
         setRank();
         singleComPage.setRank(rank.getFullName());
 
         //clearing arrays are at these methods
         singleComPage.getElRows().clear();
+        singleComPage.getCompRows().clear();
+
+        /*add to competition_performance_athlete_link
+        and set ciar for all athletes by competition*/
         setAthletes();
+        for (Athlete athlete : athletesByComp) {
+            CIARS.get(athlete.getId()).setCompetitionAthlId(getCompetitionAthlId(athlete));
+        }
+
         setJudges();
         setTypes();
         setElements();
         setComponents();
+
         this.factor = IsuElementsData.getFactor(this.competition.getRankId());
         singleComPage.createLbls();
-    }
+        downDoNothingWithListenersFlag();
 
-    public void setAllDataForFinishedCompetition() {
-        //set mode empty
-        //????
-        mode = 1;
-
-        //get a competition
-        getSelCompetition();
-
-        //get the last link of panel
-        singleComPage = Manager.getSingleComPage();
-
-        //set name of competition and rank
-        singleComPage.setFulllName(competition.getFullName());
-        setRank();
-        singleComPage.setRank(rank.getFullName());
-
-        //clearing arrays are at these methods
-        singleComPage.getElRows().clear();
-        setAthletes();
-        singleComPage.createLbls();
-
-        //get result data
-        getCIARsFromDB();
     }
 
     public boolean checkDeductionsAndComponentsValue(String deductions) {
@@ -363,22 +398,21 @@ public class IsuComModel extends StComModel {
         return m.matches();
     }
 
-    private void getCIARsFromDB() {
+    public void getCIARsFromDB() {
         //all final results by competition
-        CIARS = new HashMap<>();
         PreparedStatement prst = null;
         ResultSet rs = null;
         String query;
 
         try {
-            query = "SELECT R.IDathlete, A.Surname, A.Name, A.Middlename, " +
-                    "A.IDrank, A.Sex,\n" +
-                    "R.ID as IDresult, R.Place, R.SumResult,\n" +
-                    "R.isDone, R.StartNumber, R.SumOfAllElements, R.SumOfAllComponents,\n" +
-                    "R.Deductions\n" +
-                    "FROM RESULT as R, ATHLETE as A \n" +
-                    "WHERE IDcompetition = " + competition.getId() + " " +
-                    "AND R.IDathlete = A.ID;";
+            query = String.format("select R.IDathlete, A.Surname, A.Name, A.Middlename, A.IDrank, A.Sex, " +
+                    "R.ID as IDresult, R.Place, R.SumResult, R.isDone, R.StartNumber, R.SumOfAllElements, " +
+                    "R.SumOfAllComponents, R.Deductions, CPAL.isFinished " +
+                    "from ATHLETE as A " +
+                    "join RESULT as R on A.ID = R.IDathlete " +
+                    "join COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL on " +
+                    "R.IDcompetition = CPAL.IDcompetition and A.ID = CPAL.idAthlete " +
+                    "where R.IDcompetition = %d", competition.getId());
 
             prst = getDBC().prepareStatement(query);
             rs = prst.executeQuery();
@@ -404,6 +438,7 @@ public class IsuComModel extends StComModel {
                 CIAR.setElementScore(rs.getFloat(12));
                 CIAR.setComponentScore(rs.getFloat(13));
                 CIAR.setDeductions(rs.getFloat(14));
+                CIAR.setFinished(rs.getBoolean(15));
 
                 CIARS.put(athlete.getId(), CIAR);
             }
@@ -413,121 +448,180 @@ public class IsuComModel extends StComModel {
         }
     }
 
+    public List<Integer> getJudgesIDs() {
+        return getJudgesByComp().stream()
+                .map(Judge::getId)
+                .collect(Collectors.toList());
+    }
+
+    //by selected athlete
+    public void getComponentsResultFromDB(int athleteId) {
+        PreparedStatement prst = null;
+        ResultSet rs = null;
+        String query = String.format("select IDcomponent, Value, IDjudge " +
+                "from ALL_RESULTS_COMPONENTS as ARC " +
+                "inner join COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL on " +
+                "ARC.IDcompetitionPerformanceAthleteLink = CPAL.ID " +
+                "where CPAL.IDcompetition = %d and CPAL.IDathlete = %d;", competition.getId(), athleteId);
+        try {
+            prst = getDBC().prepareStatement(query);
+            rs = prst.executeQuery();
+
+            float score;
+            for (ComponentRow compRow : singleComPage.getCompRows()) {
+                int judgesNumbers = getJudgesByComp().size();
+
+                List<Integer> judgesIDs = getJudgesIDs();
+
+                score = 0;
+                ComponentIsu compIsu = compRow.getComponentIsu();
+                while (rs.next()) {
+                    //values
+                    ComponentValue compValue = compRow.getComponentIsu().getJudgesValues().get(judgesIDs.get(getJudgesByComp().size() - judgesNumbers));
+                    compValue.setComponentId(rs.getInt(1));
+                    compValue.setValue(rs.getFloat(2));
+                    compValue.setJudgeId(rs.getInt(3));
+                    compValue.setSaved(true);
+
+                    //data
+                    compIsu.setComponentId(compValue.getComponentId());
+
+                    score += compValue.getValue();
+                    if (--judgesNumbers == 0) break;
+                }
+                compIsu.setScores(score);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(IsuComModel.class.getName()).log(Level.SEVERE, "ERROR WITH GETTING COMPONENTS RESULT", ex);
+        }
+    }
+
+    public void setComponentResultsToFields() {
+        List<Integer> judgesIDs = getJudgesIDs();
+        for (ComponentRow compRow : singleComPage.getCompRows()) {
+            int index = 0;
+            for (JTextField tf : compRow.getJudgeMarks()) {
+                String text = String.valueOf(compRow.getComponentIsu().getJudgesValues().get(judgesIDs.get(index++)).getValue());
+                if (text.equals("0.0")) text = "";
+                tf.setText(text);
+            }
+            String scoreValue = String.valueOf(compRow.getComponentIsu().getScores());
+            compRow.setScoreText(scoreValue.equals("0.0") ? "" : scoreValue);
+        }
+    }
+
+    public int getCompetitionAthlId(Athlete athlete) {
+        PreparedStatement prst = null;
+        ResultSet rs = null;
+        int id = 0;
+
+        try {
+            String str = "SELECT ID FROM COMPETITION_PERFORMANCE_ATHLETE_LINK " +
+                    "WHERE IDathlete = " + athlete.getId() + " AND " +
+                    "IDcompetition = " + this.getCompetition().getId() + ";";
+            String str1 = "INSERT INTO COMPETITION_PERFORMANCE_ATHLETE_LINK VALUES (" +
+                    this.getCompetition().getId() + ", " + athlete.getId() +
+                    ", null, 0);";
+
+            prst = this.getDBC().prepareStatement(str);
+            rs = prst.executeQuery();
+
+            if (rs.next()) {
+                id = rs.getInt(1);
+            } else {
+                prst = this.getDBC().prepareStatement(str1);
+                prst.executeUpdate();
+
+                prst = this.getDBC().prepareStatement(str);
+                rs = prst.executeQuery();
+                if (rs.next()) {
+                    id = rs.getInt(1);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SetAthlete.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                rs.close();
+                prst.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(SetAthlete.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return id;
+    }
+
+    public void getElementsResultFromDB(int IDathlete) {
+        PreparedStatement prst = null;
+        ResultSet rs = null;
+        float score;
+        int elementNumber = 1;
+
+        String withMarks = String.format("select IDType, IDisuElement, Info, Base, IDjudge, Mark " +
+                "from (select IDcompetitionPerformanceAthleteLink, Base, Info, Mark, IDjudge, IDcompetition, IDathlete, IDisuElement " +
+                "from ALL_RESULTS_ELEMENTS as ARE " +
+                "join COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL on ARE.IDcompetitionPerformanceAthleteLink = CPAL.ID " +
+                "where CPAL.IDcompetition = %d and IDathlete = %d) as tech " +
+                "join (select E.FullNameRUS, E.Abbreviation, T.ID as IDType, T.FullName, E.ID from ISU_ELEMENT as E join ISU_ELEMENT_TYPE as T on E.IDelementType = T.ID) as elem " +
+                "on tech.IDisuElement = elem.ID", competition.getId(), IDathlete);
+        try {
+
+            CIARS.get(IDathlete).getElementsList().clear();
+            prst = getDBC().prepareStatement(withMarks);
+            rs = prst.executeQuery();
+
+            ElementIsu elIsu = null;
+
+            int elementTypeId = 0;
+            int elementId = 0;
+            Integer judgeId = null;
+            int mark = 0;
+
+            int judgesNumbers = 0;
+            int judges = singleComPage.getLstModel().getSize();
+
+            while (rs.next()) {
+
+                if (judgesNumbers == 0) {
+                    judgesNumbers = judges;
+                    elIsu = new ElementIsu();
+
+                    //to data
+                    elementTypeId = rs.getInt(1);
+                    elIsu.setElementTypeId(elementTypeId);
+
+                    elementId = rs.getInt(2);
+                    elIsu.setElementId(elementId);
+
+                    elIsu.setInfo(rs.getString(3));
+                    elIsu.setBaseValue(rs.getFloat(4));
+
+                    //to athlete ciar
+                    CIARS.get(IDathlete).getElementsList().add(elIsu);
+                }
+
+                //fill elementVal
+                ElementValue elVal = new ElementValue();
+                judgeId = rs.getInt(5);
+                mark = rs.getInt(6);
+
+                elVal.setElementId(elementId);
+                elVal.setJudgeId(judgeId);
+                elVal.setMark(mark);
+                elVal.setSaved(true);
+
+                //add a mark to result row
+                elIsu.addJudgeValue(judgeId, elVal);
+
+                judgesNumbers--;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
-
-
-    
-//    private boolean isAthleteResultInDB(ArrayList<Judge>judges) {
-//        PreparedStatement prst = null;
-//        ResultSet rs = null;
-//        String query;
-//
-//        try {
-//            query = "SELECT R.IDathlete, A.Surname, A.Name, A.Middlename, " +
-//                    "A.IDrank, A.Sex,\n" +
-//                    "R.ID as IDresult, R.Place, R.SumResult,\n" +
-//                    "R.isDone, R.StartNumber, R.SumOfAllElements, R.SumOfAllComponents,\n" +
-//                    "R.Deductions\n" +
-//                    "FROM RESULT as R, ATHLETE as A \n" +
-//                    "WHERE IDcompetition = " + competition.getId() + " " +
-//                    "AND R.IDathlete = A.ID;";
-//
-//            prst = getDBC().prepareStatement(query);
-//            rs = prst.executeQuery();
-//
-//            //all final results by competition
-//            HashMap<Integer, CompetitionIsuAthleteResult> CIARS = new HashMap<>();
-//            while (rs.next()) {
-//                Athlete athlete = new Athlete();
-//                athlete.setId(rs.getInt(1));
-//                athlete.setSurname(rs.getString(2));
-//                athlete.setName(rs.getString(3));
-//                athlete.setMiddlename(rs.getString(4));
-//                athlete.setIdrank(rs.getInt(5));
-//                athlete.setSex(rs.getBoolean(6));
-//                CompetitionIsuAthleteResult CIAR =
-//                        new CompetitionIsuAthleteResult(athlete);
-//
-//                //result field
-//                CIAR.setResultId(rs.getInt(7));
-//                CIAR.setPlace(rs.getInt(8));
-//                CIAR.setTotalScore(rs.getFloat(9));
-//                CIAR.setIsDone(rs.getBoolean(10));
-//                CIAR.setStartNumber(rs.getInt(11));
-//                CIAR.setElementScore(rs.getFloat(12));
-//                CIAR.setComponentScore(rs.getFloat(13));
-//                CIAR.setDeductions(rs.getFloat(14));
-//
-//                ElementIsu elIsu = new ElementIsu();
-//
-//                ComponentIsu compIsu = new ComponentIsu();
-//
-//                //compIsu.setJudgesValues(getCompJudMarks(athlete.getId()));
-//
-//                CIARS.put(athlete.getId(), CIAR);
-//            }
-//
-//        } catch (SQLException ex) {
-//            Logger.getLogger(IsuComModel.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
-    
-//    private HashMap<Integer, ComponentValue> getCompJudMarks(int athleteId) {
-//        //hash <IDcomponent, Values>
-//        PreparedStatement prst = null;
-//        ResultSet rs = null;
-//        String query;
-//        
-//        PreparedStatement prstComp = null;
-//        ResultSet rsComp = null;
-//        String queryComp;
-//        //componentId, hashmap
-//        HashMap<Integer, HashMap<Integer, ComponentValue>> allJudgesValues;
-//        try {
-//            query = "SELECT RC.IDcomponent, RC.IDjudge, RC.Value\n" +
-//                    "FROM  ALL_RESULTS_COMPONENTS as RC, " +
-//                    "COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL \n" +
-//                    "WHERE RC.IDcompetitionPerformanceAthleteLink = CPAL.ID AND " +
-//                    "CPAL.IDathlete = " + athleteId + " AND " +
-//                    "CPAL.IDcompetition = " + competition.getId() + ";";
-//            
-//            prst = getDBC().prepareStatement(query);
-//            rs = prst.executeQuery();
-//            
-//            queryComp = "SELECT  Distinct RC.IDcomponent\n" +
-//                        "FROM  ALL_RESULTS_COMPONENTS as RC, " +
-//                        "COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL \n" +
-//                        "WHERE RC.IDcompetitionPerformanceAthleteLink = CPAL.ID " +
-//                        "AND CPAL.IDcompetition = " + competition.getId() + ";";
-//            
-//            prstComp = getDBC().prepareStatement(queryComp);
-//            rsComp = prstComp.executeQuery();
-//            
-//            allJudgesValues = new HashMap<>();
-//            
-//            //by all components value
-//            while(rs.next()) {
-//                HashMap<Integer, ComponentValue> judgesValues = new HashMap<>();
-//                //by every component
-//                while(rsComp.next()) {                    
-//                    ComponentValue compVal = new ComponentValue();
-//                    compVal.setComponentId(rs.getInt(1));
-//                    compVal.setJudgeId(rs.getInt(2));
-//                    compVal.setValue(rs.getFloat(3));
-//                    judgesValues.put(compVal.getComponentId(), compVal);
-//                }
-//                allJudgesValues.put(judgesValues.keySet().hashCode(), judgesValues);                
-//            }           
-//        } catch (SQLException ex) {
-//            Logger.getLogger(IsuComModel.class.getName()).
-//                   log(Level.SEVERE, null, ex);
-//        }
-//        return allJudgesValues;        
-//    }
-    
-    
-    
     public Competition getCompetition() {
         return competition;
     }
@@ -542,7 +636,7 @@ public class IsuComModel extends StComModel {
 
     public void setFactor(float factor) {
         this.factor = factor;
-    }    
+    }
 
     public HashMap<Integer, ElementData> getAllElements() {
         return allElements;
@@ -552,14 +646,20 @@ public class IsuComModel extends StComModel {
         return allTypes;
     }
 
-    public HashMap<Integer, CompetitionIsuAthleteResult> getAthletesResultsByComp() {
-        return athletesByComp;
+    public CompetitionIsuAthleteResult getCIAR() {
+        return CIAR;
     }
 
-    public CompetitionIsuAthleteResult getCIAR() { return CIAR; }
+    public CompetitionIsuAthleteResult getCIAR(int IDathlete) {
+        return CIARS.get(IDathlete);
+    }
 
-    public CompetitionIsuAthleteResult getCIAR(int athleteId) {
-        return CIARS.get(athleteId);
+    public CompetitionIsuAthleteResult addCIARtoCIARs(int IDathlete, CompetitionIsuAthleteResult ciar) {
+        return CIARS.put(IDathlete, ciar);
+    }
+
+    public HashMap<Integer, CompetitionIsuAthleteResult> getCIARS() {
+        return CIARS;
     }
 
     public void setCIAR(CompetitionIsuAthleteResult CIAR) {
@@ -588,5 +688,17 @@ public class IsuComModel extends StComModel {
 
     public void setFinished(boolean isFinished) {
         this.isFinished = isFinished;
-    }   
+    }
+
+    public static boolean isDoNothingWithListenersFlagUp() {
+        return doNothingWithListenersFlag;
+    }
+
+    public static void upDoNothingWithListenersFlag() {
+        doNothingWithListenersFlag = true;
+    }
+
+    public static void downDoNothingWithListenersFlag() {
+        doNothingWithListenersFlag = false;
+    }
 }

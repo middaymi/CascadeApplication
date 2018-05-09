@@ -1,9 +1,7 @@
 package views.TestCom.StartCom;
 
-import data.Component;
-import data.ComponentRow;
-import data.ElementRow;
-import data.Judge;
+import data.*;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -26,7 +24,7 @@ import views.Manager;
 
 public class SingleStComPage extends JPanel {
     
-    private JLabel fulllNamelbl;
+    private JLabel fullNamelbl;
     private JLabel  rankLbl;
     
     //top panel
@@ -109,14 +107,14 @@ public class SingleStComPage extends JPanel {
     
     //full name competition and rank lbl
     private void createWelLbls() {
-        fulllNamelbl = new JLabel();    
-        fulllNamelbl.setSize(1050, 70);
-        fulllNamelbl.setLocation(250, 30);
-        CommonSettings.settingFont30(fulllNamelbl);
-        CommonSettings.settingGrayBorder(fulllNamelbl);
-        fulllNamelbl.setBackground(Color.LIGHT_GRAY);
-        fulllNamelbl.setOpaque(true);
-        this.add(fulllNamelbl);                
+        fullNamelbl = new JLabel();
+        fullNamelbl.setSize(1050, 70);
+        fullNamelbl.setLocation(250, 30);
+        CommonSettings.settingFont30(fullNamelbl);
+        CommonSettings.settingGrayBorder(fullNamelbl);
+        fullNamelbl.setBackground(Color.LIGHT_GRAY);
+        fullNamelbl.setOpaque(true);
+        this.add(fullNamelbl);
                 
         rankLbl = new JLabel();        
         rankLbl.setSize(720, 70);
@@ -317,6 +315,7 @@ public class SingleStComPage extends JPanel {
     }
             
     private void createElJudLabels(int i, int judgesCount) {
+
         //i = element(1) or component labels(2)
         //j = count of judges
         for (int k = 1; k <= judgesCount; k++) {
@@ -407,7 +406,16 @@ public class SingleStComPage extends JPanel {
         elPanel.add(el);
         elPanel.repaint();
         elPanel.updateUI();
-        elRows.add(el); 
+        elRows.add(el);
+    }
+
+    public void addElementRow(int number, ElementIsu elIsu) {
+        ElementRow el = new ElementRow(number, elIsu);
+        elPanel.add(el);
+        elPanel.repaint();
+        elPanel.updateUI();
+        elRows.add(el);
+
     }
     
     public void createAddElemBtn() {
@@ -475,8 +483,8 @@ public class SingleStComPage extends JPanel {
         this.lstModel = lstModel;
     }
 
-    public void setFulllName(String fullName) {
-        this.fulllNamelbl.setText("Название: " + fullName);
+    public void setFullName(String fullName) {
+        this.fullNamelbl.setText("Название: " + fullName);
     }
 
     public void setRank(String rank) {        
@@ -499,7 +507,7 @@ public class SingleStComPage extends JPanel {
         return elRows;
     }
     
-    public ArrayList<ComponentRow> getCompRows() {
+    public ArrayList<ComponentRow>  getCompRows() {
         return compRows;
     }
 
@@ -576,6 +584,14 @@ public class SingleStComPage extends JPanel {
         componentScoreTF.setText(textOfFields[3]);
         deductionsTF.setText(textOfFields[4]);
     }
+
+    public void clearTopPanelResults() {
+        startTF.setText("");
+        totalScoreTF.setText("");
+        elementScoreTF.setText("");
+        componentScoreTF.setText("");
+        deductionsTF.setText("");
+    }
     
     public void setTotalScore(String str) {
         this.totalScoreTF.setText(str);
@@ -587,5 +603,11 @@ public class SingleStComPage extends JPanel {
 
     public void setComponentScore(String str) {
         this.componentScoreTF.setText(str);
+    }
+
+    public void setStartNumber(String str) { this.startTF.setText(str); }
+
+    public void setComponentsRow(ComponentRow row) {
+        compRows.add(row);
     }
 }

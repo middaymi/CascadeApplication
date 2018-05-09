@@ -1,14 +1,12 @@
 package controllers.TestComPage.SingleComPage;
 
-import data.CompetitionIsuAthleteResult;
-import data.ComponentIsu;
-import data.ComponentRow;
-import data.ElementIsu;
-import data.ElementRow;
+import data.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,9 +26,15 @@ public class FinishComByAthlete implements ActionListener{
         manager = Manager.getManagerInstance();
         singleComPage = manager.getSingleComPage();
         isuComModel = IsuComModel.getModelInstance();
-        
+
         if (singleComPage.getAthlCmb().getSelectedItem() != null) {
+            Athlete athlete = (Athlete) (singleComPage.getAthlCmb().getSelectedItem());
+
             if (checkAmountInputAllValues()) {
+
+                //mark as finished
+                setFinishedFlagInDB(athlete.getId());
+
                 //enable btn save protocol in pdf
                 isuComModel.setMode(1);
 
@@ -54,7 +58,7 @@ public class FinishComByAthlete implements ActionListener{
 
                 //get a result
                 CompetitionIsuAthleteResult CIAR = IsuComModel.getModelInstance().getCIAR();
-
+                CIAR.setFinished(true);
                 //calculating values and check rank
                 CIAR.calculate(IsuComModel.getModelInstance().getFactor());
                 CIAR.checkRank(IsuComModel.getModelInstance().getAllElements(), 
@@ -85,7 +89,20 @@ public class FinishComByAthlete implements ActionListener{
             "Ошибка", JOptionPane.WARNING_MESSAGE);
             return;
         }       
-    }  
+    }
+
+    private void setFinishedFlagInDB(int IDathlete) {
+        String query = String.format("update COMPETITION_PERFORMANCE_ATHLETE_LINK " +
+                "set isFinished = 1 where IDcompetition = %d and IDathlete = %d;",
+                isuComModel.getCompetition().getId(), IDathlete);
+        Statement st = null;
+        try {
+            st = isuComModel.getDBC().createStatement();
+            st.executeUpdate(query);
+        } catch (SQLException | NullPointerException ex) {
+            ex.getStackTrace();
+        }
+    }
     
     //add an athlete result
     private void addAthleteResult(CompetitionIsuAthleteResult CIAR) {
