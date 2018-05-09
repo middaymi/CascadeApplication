@@ -1,10 +1,7 @@
 package controllers.TestComPage.SingleComPage;
 
-import data.Competition;
-import data.CompetitionIsuAthleteResult;
-import data.Component;
-import data.ComponentIsu;
-import data.ElementIsu;
+import data.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -43,7 +40,7 @@ public class SaveProtocol implements ActionListener {
         isuComModel = IsuComModel.getModelInstance();     
         singleStComPage = Manager.getManagerInstance().getSingleComPage();
         competition = tcModel.getCompetitions().get(tcModel.selRow());
-        CIAR = isuComModel.getCIAR();
+        CIAR = isuComModel.getCIARS().get(((Athlete)singleStComPage.getAthlCmb().getSelectedItem()).getId());
         
         if (singleStComPage.getAthlCmb().getSelectedItem() != null) {
             numberOfJudges = isuComModel.getJudgesByComp().size();

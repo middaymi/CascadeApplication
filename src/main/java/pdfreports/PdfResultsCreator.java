@@ -330,8 +330,7 @@ public class PdfResultsCreator {
     private Font setFont(int size) {
         try {
             BaseFont myAarial = null; //подключаем файл шрифта, который поддерживает кириллицу
-//            myAarial = BaseFont.createFont("C:\\windows\\fonts\\times.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            myAarial = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
+            myAarial = BaseFont.createFont("C:\\windows\\fonts\\times.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font myFont = new Font(myAarial, size);
             return myFont;
         } catch (DocumentException | IOException ex) {
@@ -347,8 +346,7 @@ public class PdfResultsCreator {
     private Font setBoldFont() {
         try {
             BaseFont myAarial = null; //подключаем файл шрифта, который поддерживает кириллицу
-//            myAarial = BaseFont.createFont("C:\\windows\\fonts\\times.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            myAarial =  BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED);
+            myAarial = BaseFont.createFont("C:\\windows\\fonts\\times.TTF", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
             Font myFont = new Font(myAarial, 12, Font.BOLD);
             return myFont;
         } catch (DocumentException | IOException ex) {
