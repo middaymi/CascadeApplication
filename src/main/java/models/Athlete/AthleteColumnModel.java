@@ -6,6 +6,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import static utils.Layout.calcW;
+
 public class AthleteColumnModel {
     //get a table
     JTable table;
@@ -32,24 +34,24 @@ public class AthleteColumnModel {
             if (column.getHeaderValue() == "Имя"
                || column.getHeaderValue() == "Фамилия"
                || column.getHeaderValue() == "Отчество") 
-                    {column.setPreferredWidth(230);}            
+                    {column.setPreferredWidth(calcW(230));}
             else if (column.getHeaderValue() == "ДР")
-                    {column.setPreferredWidth(170);}            
+                    {column.setPreferredWidth(calcW(170));}
             else if (column.getHeaderValue() == "Разряд"
                     || column.getHeaderValue() == "Пол")
-                    {column.setPreferredWidth(120);
+                    {column.setPreferredWidth(calcW(120));
                     render.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
                     table.getColumn("Разряд").setCellRenderer(render);}            
             else if (column.getHeaderValue() == "Представитель")
-                    {column.setPreferredWidth(500);}            
+                    {column.setPreferredWidth(calcW(500));}
             else if (column.getHeaderValue() == "Телефон")
-                    {column.setPreferredWidth(240);}            
+                    {column.setPreferredWidth(calcW(240));}
             else if (column.getHeaderValue() == "Адрес")
-                    {column.setPreferredWidth(600);}            
+                    {column.setPreferredWidth(calcW(600));}
             else if (column.getHeaderValue() == "Документ"
                     || column.getHeaderValue() == "Сертификат"
                     || column.getHeaderValue() == "Страховка")
-                    {column.setPreferredWidth(180);}                       
+                    {column.setPreferredWidth(calcW(180));}
         }
         table.setColumnModel(columnModel);
     }

@@ -10,8 +10,8 @@ import java.util.logging.Logger;
 public class DataBaseConnection {
     
     private static DataBaseConnection DataBaseInstance = null;
-//    private String dbURL = "jdbc:sqlserver://91.123.24.45;databaseName=cascade;integratedSecurity=false;user=sa;password=1908London";
-    private String dbURL = "jdbc:sqlserver://localhost;instanceName=MSSQLSERVER;databaseName=TestDB;integratedSecurity=true;";
+    private String dbURL = "jdbc:sqlserver://91.123.24.45;databaseName=cascade;integratedSecurity=false;user=sa;password=1908London";
+//    private String dbURL = "jdbc:sqlserver://localhost;instanceName=MSSQLSERVER;databaseName=TestDB;integratedSecurity=true;";
     private Connection DBconnection;
     
     private DataBaseConnection() { 
@@ -25,7 +25,6 @@ public class DataBaseConnection {
         //connect to database
         try {
             DBconnection = DriverManager.getConnection(dbURL);
-            //if (DBconnection != null) System.out.println("connected");
         } catch (SQLException ex) {
             Logger.getLogger(DataBaseConnection.class.getName()).
                              log(Level.SEVERE,"no connection to database", ex);   

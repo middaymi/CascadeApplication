@@ -21,6 +21,9 @@ import models.TestCom.TestComModel;
 import pdfreports.PdfResultsCreator;
 import views.CommonSettings;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class ProtocolPage extends JPanel {
     private JButton saveInPdf;
     private JPanel pnl;
@@ -39,8 +42,8 @@ public class ProtocolPage extends JPanel {
         CommonSettings.settingFont30(saveInPdf);
         CommonSettings.settingGrayBorder(saveInPdf);
         saveInPdf.setBackground(Color.LIGHT_GRAY);
-        saveInPdf.setSize(300, 100);
-        saveInPdf.setLocation(2534, 1480);
+        saveInPdf.setSize(calcW(300), calcH(100));
+        saveInPdf.setLocation(calcW(2534), calcH(1480));
         this.add(saveInPdf);
         saveInPdf.addActionListener(new ActionListener() {
             @Override
@@ -87,26 +90,24 @@ public class ProtocolPage extends JPanel {
                     pdf.PdfResultsSetFinalSimpleData(competition.getFullName(), 
                                                      competition.getDate(), sr);
                     pdf.createFinalPdfSimple();
-                }               
-                
+                }
             }
         });
-        
     }
     
     private void createPnl(int countAthlets) {
         pnl = new JPanel();
         scrl = new JScrollPane(pnl);
         pnl.setLayout(null);
-        pnl.setSize(2500, 70 * countAthlets + 1);
+        pnl.setSize(calcW(2500), calcH(70 * countAthlets + 1));
         pnl.setLocation(0, 0);
-        scrl.setSize(2500, 1300);
-        scrl.setLocation(334, 150);
+        scrl.setSize(calcW(2500), calcH(1300));
+        scrl.setLocation(calcW(334), calcH(150));
         this.add(scrl);        
     } 
     
     private void commonDraw(JLabel lbl, boolean header) {
-        if (header == true) {
+        if (header) {
             CommonSettings.settingGrayBorder(lbl);
             CommonSettings.settingFontBold30(lbl);
             lbl.setBackground(Color.GRAY);
@@ -124,17 +125,17 @@ public class ProtocolPage extends JPanel {
         JLabel sumRes = new JLabel();
         JLabel place = new JLabel();         
         
-        fio.setSize(500, 70);        
-        isDone.setSize(500, 70);
-        sumPlaces.setSize(500, 70);
-        sumRes.setSize(500, 70);
-        place.setSize(500, 70);
+        fio.setSize(calcW(500), calcH(70));
+        isDone.setSize(calcW(500), calcH(70));
+        sumPlaces.setSize(calcW(500), calcW(70));
+        sumRes.setSize(calcW(500), calcH(70));
+        place.setSize(calcW(500), calcH(70));
         
-        place.setLocation(0, 70*count);
-        fio.setLocation(500*1, 70*count);        
-        isDone.setLocation(500*4, 70*count);
-        sumPlaces.setLocation(500*3, 70*count);
-        sumRes.setLocation(500*2, 70*count);
+        place.setLocation(0, calcH(70 * count));
+        fio.setLocation(calcW(500), calcH(70 * count));
+        sumRes.setLocation(calcW(500 * 2), calcH(70 * count));
+        sumPlaces.setLocation(calcW(500 * 3), calcH(70 * count));
+        isDone.setLocation(calcW(500 * 4), calcH(70 * count));
                 
         if (count == 0) {
             fio.setText("Спортсмен");        
@@ -180,23 +181,23 @@ public class ProtocolPage extends JPanel {
         JLabel sumRes = new JLabel();
         JLabel place = new JLabel();          
         
-        fio.setSize(312, 70);  
-        stNumber.setSize(312, 70);
-        isDone.setSize(312, 70);
-        sumEl.setSize(312, 70);
-        sumComp.setSize(312, 70);
-        ded.setSize(312, 70);        
-        sumRes.setSize(312, 70);
-        place.setSize(312, 70);
+        fio.setSize(calcW(312), calcH(70));
+        stNumber.setSize(calcW(312), calcH(70));
+        isDone.setSize(calcW(312), calcH(70));
+        sumEl.setSize(calcW(312), calcH(70));
+        sumComp.setSize(calcW(312), calcH(70));
+        ded.setSize(calcW(312), calcH(70));
+        sumRes.setSize(calcW(312), calcH(70));
+        place.setSize(calcW(312), calcH(70));
         
-        fio.setLocation(0, 70*count);        
-        stNumber.setLocation(312*1, 70*count);
-        isDone.setLocation(312*2, 70*count);        
-        sumEl.setLocation(312*3, 70*count);
-        sumComp.setLocation(312*4, 70*count);
-        ded.setLocation(312*5, 70*count);
-        sumRes.setLocation(312*6, 70*count);
-        place.setLocation(312*7, 70*count);        
+        fio.setLocation(0, calcH(70*count));
+        stNumber.setLocation(calcW(312), calcH(70*count));
+        isDone.setLocation(calcW(312*2), calcH(70*count));
+        sumEl.setLocation(calcW(312*3), calcH(70*count));
+        sumComp.setLocation(calcW(312*4), calcH(70*count));
+        ded.setLocation(calcW(312*5), calcH(70*count));
+        sumRes.setLocation(calcW(312*6), calcH(70*count));
+        place.setLocation(calcW(312*7), calcH(70*count));
                 
         if (count == 0) {
             fio.setText("Спортсмен");        

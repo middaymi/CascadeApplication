@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import views.Manager;
 
 public class PerformanceBtnListener implements ActionListener {        
-    public void actionPerformed(ActionEvent e) { 
-        Manager.getManagerInstance().choosePanel(40);  
+    public void actionPerformed(ActionEvent e) {
+        Manager.getManagerInstance().choosePanel(40);
     }
 }

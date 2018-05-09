@@ -29,7 +29,9 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import views.TestCom.StartCom.MarkTextField;
 
-public class StComModel {
+import static utils.Layout.calcH;
+
+  public class StComModel {
     private final Connection DBC = DataBaseConnection.getInstanceDataBase().
                                    getDBconnection(); 
     private StComPage stComPage;        
@@ -200,12 +202,12 @@ public class StComModel {
         if (competitionKind == 3) {
             stComPage.setSportsmanLabels(athletesByComp.values(), 1);
             stComPage.setElementWithJudgesLabels(elementsByComp.values(), getJudgesByComp());
-            stComPage.setFields(marksList, 200);
+            stComPage.setFields(marksList, calcH(200));
         }
         else{
             stComPage.setSportsmanLabels(athletesByComp.values(), 0);
             stComPage.setElementLabels(elementsByComp.values());
-            stComPage.setFields(marksList, 100);
+            stComPage.setFields(marksList, calcH(100));
         }
     }
 

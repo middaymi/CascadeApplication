@@ -7,6 +7,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import static utils.Layout.calcW;
+
 public class TestComColumnModel {
     
     private JTable table;
@@ -40,10 +42,10 @@ public class TestComColumnModel {
             if (column.getHeaderValue() == "Название" ||
                 column.getHeaderValue() == "Тип" ||
                 column.getHeaderValue() == "Дата и время")
-                {column.setPreferredWidth(300);} 
+                {column.setPreferredWidth(calcW(300));}
             else if (column.getHeaderValue() == "Адрес" ||
                 column.getHeaderValue() == "Описание")
-                {column.setPreferredWidth(400);}         
+                {column.setPreferredWidth(calcW(400));}
         }
         //columnModel.getColumn(2).setHeaderRenderer(renderToolTipText);
         //combobox-seasons cell        

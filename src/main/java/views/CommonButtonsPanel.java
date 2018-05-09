@@ -4,6 +4,9 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
+
 public class CommonButtonsPanel extends JPanel {
     
     private JButton settingBtn;
@@ -22,8 +25,8 @@ public class CommonButtonsPanel extends JPanel {
     //setting button
     private void createSettingBtn () {
         settingBtn = new JButton("*");
-        settingBtn.setSize(100, 100);
-        settingBtn.setLocation(3018, 1507);
+        settingBtn.setSize(calcW(100), calcH(100));
+        settingBtn.setLocation(calcW(3018), calcH(1507));
         settingBtn.setBackground(Color.LIGHT_GRAY);
         CommonSettings.settingFont30(settingBtn);
         this.add(settingBtn);
@@ -31,8 +34,8 @@ public class CommonButtonsPanel extends JPanel {
     //a button for jump to mainFrame 
     private void createToMainFrameBtn () {
         toMainFrameBtn = new JButton("Главная");
-        toMainFrameBtn.setSize(200, 70);
-        toMainFrameBtn.setLocation(1484, 30);
+        toMainFrameBtn.setSize(calcW(200), calcH(70));
+        toMainFrameBtn.setLocation(calcW(1484), calcH(30));
         toMainFrameBtn.setBackground(Color.LIGHT_GRAY);
         CommonSettings.settingFont30(toMainFrameBtn);
         this.add(toMainFrameBtn);
@@ -41,8 +44,8 @@ public class CommonButtonsPanel extends JPanel {
     }  
     private void createBackBtn() {
         backBtn = new JButton("⟵");
-        backBtn.setSize(100, 70);
-        backBtn.setLocation(50, 30);
+        backBtn.setSize(calcW(100), calcH(70));
+        backBtn.setLocation(calcW(50), calcH(30));
         backBtn.setBackground(Color.LIGHT_GRAY);
         CommonSettings.settingFont30(backBtn);
         this.add(backBtn);
@@ -51,8 +54,8 @@ public class CommonButtonsPanel extends JPanel {
     }
     private void createNextBtn() {
         nextBtn = new JButton("⟶");
-        nextBtn.setSize(100, 70);
-        nextBtn.setLocation(3018, 30);
+        nextBtn.setSize(calcW(100), calcH(70));
+        nextBtn.setLocation(calcW(3018), calcH(30));
         nextBtn.setBackground(Color.LIGHT_GRAY);
         CommonSettings.settingFont30(nextBtn);
         this.add(nextBtn);

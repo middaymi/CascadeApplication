@@ -1,11 +1,3 @@
-/************************************
-WARNING! CHANGE HANDLEWRITTEN SIZE
-         NUMBERS
-
-* setTableColumnsSettings() move to 
-employeeModel?
-************************************/
-
 package views;
 
 import java.awt.Color;
@@ -20,6 +12,9 @@ import models.Employee.EmployeeColumnModel;
 import models.Employee.EmployeeModel;
 import models.Employee.DateCellEditor;
 import models.MultiLineCell;
+
+import static utils.Layout.calcH;
+import static utils.Layout.calcW;
 
 public class EmployeePage extends JPanel {
     
@@ -52,7 +47,7 @@ public class EmployeePage extends JPanel {
         table = new JTable(empModel);
         table.setVisible(true);
         table.setOpaque(true);        
-        table.setRowHeight(180);
+        table.setRowHeight(calcH(180));
         table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         table.setEnabled(false);
         CommonSettings.settingFontBold30(table.getTableHeader());
@@ -76,8 +71,8 @@ public class EmployeePage extends JPanel {
         //scrlPane.setBackground(newColor);
         //scrlPane.getViewport().setBackground(newColor);
                 
-        scrlPane.setSize(2000, 1180);
-        scrlPane.setLocation(584, 230);                
+        scrlPane.setSize(calcW(2000), calcH(1180));
+        scrlPane.setLocation(calcW(584), calcH(230));
         this.add(scrlPane);
     }
     
@@ -85,8 +80,8 @@ public class EmployeePage extends JPanel {
     private void setChangeBtnSettings() {
         changeBtn = new JButton("Изменить");        
         changeBtn.setBackground(Color.LIGHT_GRAY);
-        changeBtn.setSize(250, 100);
-        changeBtn.setLocation(2334, 1440);
+        changeBtn.setSize(calcW(250), calcH(100));
+        changeBtn.setLocation(calcW(2334), calcH(1440));
         CommonSettings.settingFont30(changeBtn);
         this.add(changeBtn);
         changeBtn.addActionListener(new controllers.EmployeePage.
@@ -95,8 +90,8 @@ public class EmployeePage extends JPanel {
     private void setDelBtnSettings() {
         delBtn = new JButton("Удалить");        
         delBtn.setBackground(Color.LIGHT_GRAY);
-        delBtn.setSize(250, 100);
-        delBtn.setLocation(2054, 1440);
+        delBtn.setSize(calcW(250), calcH(100));
+        delBtn.setLocation(calcW(2054), calcH(1440));
         delBtn.setVisible(false);
         CommonSettings.settingFont30(delBtn);
         this.add(delBtn);
@@ -106,8 +101,8 @@ public class EmployeePage extends JPanel {
     private void setAddBtnSettings() {
         addBtn = new JButton("Добавить");        
         addBtn.setBackground(Color.LIGHT_GRAY);
-        addBtn.setSize(250, 100);
-        addBtn.setLocation(1774, 1440);
+        addBtn.setSize(calcW(250), calcH(100));
+        addBtn.setLocation(calcW(1774), calcH(1440));
         addBtn.setVisible(false);
         CommonSettings.settingFont30(addBtn);
         this.add(addBtn);
