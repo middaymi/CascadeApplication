@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
@@ -108,7 +109,7 @@ public class ElementRow extends JPanel {
         createResult();
 
         this.setLayout(null);
-        this.setSize(calcW(1720 + judgesNumbers * 140 + 150), calcH(70));
+        this.setSize(calcW(1720 + judges.size() * 140 + 150), calcH(70));
         this.setLocation(0, calcH(70 + number * 70));
         this.setVisible(true);
         this.setFocusable(true);
@@ -251,21 +252,40 @@ public class ElementRow extends JPanel {
     }
 
     private void createJudge(ElementIsu elemIsu) {
+        judgeMarks.clear();
         for (int i = 0; i < judges.size(); i++) {
             Judge judge = judges.get(i);
             JComboBox judgeMark = new JComboBox();
             judgeMark.setSize(calcW(140), calcH(70));
             judgeMark.setLocation(calcW(1720 + i * 140), 0);
             CommonSettings.settingFont30(judgeMark);
+
             this.add(judgeMark);
             judgeMarks.add(judgeMark);
+
             for (String goe : IsuElementsData.getGoe()) {
                 judgeMark.addItem(goe);
             }
-            ElementValue elementValue = new ElementValue();
+
+            ElementValue elementValue;
+
+            if (elemIsu == null || elemIsu.getJudgesValues().get(judge.getId()) == null) {
+                elementValue = new ElementValue();
+                elementValue.setJudgeId(judge.getId());
+                elementValue.setMark(null);
+                elementValue.setValue((float) 0.0);
+                getElementIsu().getJudgesValues().
+                        put(judge.getId(), elementValue);
+                judgeMark.setSelectedItem(null);
+            } else {
+                judgeMark.setSelectedItem(String.valueOf(elemIsu.getJudgesValues().get(judge.getId()).getMark()));
+            }
+
             judgeMark.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    ElementValue elementValue = getElementIsu().getJudgesValues().get(judge.getId());
+
                     //athlete is selected and radioBtns are disabled
                     if (elementCmb.getSelectedItem() != null &&
                             !isuComModel.isFinished() &&
@@ -283,11 +303,6 @@ public class ElementRow extends JPanel {
                     }
                 }
             });
-            if (elemIsu != null) {
-                judgeMark.setSelectedItem(String.valueOf(elemIsu.getJudgesValues().get(judge.getId()).getMark()));
-            } else {
-                judgeMark.setSelectedItem(null);
-            }
         }
     }
 

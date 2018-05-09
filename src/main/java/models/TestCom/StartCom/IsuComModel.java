@@ -388,7 +388,6 @@ public class IsuComModel extends StComModel {
         this.factor = IsuElementsData.getFactor(this.competition.getRankId());
         singleComPage.createLbls();
         downDoNothingWithListenersFlag();
-
     }
 
     public boolean checkDeductionsAndComponentsValue(String deductions) {
@@ -566,7 +565,7 @@ public class IsuComModel extends StComModel {
                 "join (select E.FullNameRUS, E.Abbreviation, T.ID as IDType, T.FullName, E.ID from ISU_ELEMENT as E join ISU_ELEMENT_TYPE as T on E.IDelementType = T.ID) as elem " +
                 "on tech.IDisuElement = elem.ID", competition.getId(), IDathlete);
         try {
-
+            System.out.println(withMarks);
             CIARS.get(IDathlete).getElementsList().clear();
             prst = getDBC().prepareStatement(withMarks);
             rs = prst.executeQuery();
@@ -593,6 +592,7 @@ public class IsuComModel extends StComModel {
 
                     elementId = rs.getInt(2);
                     elIsu.setElementId(elementId);
+                    elIsu.setName(allElements.get(elementId).toString());
 
                     elIsu.setInfo(rs.getString(3));
                     elIsu.setBaseValue(rs.getFloat(4));
