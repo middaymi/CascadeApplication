@@ -578,7 +578,7 @@ public class PdfResultsCreator {
             isuTable.addCell(compScore);
             for (int j = 0; j < this.numberOfJudges; j++) {
                 if (mode != 0) {
-                    cell.setPhrase(new Phrase(this.judgesCompValues.get(i).get(j).getValue() + "",small));
+                    cell.setPhrase(new Phrase(this.judgesCompValues.get(i).get(j).getValue() + "", small));
                 } else {
                     cell.setPhrase(new Phrase(" "));
                 }

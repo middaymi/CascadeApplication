@@ -396,7 +396,7 @@ public class IsuComModel extends StComModel {
         return m.matches();
     }
 
-    public void getCIARsFromDB() {
+    public void getCIARsFromDB(Athlete athlete) {
         //all final results by competition
         PreparedStatement prst = null;
         ResultSet rs = null;
@@ -410,14 +410,13 @@ public class IsuComModel extends StComModel {
                     "join RESULT as R on A.ID = R.IDathlete " +
                     "join COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL on " +
                     "R.IDcompetition = CPAL.IDcompetition and A.ID = CPAL.idAthlete " +
-                    "where R.IDcompetition = %d", competition.getId());
+                    "where R.IDcompetition = %d and R.IDathlete = %d", competition.getId(), athlete.getId());
 
             prst = getDBC().prepareStatement(query);
             rs = prst.executeQuery();
             System.out.println(query);
 
             while (rs.next()) {
-                Athlete athlete = new Athlete();
                 athlete.setId(rs.getInt(1));
                 athlete.setSurname(rs.getString(2));
                 athlete.setName(rs.getString(3));
@@ -425,8 +424,7 @@ public class IsuComModel extends StComModel {
                 athlete.setIdrank(rs.getInt(5));
                 athlete.setSex(rs.getBoolean(6));
 
-                CompetitionIsuAthleteResult CIAR =
-                        new CompetitionIsuAthleteResult(athlete);
+                CompetitionIsuAthleteResult CIAR = CIARS.get(athlete.getId());
 
                 //result field
                 CIAR.setResultId(rs.getInt(7));
@@ -438,8 +436,6 @@ public class IsuComModel extends StComModel {
                 CIAR.setComponentScore(rs.getFloat(13));
                 CIAR.setDeductions(rs.getFloat(14));
                 CIAR.setFinished(rs.getBoolean(15));
-
-                CIARS.put(athlete.getId(), CIAR);
             }
 
         } catch (SQLException ex) {
@@ -489,6 +485,13 @@ public class IsuComModel extends StComModel {
                     if (--judgesNumbers == 0) break;
                 }
                 compIsu.setScores(score);
+
+                for(ComponentIsu ci : CIARS.get(athleteId).getComponentsList()) {
+                    if (ci.getComponentId() == compIsu.getComponentId()) {
+                        ci = compIsu;
+                        break;
+                    }
+                }
             }
 
         } catch (SQLException ex) {
