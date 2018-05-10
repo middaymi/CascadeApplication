@@ -37,10 +37,12 @@ public class SavePdf implements ActionListener {
         
         competitionName = competition.getFullName();
         dateOfCompetition = competition.getDate();
+        elements.clear();
         elements.addAll(stComModel.getElementsByComp().values());
         results = stComModel.getMarksList();
         mode = stComModel.getMode();
         numberOfJudges = stComModel.getJudgesByComp().size();
+        athlets.clear();
         for (SportsmanResult sr : stComModel.getAthletesByComp().values()) {
             athlets.add(sr.getAthlete());
         }
