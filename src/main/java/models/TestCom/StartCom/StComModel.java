@@ -641,7 +641,7 @@ import static utils.Layout.calcH;
             for (MarkCellData data : marksList.get(index)) {
                 if ((Float)data.getValue() == null) {
                     JOptionPane.showMessageDialog(stComPage, 
-                    "Введите все значения для расчета", "Ошибка!",
+                    "Для расчета введите все значения с нажатием Enter для подтверждения оценки!", "Ошибка!",
                     JOptionPane.INFORMATION_MESSAGE);
                     return false;
                 }        

@@ -622,6 +622,13 @@ public class IsuComModel extends StComModel {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+                prst.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -641,14 +648,17 @@ public class IsuComModel extends StComModel {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                rs.close();
+                prst.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         for (CompetitionIsuAthleteResult ciar :CIARS.values()) {
             startNumbers.add(ciar.getStartNumber());
-        }
-
-        for (int start : startNumbers) {
-            System.out.println(start);
         }
 
         startNumber = startNumbers.stream()
