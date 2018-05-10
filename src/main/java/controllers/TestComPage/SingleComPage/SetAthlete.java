@@ -41,8 +41,9 @@ public class SetAthlete implements ActionListener {
 
             // start number
             if (CIARS.get(athlete.getId()).getStartNumber() == 0) {
-                CIARS.get(athlete.getId()).setStartNumber(getStartNumber());
+                CIARS.get(athlete.getId()).setStartNumber(isuComModel.getStartNumber());
             }
+
             singleComPage.setStartTF(String.valueOf(CIARS.get(athlete.getId()).getStartNumber()));
             singleComPage.getStartTF().setEditable(false);
 
@@ -135,14 +136,5 @@ public class SetAthlete implements ActionListener {
                 String.valueOf(ciar.getDeductions()).equals("0.0") ? "" : String.valueOf(ciar.getDeductions())
         };
         singleComPage.setReusltsToTopPnl(texts);
-    }
-
-    private int getStartNumber() {
-        int currentLastStartNumber = isuComModel.getCIARS().values().stream()
-                .map(athlete -> athlete.getStartNumber())
-                .sorted((o1, o2) -> -o1.compareTo(o2))
-                .findFirst()
-                .orElse(0);
-        return currentLastStartNumber + 1;
     }
 }

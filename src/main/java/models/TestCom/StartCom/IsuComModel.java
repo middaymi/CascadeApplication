@@ -346,7 +346,8 @@ public class IsuComModel extends StComModel {
             Logger.getLogger(StComModel.class.getName()).
                     log(Level.SEVERE,
                             "Do not take selected rank from DB", ex);
-        }    }
+        }
+    }
 
     public void setAllData() {
         //get the last link of panel
@@ -486,7 +487,7 @@ public class IsuComModel extends StComModel {
                 }
                 compIsu.setScores(score);
 
-                for(ComponentIsu ci : CIARS.get(athleteId).getComponentsList()) {
+                for (ComponentIsu ci : CIARS.get(athleteId).getComponentsList()) {
                     if (ci.getComponentId() == compIsu.getComponentId()) {
                         ci = compIsu;
                         break;
@@ -622,6 +623,40 @@ public class IsuComModel extends StComModel {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public int getStartNumber() {
+        PreparedStatement prst = null;
+        ResultSet rs = null;
+        String query = String.format("select StartNumber from result where IDcompetition = %d", competition.getId());
+        System.out.println(query);
+        List<Integer> startNumbers = new ArrayList<>();
+        int startNumber = 0;
+
+        try {
+            prst = getDBC().prepareStatement(query);
+            rs = prst.executeQuery();
+            while (rs.next()) {
+                startNumbers.add(rs.getInt(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        for (CompetitionIsuAthleteResult ciar :CIARS.values()) {
+            startNumbers.add(ciar.getStartNumber());
+        }
+
+        for (int start : startNumbers) {
+            System.out.println(start);
+        }
+
+        startNumber = startNumbers.stream()
+                        .distinct()
+                        .sorted((o1, o2) -> -o1.compareTo(o2))
+                        .findFirst()
+                        .orElse(0);
+        return startNumber + 1;
     }
 
 
