@@ -273,7 +273,7 @@ public class ElementRow extends JPanel {
             if (elemIsu == null || elemIsu.getJudgesValues().get(judge.getId()) == null) {
                 elementValue = new ElementValue();
                 elementValue.setJudgeId(judge.getId());
-                elementValue.setMark(0);
+                elementValue.setMark(null);
                 elementValue.setValue((float) 0.0);
                 getElementIsu().getJudgesValues().
                         put(judge.getId(), elementValue);
@@ -305,7 +305,6 @@ public class ElementRow extends JPanel {
                         elementValue.setValue((float) 0.0);
                         getElementIsu().getJudgesValues().
                                 put(judge.getId(), elementValue);
-//                        getElementIsu().getJudgesValues().replace(judge.getId(), elementValue);
                         addToDB(elementValue);
                     }
                 }
