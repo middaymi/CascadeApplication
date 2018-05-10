@@ -32,6 +32,8 @@ public class SetAthlete implements ActionListener {
             // clear gui
             isuComModel.clearElementAndComponentsRow();
 
+            isuComModel.setMode(0);
+
             //get selected athlete
             Athlete athlete = (Athlete) (singleComPage.getAthlCmb().getSelectedItem());
             HashMap<Integer, CompetitionIsuAthleteResult> CIARS = isuComModel.getCIARS();
@@ -46,8 +48,10 @@ public class SetAthlete implements ActionListener {
 
             //components
             //set new ComponentIsu for each Component
+            isuComModel.getCIARS().get(athlete.getId()).getComponentsList().clear();
             for (ComponentRow row : singleComPage.getCompRows()) {
                 ComponentIsu compIsu = row.getComponentIsu();
+                compIsu.getJudgesValues().clear();
                 for (Judge judge : isuComModel.getJudgesByComp()) {
                     ComponentValue compVal = new ComponentValue();
                     compIsu.getJudgesValues().put(judge.getId(), compVal);
@@ -61,7 +65,7 @@ public class SetAthlete implements ActionListener {
             isuComModel.setComponentResultsToFields();
 
             // CHECK RESULT AND VIEW IF IS
-            isuComModel.getCIARsFromDB();
+            isuComModel.getCIARsFromDB(athlete);
             CIARtoFront(CIARS.get(athlete.getId()));
 
             //ELEMENTS
@@ -75,6 +79,7 @@ public class SetAthlete implements ActionListener {
             //if finished
             if (isuComModel.isFinishedCompetitionForAthlete(athlete.getId())) {
                 activateEditBtns = false;
+                isuComModel.setMode(1);
 
                 //to do not editable components
                 for (ComponentRow row : singleComPage.getCompRows()) {
@@ -102,8 +107,10 @@ public class SetAthlete implements ActionListener {
                     compRow.setScoreText(String.valueOf(compData.getScores()));
                 }
 
-            } else {
-                //add new empty element-row
+            }
+
+            //add new row if don't have any rows from db
+            if (CIARS.get(athlete.getId()).getElementsList().size() == 0) {
                 singleComPage.addElementRow();
             }
 
