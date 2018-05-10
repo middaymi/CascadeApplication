@@ -214,6 +214,7 @@ public class ElementRow extends JPanel {
                     base.setText("");
                     base.setText(String.valueOf(((ElementData) elementCmb.
                             getSelectedItem()).getBase()));
+
                 }
             }
         });
@@ -272,13 +273,18 @@ public class ElementRow extends JPanel {
             if (elemIsu == null || elemIsu.getJudgesValues().get(judge.getId()) == null) {
                 elementValue = new ElementValue();
                 elementValue.setJudgeId(judge.getId());
-                elementValue.setMark(null);
+                elementValue.setMark(0);
                 elementValue.setValue((float) 0.0);
                 getElementIsu().getJudgesValues().
                         put(judge.getId(), elementValue);
                 judgeMark.setSelectedItem(null);
             } else {
-                judgeMark.setSelectedItem(String.valueOf(elemIsu.getJudgesValues().get(judge.getId()).getMark()));
+                int mark = elemIsu.getJudgesValues().get(judge.getId()).getMark();
+                if (mark == 0) {
+                    judgeMark.setSelectedItem("0");
+                } else {
+                judgeMark.setSelectedItem(mark > 0 ? "+" + String.valueOf(mark) : String.valueOf(mark));
+                }
             }
 
             judgeMark.addActionListener(new ActionListener() {
@@ -299,6 +305,7 @@ public class ElementRow extends JPanel {
                         elementValue.setValue((float) 0.0);
                         getElementIsu().getJudgesValues().
                                 put(judge.getId(), elementValue);
+//                        getElementIsu().getJudgesValues().replace(judge.getId(), elementValue);
                         addToDB(elementValue);
                     }
                 }
