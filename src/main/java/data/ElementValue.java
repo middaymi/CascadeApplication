@@ -4,16 +4,16 @@ public class ElementValue {
     
     private int elementId;
     private int judgeId;
-    private int mark;
+    private Integer mark;
     private float value;
     
     private boolean isSaved = false;
 
-    public int getMark() {
+    public Integer getMark() {
         return mark;
     }
 
-    public void setMark(int mark) {
+    public void setMark(Integer mark) {
         this.mark = mark;
     }
 

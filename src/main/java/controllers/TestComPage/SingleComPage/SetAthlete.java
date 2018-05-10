@@ -15,7 +15,6 @@ public class SetAthlete implements ActionListener {
     SingleStComPage singleComPage;
     IsuComModel isuComModel;
     Manager manager;
-    int startNumber;
 
     public void actionPerformed(ActionEvent e) {
         manager = Manager.getManagerInstance();
