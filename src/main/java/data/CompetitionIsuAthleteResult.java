@@ -46,7 +46,7 @@ public class CompetitionIsuAthleteResult {
         //   element.setBaseValue(base);
            float sum = 0;           
            for (ElementValue value : element.getJudgesValues().values()) {
-               float res = IsuElementsData.getElementValue(element.getElementId(), 
+                   float res = IsuElementsData.getElementValue(element.getElementId(),
                                                            element.getInfo(), value.getMark());
                value.setValue(res);
                sum += res;
