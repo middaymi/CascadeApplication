@@ -12,7 +12,11 @@ public class ElementIsu {
     private String info = ""; //+
     private float baseValue = 0.0f; //+
     private HashMap<Integer, ElementValue> judgesValues = new HashMap<>(); //+
-    private float scores = 0;    
+    private float scores = 0;
+    private boolean isSaved = false;
+
+    public boolean isSaved() { return isSaved; }
+    public void setSaved(boolean saved) {isSaved = saved;}
 
     public int getElementId() {
         return elementId;

@@ -603,6 +603,7 @@ public class IsuComModel extends StComModel {
 
                     //to athlete ciar
                     CIARS.get(IDathlete).getElementsList().add(elIsu);
+                    elIsu.setSaved(true);
                 }
 
                 //fill elementVal
