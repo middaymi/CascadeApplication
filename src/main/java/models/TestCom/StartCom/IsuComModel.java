@@ -579,7 +579,7 @@ public class IsuComModel extends StComModel {
             int elementTypeId = 0;
             int elementId = 0;
             Integer judgeId = null;
-            int mark = 0;
+            Integer mark = null;
 
             int judgesNumbers = 0;
             int judges = singleComPage.getLstModel().getSize();
@@ -608,7 +608,7 @@ public class IsuComModel extends StComModel {
                 //fill elementVal
                 ElementValue elVal = new ElementValue();
                 judgeId = rs.getInt(5);
-                mark = rs.getInt(6);
+                mark = (Integer) rs.getObject(6);
 
                 elVal.setElementId(elementId);
                 elVal.setJudgeId(judgeId);

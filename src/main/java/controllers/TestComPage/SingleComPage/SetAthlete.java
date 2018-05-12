@@ -39,7 +39,7 @@ public class SetAthlete implements ActionListener {
             HashMap<Integer, CompetitionIsuAthleteResult> CIARS = isuComModel.getCIARS();
             isuComModel.setCIAR(CIARS.get(athlete.getId()));
 
-            // start number
+            // stCIARS.get(athlete.getId())art number
             if (CIARS.get(athlete.getId()).getStartNumber() == 0) {
                 CIARS.get(athlete.getId()).setStartNumber(isuComModel.getStartNumber());
             }
