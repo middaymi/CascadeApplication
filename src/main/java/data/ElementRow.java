@@ -6,6 +6,7 @@ package data;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.annotation.ElementType;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -104,6 +105,7 @@ public class ElementRow extends JPanel {
         createNumbLbl();
         createElementTypeCmb(types.get(elIsu.getElementTypeId()));
         createElementCmb(elements.get(elIsu.getElementId()));
+        changableFlag(1);
         createInfo(elIsu.getInfo());
         createBase();
         createJudge(elIsu);
@@ -195,6 +197,7 @@ public class ElementRow extends JPanel {
             elementCmb.setSelectedItem(null);
         } else {
             elementCmb.setSelectedItem(element);
+            elementIsu.setSaved(true);
         }
 
         //if type and element are selected
@@ -203,19 +206,22 @@ public class ElementRow extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if ((ElementData) (elementCmb.getSelectedItem()) != null &&
                         changableFlag() == 1) {
+
                     //get element link
                     ElementData selElement = ((ElementData) (elementCmb.getSelectedItem()));
+                    addToDBElementWithNullMarks((Athlete) singleComPage.getAthlCmb().getSelectedItem(), elementIsu, selElement.getId());
+
                     //setElementId to ElementIsu
-                    getElementIsu().setElementId(selElement.getId());
+                    elementIsu.setElementId(selElement.getId());
                     //setElementName to ElementIsu
-                    getElementIsu().setName(selElement.getFullNameRus() +
+                    elementIsu.setName(selElement.getFullNameRus() +
                             " (" + selElement.getAbbreviation() + ")");
                     //setBaseValue to ElementIsu
-                    getElementIsu().setBaseValue(selElement.getBase());
+                    elementIsu.setBaseValue(selElement.getBase());
                     base.setText("");
                     base.setText(String.valueOf(((ElementData) elementCmb.
                             getSelectedItem()).getBase()));
-                    addToDBElementWithNullMarks((Athlete) singleComPage.getAthlCmb().getSelectedItem(), elementIsu);
+
                 }
             }
         });
@@ -388,27 +394,51 @@ public class ElementRow extends JPanel {
         }
     }
 
-    private void addToDBElementWithNullMarks(Athlete athlete, ElementIsu elementIsu) {
-        String query;
+    private void addToDBElementWithNullMarks(Athlete athlete, ElementIsu elementIsu, int elemId) {
+        String query = "";
         PreparedStatement prst = null;
+        String insert = "";
+
         for (ElementValue elemValue : elementIsu.getJudgesValues().values()) {
-            elemValue.setMark(null);
-            query = "INSERT INTO ALL_RESULTS_ELEMENTS VALUES ( " +
+            insert = " INSERT INTO ALL_RESULTS_ELEMENTS VALUES (" +
                     isuComModel.getCIARS().get(athlete.getId()).getCompetitionAthlId() + ", " +
                     elementIsu.getBaseValue() + ", " +
                     "\'\'" + ", " + //info
                     null + ", " + //mark
-                    elementIsu.getElementId() + ", " +
-                    elemValue.getJudgeId() + ");";
+                    elemId + ", " +
+                    elemValue.getJudgeId() + "); ";
+
+            if (elementIsu.isSaved()) {
+                query = "DELETE FROM ALL_RESULTS_ELEMENTS WHERE IDcompetitionPerformanceAthleteLink = "
+                        + isuComModel.getCIARS().get(athlete.getId()).getCompetitionAthlId() +
+                        " AND IDisuElement = " + elementIsu.getElementId() + ";" +
+                        insert;
+            } else {
+                query = insert;
+            }
             System.out.println(query);
-            try {
-                prst = isuComModel.getDBC().prepareStatement(query);
-                prst.execute();
-            } catch (SQLException e) {
-                e.printStackTrace();
+        }
+        //clear marks on gui and in data
+        for (ElementRow row : singleComPage.getElRows()) {
+            if (row.getElementIsu().getElementId() == elementIsu.getElementId()) {
+                for (ElementValue dataMarks : elementIsu.getJudgesValues().values()) {
+                    dataMarks.setMark(null);
+                }
+                for (JComboBox guiMarks : row.getJudgeMarks()) {
+                    guiMarks.setSelectedItem("");
+                }
+                break;
             }
         }
+        elementIsu.setSaved(true);
+        try {
+            prst = isuComModel.getDBC().prepareStatement(query);
+            prst.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
+
 
     public ArrayList<JComboBox> getJudgeMarks() {
         return judgeMarks;
