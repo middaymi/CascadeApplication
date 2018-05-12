@@ -293,12 +293,12 @@ public class ElementRow extends JPanel {
             judgeMark.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    if (isuComModel.isDoNothingWithListenersFlagUp()) {
+                        return;
+                    }
                     ElementValue elementValue = getElementIsu().getJudgesValues().get(judge.getId());
-
                     //athlete is selected and radioBtns are disabled
-                    if (elementCmb.getSelectedItem() != null &&
-                            !isuComModel.isFinished() &&
-                            !isuComModel.isDoNothingWithListenersFlagUp()) {
+                    if (elementCmb.getSelectedItem() != null) {
                         //to ElementValue
                         elementValue.setElementId(
                                 ((ElementData) elementCmb.getSelectedItem()).getId());
