@@ -22,6 +22,7 @@ import lombok.Data;
 import models.TestCom.StartCom.IsuComModel;
 import models.TestCom.TestComModel;
 import views.CommonSettings;
+import views.Manager;
 import views.TestCom.StartCom.SingleStComPage;
 
 import static utils.Layout.calcH;
@@ -44,7 +45,7 @@ public class ElementRow extends JPanel {
     private ElementIsu elementIsu;
 
     private IsuComModel isuComModel;
-    private SingleStComPage singleComPage;
+    private SingleStComPage singleComPage = Manager.getSingleComPage();
 
     public ElementRow(ArrayList<Judge> judges,
                       HashMap<Integer, ElementData> elements,
@@ -214,7 +215,7 @@ public class ElementRow extends JPanel {
                     base.setText("");
                     base.setText(String.valueOf(((ElementData) elementCmb.
                             getSelectedItem()).getBase()));
-
+                    addToDBElementWithNullMarks((Athlete) singleComPage.getAthlCmb().getSelectedItem(), elementIsu);
                 }
             }
         });
@@ -274,16 +275,17 @@ public class ElementRow extends JPanel {
                 elementValue = new ElementValue();
                 elementValue.setJudgeId(judge.getId());
                 elementValue.setMark(null);
-                elementValue.setValue((float) 0.0);
                 getElementIsu().getJudgesValues().
                         put(judge.getId(), elementValue);
                 judgeMark.setSelectedItem(null);
             } else {
-                int mark = elemIsu.getJudgesValues().get(judge.getId()).getMark();
-                if (mark == 0) {
+                Integer mark = elemIsu.getJudgesValues().get(judge.getId()).getMark();
+                if (mark == null) {
+                    judgeMark.setSelectedItem(null);
+                } else if (mark == 0) {
                     judgeMark.setSelectedItem("0");
                 } else {
-                judgeMark.setSelectedItem(mark > 0 ? "+" + String.valueOf(mark) : String.valueOf(mark));
+                    judgeMark.setSelectedItem(mark > 0 ? "+" + String.valueOf(mark) : String.valueOf(mark));
                 }
             }
 
@@ -333,20 +335,11 @@ public class ElementRow extends JPanel {
             int elId = elVal.getElementId();
             int judId = elVal.getJudgeId();
 
-            if (!elVal.isSaved()) {
-                //insert to database
-                query = "INSERT INTO ALL_RESULTS_ELEMENTS " +
-                        "VALUES(" + isuComModel.getCIAR().getCompetitionAthlId() + ", " +
-                        base + ", '" + info + "', " + mark + ", " + elId + ", " + judId + ");";
-                //change saved flag
-                elVal.setSaved(true);
-            } else {
-                query = "UPDATE ALL_RESULTS_ELEMENTS SET Base = " + base +
-                        ", Info = '" + info + "', Mark = " + mark +
-                        " WHERE IDcompetitionPerformanceAthleteLink = " +
-                        isuComModel.getCIAR().getCompetitionAthlId() +
-                        " AND IDisuElement = " + elId + " AND IDjudge = " + judId + ";";
-            }
+            query = "UPDATE ALL_RESULTS_ELEMENTS SET Base = " + base +
+                    ", Info = '" + info + "', Mark = " + mark +
+                    " WHERE IDcompetitionPerformanceAthleteLink = " +
+                    isuComModel.getCIAR().getCompetitionAthlId() +
+                    " AND IDisuElement = " + elId + " AND IDjudge = " + judId + ";";
             System.out.println(query);
             prst = isuComModel.getDBC().prepareStatement(query);
             prst.execute();
@@ -391,6 +384,28 @@ public class ElementRow extends JPanel {
             CommonSettings.settingFontBold30(c);
             c.setEnabled(value);
             c.setForeground(Color.WHITE);
+        }
+    }
+
+    private void addToDBElementWithNullMarks(Athlete athlete, ElementIsu elementIsu) {
+        String query;
+        PreparedStatement prst = null;
+        for (ElementValue elemValue : elementIsu.getJudgesValues().values()) {
+            elemValue.setMark(null);
+            query = "INSERT INTO ALL_RESULTS_ELEMENTS VALUES ( " +
+                    isuComModel.getCIARS().get(athlete.getId()).getCompetitionAthlId() + ", " +
+                    elementIsu.getBaseValue() + ", " +
+                    "\'\'" + ", " + //info
+                    null + ", " + //mark
+                    elementIsu.getElementId() + ", " +
+                    elemValue.getJudgeId() + ");";
+            System.out.println(query);
+            try {
+                prst = isuComModel.getDBC().prepareStatement(query);
+                prst.execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
