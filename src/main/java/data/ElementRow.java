@@ -234,13 +234,14 @@ public class ElementRow extends JPanel {
             info.addItem(nameOfInfo);
             info.setSelectedItem(nameOfInfo);
             return;
+        } else {
+            info.setSelectedItem(null);
         }
 
-        info.setSelectedItem(null);
         info.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                getElementIsu().setInfo((String) info.getSelectedItem());
+                elementIsu.setInfo((String) info.getSelectedItem());
             }
         });
     }

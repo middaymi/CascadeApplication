@@ -53,7 +53,7 @@ public class FinishComByAthlete implements ActionListener {
                 for (ComponentRow compRow : comRows) {
                     compRow.setEnabledCompRowComponents(false);
                 }
-                //singleComPage.setEditableTopPnl(false);
+                singleComPage.setEditableTopPnl(false);
                 singleComPage.enableAddElemBtn(false);
                 singleComPage.enableFinBtn(false);
 
