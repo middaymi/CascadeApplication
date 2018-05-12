@@ -39,7 +39,6 @@ public class SetAthlete implements ActionListener {
             HashMap<Integer, CompetitionIsuAthleteResult> CIARS = isuComModel.getCIARS();
             isuComModel.setCIAR(CIARS.get(athlete.getId()));
 
-            // stCIARS.get(athlete.getId())art number
             if (CIARS.get(athlete.getId()).getStartNumber() == 0) {
                 CIARS.get(athlete.getId()).setStartNumber(isuComModel.getStartNumber());
             }
@@ -81,6 +80,7 @@ public class SetAthlete implements ActionListener {
             if (isuComModel.isFinishedCompetitionForAthlete(athlete.getId())) {
                 activateEditBtns = false;
                 isuComModel.setMode(1);
+                singleComPage.setEditableTopPnl(activateEditBtns);
 
                 //to do not editable components
                 for (ComponentRow row : singleComPage.getCompRows()) {
