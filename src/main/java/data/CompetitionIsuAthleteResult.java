@@ -59,7 +59,7 @@ public class CompetitionIsuAthleteResult {
         }
         
         // calculate total
-        totalScore = elementScore + componentScore - deductions; 
+        totalScore = elementScore + componentScore - Math.abs(deductions);
         totalScore = Math.round(totalScore * 100.0f) / 100.0f;
     }
     
