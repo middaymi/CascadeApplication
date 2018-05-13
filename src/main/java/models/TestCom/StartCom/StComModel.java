@@ -211,8 +211,6 @@ import static utils.Layout.calcH;
         }
     }
 
-    public void setAllDataForFinishedCompetition() {
-    }
     
     //athlets***
     /*get athletes, TAKING PART IN COMPETITION from DB
@@ -483,7 +481,7 @@ import static utils.Layout.calcH;
                                  "AND IDisuElement = " +
                                   field.getData().getElementId() + "), " +
                                   field.getData().getAthleteId() + ", " +
-                                  field.getData().getValue() + ", " + judgeId + ");";
+                                  field.getData().getValue() + ", " + judgeId + ", 0);";
                                                 
                 System.out.println(query);
                 prst = DBC.prepareStatement(query);
