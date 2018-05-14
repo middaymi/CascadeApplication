@@ -209,7 +209,9 @@ public class ElementRow extends JPanel {
 
                     //get element link
                     ElementData selElement = ((ElementData) (elementCmb.getSelectedItem()));
-                    addToDBElementWithNullMarks((Athlete) singleComPage.getAthlCmb().getSelectedItem(), elementIsu, selElement.getId());
+
+                    //get prevElementId
+                    int prevElemId = elementIsu.getElementId();
 
                     //setElementId to ElementIsu
                     elementIsu.setElementId(selElement.getId());
@@ -221,7 +223,7 @@ public class ElementRow extends JPanel {
                     base.setText("");
                     base.setText(String.valueOf(((ElementData) elementCmb.
                             getSelectedItem()).getBase()));
-
+                    addToDBElementWithNullMarks((Athlete) singleComPage.getAthlCmb().getSelectedItem(), elementIsu, prevElemId);
                 }
             }
         });
@@ -394,10 +396,11 @@ public class ElementRow extends JPanel {
         }
     }
 
-    private void addToDBElementWithNullMarks(Athlete athlete, ElementIsu elementIsu, int elemId) {
+    private void addToDBElementWithNullMarks(Athlete athlete, ElementIsu elementIsu, int prevElemId) {
         String query = "";
         PreparedStatement prst = null;
         String insert = "";
+        boolean elementsWasDeleted = false;
 
         for (ElementValue elemValue : elementIsu.getJudgesValues().values()) {
             insert = " INSERT INTO ALL_RESULTS_ELEMENTS VALUES (" +
@@ -405,18 +408,30 @@ public class ElementRow extends JPanel {
                     elementIsu.getBaseValue() + ", " +
                     "\'\'" + ", " + //info
                     null + ", " + //mark
-                    elemId + ", " +
+                    elementIsu.getElementId() + ", " + //newId
                     elemValue.getJudgeId() + "); ";
 
             if (elementIsu.isSaved()) {
-                query = "DELETE FROM ALL_RESULTS_ELEMENTS WHERE IDcompetitionPerformanceAthleteLink = "
-                        + isuComModel.getCIARS().get(athlete.getId()).getCompetitionAthlId() +
-                        " AND IDisuElement = " + elementIsu.getElementId() + ";" +
-                        insert;
+                if (!elementsWasDeleted) {
+                    query = "DELETE FROM ALL_RESULTS_ELEMENTS WHERE IDcompetitionPerformanceAthleteLink = "
+                            + isuComModel.getCIARS().get(athlete.getId()).getCompetitionAthlId() +
+                            " AND IDisuElement = " + prevElemId + ";" +
+                            insert;
+                    elementsWasDeleted = true;
+                } else {
+                    query = insert;
+                }
             } else {
                 query = insert;
             }
+
             System.out.println(query);
+            try {
+                prst = isuComModel.getDBC().prepareStatement(query);
+                prst.execute();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
         }
         //clear marks on gui and in data
         for (ElementRow row : singleComPage.getElRows()) {
@@ -431,13 +446,8 @@ public class ElementRow extends JPanel {
             }
         }
         elementIsu.setSaved(true);
-        try {
-            prst = isuComModel.getDBC().prepareStatement(query);
-            prst.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
+
 
 
     public ArrayList<JComboBox> getJudgeMarks() {
