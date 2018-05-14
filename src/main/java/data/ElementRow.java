@@ -241,7 +241,6 @@ public class ElementRow extends JPanel {
         if (!nameOfInfo.equals("")) {
             info.addItem(nameOfInfo);
             info.setSelectedItem(nameOfInfo);
-            return;
         } else {
             info.setSelectedItem(null);
         }
@@ -249,9 +248,26 @@ public class ElementRow extends JPanel {
         info.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                elementIsu.setInfo((String) info.getSelectedItem());
+                    String infoVal = (String) info.getSelectedItem();
+                    elementIsu.setInfo(infoVal);
+                    addInfoToDB(infoVal);
             }
         });
+    }
+
+    private void addInfoToDB(String infoVal) {
+        String query = String.format("UPDATE ALL_RESULTS_ELEMENTS SET INFO = '%s' WHERE IDcompetitionPerformanceAthleteLink = %d and IDisuElement = %d",
+                infoVal,
+                isuComModel.getCIARS().get(((Athlete) singleComPage.getAthlCmb().getSelectedItem()).getId()).getCompetitionAthlId(),
+                elementIsu.getElementId());
+        PreparedStatement prst = null;
+        try {
+            prst = isuComModel.getDBC().prepareStatement(query);
+            prst.execute();
+            System.out.println(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void createBase() {
@@ -365,18 +381,6 @@ public class ElementRow extends JPanel {
         }
     }
 
-    public JLabel getScore() {
-        return score;
-    }
-
-    public void setScoreText(String score) {
-        this.score.setText(score);
-    }
-
-    public ElementIsu getElementIsu() {
-        return elementIsu;
-    }
-
     //setEnabled fields
     public void setEnabledElRowComponents(boolean value) {
         ArrayList<JComponent> fields = new ArrayList<>();
@@ -449,6 +453,17 @@ public class ElementRow extends JPanel {
     }
 
 
+    public JLabel getScore() {
+        return score;
+    }
+
+    public void setScoreText(String score) {
+        this.score.setText(score);
+    }
+
+    public ElementIsu getElementIsu() {
+        return elementIsu;
+    }
 
     public ArrayList<JComboBox> getJudgeMarks() {
         return judgeMarks;
