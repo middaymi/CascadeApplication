@@ -39,6 +39,7 @@ public class IsuComModel extends StComModel {
     private HashMap<Integer, CompetitionIsuAthleteResult> CIARS = new HashMap<>();
 
     private static boolean doNothingWithListenersFlag = false;
+    public boolean isDeductionSaved = false;
 
     private IsuComModel() {
     }
@@ -54,8 +55,8 @@ public class IsuComModel extends StComModel {
 
     public boolean isFinishedCompetitionForAthlete(int athleteID) {
         //if finished = true(1)
-        String query = String.format("select * from RESULT where RESULT.IDathlete = %d and RESULT.IDcompetition = %d",
-                athleteID, competition.getId());
+        String query = String.format("select isFinished from COMPETITION_PERFORMANCE_ATHLETE_LINK where IDcompetition = %d and IDathlete = %d",
+                competition.getId(), athleteID);
 
         PreparedStatement prst = null;
         ResultSet rs = null;
@@ -65,7 +66,7 @@ public class IsuComModel extends StComModel {
             rs = prst.executeQuery();
 
             if (rs.next()) {
-                return true;
+                return rs.getBoolean(1);
             }
         } catch (SQLException ex) {
             ex.getStackTrace();
@@ -747,7 +748,26 @@ public class IsuComModel extends StComModel {
         doNothingWithListenersFlag = true;
     }
 
-    public static void downDoNothingWithListenersFlag() {
-        doNothingWithListenersFlag = false;
+    public static void downDoNothingWithListenersFlag() { doNothingWithListenersFlag = false; }
+
+    public void setDeductionSaved(boolean value) { isDeductionSaved = value; }
+
+    public boolean isDeductionSaved() {
+        String query = String.format("select ID from RESULT where RESULT.IDathlete = %d and RESULT.IDcompetition = %d",
+                ((Athlete)singleComPage.getAthlCmb().getSelectedItem()).getId(), competition.getId());
+
+        try {
+            PreparedStatement prst = getDBC().prepareStatement(query);
+            ResultSet rs = prst.executeQuery();
+
+            if (rs.next()) {
+                return true;
+            }
+            prst.close();
+            rs.close();
+        } catch (SQLException ex) {
+            ex.getStackTrace();
+        }
+        return false;
     }
 }

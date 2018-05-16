@@ -122,11 +122,20 @@ public class FinishComByAthlete implements ActionListener {
         String query = null;
         PreparedStatement prst = null;
         try {
+            if (!isuComModel.isDeductionSaved()) {
             query = "INSERT INTO RESULT VALUES ( " +
                     IDcompetition + ", " + IDathlete + ", null, " +
                     sumResult + ", " + isDone + ", " + startNumber + ", " +
                     sumOfAllElements + ", " + sumOfAllComponents + ", " +
                     deductions + ", null, null);";
+            } else {
+                query = "UPDATE RESULT SET " +
+                        "SumResult = " + sumResult + ", " +
+                        "isDone = " + isDone + ", " +
+                        "SumOfAllElements = " + sumOfAllElements + ", " +
+                        "SumOfAllComponents = " + sumOfAllComponents + ";";
+            }
+
             System.out.println(query);
             prst = isuComModel.getDBC().prepareStatement(query);
             prst.execute();
