@@ -15,20 +15,27 @@ public class PointsTable {
         if (points == 0) return 0;
         return (points - 1) / 5 + 2;
     }
-        
+
     public int getPoints(boolean sex, int age, Float value) {
         if (value == null) {
             return -1;
-        } else {         
+        } else {
             for (PointsRow row : getTable()) {
-                if (row.isSex() == sex && row.getAge() == age) { 
+                if (row.isSex() == sex && row.getAge() == age) {
                     float min = row.getMin();
                     float max = row.getMax();
-                    
-                    float minMin = (min < max) ? min : max;
 
-                    if (value < minMin) {
-                        return 0;
+                    float minMin = (min < max) ? min : max;
+                    float maxMax = (min < max) ? max : min;
+
+                    if (min < max) {
+                        if (value < minMin) {
+                            return 0;
+                        }
+                    } else {
+                        if (value > maxMax) {
+                            return 0;
+                        }
                     }
 
                     float step = Math.abs(max - min) / 20;
