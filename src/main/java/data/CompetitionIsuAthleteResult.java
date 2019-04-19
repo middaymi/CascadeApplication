@@ -65,7 +65,7 @@ public class CompetitionIsuAthleteResult {
     
     public void checkRank(HashMap<Integer, ElementData> elements, int rank) {
         // check rank        
-        isDone = RankCalculation.calculateRankExecution(elementsList, elements, rank);
+        isDone = RankCalculation.calculateRankExecutionV2019(elementsList, elements, rank, elementScore);
     }
    
     public Athlete getAthlete() {
