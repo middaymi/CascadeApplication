@@ -6,6 +6,7 @@ import java.util.HashMap;
 public class RankCalculation {
 
     private static final int THRESHOLD = -1;
+    private static final int THRESHOLD_V2019 = -2;
 
     public static boolean calculateRankExecution(ArrayList<ElementIsu> elementsList, HashMap<Integer, ElementData> elements, int rank) {
 
@@ -159,6 +160,93 @@ public class RankCalculation {
                 break;
             }
             */
+        }
+
+        return result;
+    }
+
+    /**
+     * @rank - разряд
+     * 0 - Норма "Юный фигурист"
+     * 1 - 3 юношеский спортивный разряд
+     * 2 - 2 юношеский спортивный разряд
+     * 3 - 1 юношеский спортивный разряд
+     * 4 - 2 спортивный разряд
+     * 5 - 1 спортивный разряд
+     * 6 - КМС
+     * 7 - 3 спортивный разряд
+     */
+    public static boolean calculateRankExecutionV2019(ArrayList<ElementIsu> elementsList, HashMap<Integer, ElementData> elements, int rank, float elementScore) {
+
+        boolean result = false;
+        int rankLimit = 0;
+
+        switch(rank) {
+            // Юный фигурист (средняя оценка не меньше -2)
+            case 0: {
+                ArrayList<ArrayList<IsuElementValue>> valuesList = new ArrayList<ArrayList<IsuElementValue>>();
+                for (ElementIsu element: elementsList) {
+                    ArrayList<IsuElementValue> values = new ArrayList<>();
+                    ElementData el = elements.get(element.getElementId());
+                    for (ElementValue val : element.getJudgesValues().values()) {
+                        IsuElementValue isuValue = new IsuElementValue();
+                        isuValue.setMark(val.getMark());
+                        isuValue.setElement(el);
+                        values.add(isuValue);
+                    }
+                    valuesList.add(values);
+                }
+
+                int sum = 0;
+                for (ArrayList<IsuElementValue> values : valuesList) {
+                    for (IsuElementValue value : values) {
+                        sum += value.getMark();
+                    }
+                }
+                double average = 1.0 * sum / (valuesList.size() * valuesList.get(0).size());
+                if (average < THRESHOLD_V2019) result = false;
+
+                break;
+            }
+            // 3 юношеский (сумма за технику не меньше 7)
+            case 1: {
+                rankLimit = 7;
+                result = elementScore >= rankLimit;
+                break;
+            }
+            // 2 юношеский (сумма за технику не меньше 11)
+            case 2: {
+                rankLimit = 11;
+                result = elementScore >= rankLimit;
+                break;
+            }
+            // 1 юношеский (сумма за технику не меньше 13)
+            case 3: {
+                rankLimit = 13;
+                result = elementScore >= rankLimit;
+                break;
+            }
+//            // 2 спортивный (сумма за технику не меньше 13/19 )
+//            case 4: {
+//
+//                break;
+//            }
+//            // 1 спортивный (сумма за технику не меньше 19/30)
+//            case 5: {
+//
+//                break;
+//            }
+//            // КМС (сумма за технику не меньше )
+//            case 6: {
+//
+//                break;
+//            }
+            // 3 спортивный (сумма за технику не меньше 16)
+            case 7: {
+                rankLimit = 16;
+                result = elementScore >= rankLimit;
+                break;
+            }
         }
 
         return result;
