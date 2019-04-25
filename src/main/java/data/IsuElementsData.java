@@ -122,7 +122,13 @@ public class IsuElementsData {
         float offset = 0;
         
         switch (mark) {
-            case -3: 
+            case -5:
+                offset = element.getValueMinus5();
+                break;
+            case -4:
+                offset = element.getValueMinus4();
+                break;
+            case -3:
                 offset = element.getValueMinus3();
                 break;
             case -2: 
@@ -134,12 +140,18 @@ public class IsuElementsData {
             case 1: 
                 offset = element.getValuePlus1();
                 break;
-            case 2: 
+            case 2:
                 offset = element.getValuePlus2();
                 break;
-            case 3: 
+            case 3:
                 offset = element.getValuePlus3();
-                break;                
+                break;
+            case 4:
+                offset = element.getValuePlus4();
+                break;
+            case 5:
+                offset = element.getValuePlus5();
+                break;
         }
         
         return base + offset;        
