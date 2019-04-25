@@ -25,6 +25,8 @@ public class IsuElementsData {
         infoValues.add("x !");
         infoValues.add("x e");
         
+        goe.add("-5");
+        goe.add("-4");
         goe.add("-3");
         goe.add("-2");
         goe.add("-1");
@@ -32,7 +34,9 @@ public class IsuElementsData {
         goe.add("+1");
         goe.add("+2");
         goe.add("+3");
-        
+        goe.add("+4");
+        goe.add("+5");
+
         factor.put(1, 1.2f);
         factor.put(2, 1.5f);
         factor.put(3, 1.6f);
