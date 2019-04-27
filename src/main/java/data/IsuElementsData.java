@@ -24,6 +24,7 @@ public class IsuElementsData {
         infoValues.add("x <<");
         infoValues.add("x !");
         infoValues.add("x e");
+        infoValues.add("+REP");
         
         goe.add("-5");
         goe.add("-4");
@@ -62,61 +63,48 @@ public class IsuElementsData {
         return goe;
     }
     
-    public static float getElementBase(Integer elementId, String info) {
+    public static ElementData getElementBase(Integer elementId, String info) {
+
         ElementData element = data.get(elementId);
-        
+        ElementData elementRes = null;
+
         // calculate base
-        float base = element.getBase();                
-        
+//        float base = element.getBase();
+
+        // Заменить по правилам ИСУ смену базы + уточнить *1.1
         if (info.equals("<")) {
-            base = element.getBaseV();
+            elementRes = data.get(element.getBaseV());
         } else if (info.equals("<<")) {
-            Integer lowId = element.getBaseV2();
-            element = data.get(lowId);
-            base = element.getBase();            
+            elementRes = data.get(element.getBaseV2());
         } else if (info.equals("e")) {
-            base = element.getBaseV();
+            elementRes = data.get(element.getBaseV());
         } else if (info.equals("!")) {
-            base = element.getBase();
+            // save element
         } else if (info.equals("< e")) {
-            base = element.getBaseV1();
+            elementRes = data.get(element.getBaseV1());
         } else if (info.equals("V")) {
-            base = element.getBaseV();
+            elementRes = data.get(element.getBaseV());
         } else if (info.equals("<< e")) {
-            Integer lowId = element.getBaseV2();
-            element = data.get(lowId);
-            base = element.getBaseV();
-        } else if (info.equals("x") && element.getElementTypeId() == 1) {
-            base = 1.1f * element.getBase();  
-        } else if (info.equals("x <") && element.getElementTypeId() == 1) {
-            base = 1.1f * element.getBaseV();  
-        } else if (info.equals("x <<") && element.getElementTypeId() == 1) {
-            Integer lowId = element.getBaseV2();
-            element = data.get(lowId);            
-            base = 1.1f * element.getBase();  
-        } else if (info.equals("x !") && element.getElementTypeId() == 1) {
-            base = 1.1f * element.getBase();  
-        } else if (info.equals("x e") && element.getElementTypeId() == 1) {
-            base = 1.1f * element.getBaseV1();  
+            Integer idElement = data.get(element.getBaseV2()).getBaseV();
+            if (idElement != 0) elementRes = data.get(idElement);
         }
-        return base;
+
+        if (elementRes != null) {
+            element = elementRes;
+        }
+
+        return element;
     }
-    
+
     public static float getElementValue(Integer elementId, String info, int mark) {
          
         if (elementId <= 6 && (info.contains("<<"))) {
             return 0;
         }
         
-        ElementData element = data.get(elementId);
-        
-        // get base
-        float base = getElementBase(elementId, info);
-        
-        if (info.contains("<<")) {
-            Integer lowId = element.getBaseV2();
-            element = data.get(lowId);
-        }
+        ElementData element = getElementBase(elementId, info);
+
+        float base = element.getBase();
         
         //calculate offset
         float offset = 0;
@@ -153,7 +141,14 @@ public class IsuElementsData {
                 offset = element.getValuePlus5();
                 break;
         }
-        
+
+        if (info.equals("+REP")) {
+            base = base * 0.7f;
+        }
+        else if (info.contains("x") && element.getElementTypeId() == 1) {
+            base = 1.1f * element.getBase();
+        }
+
         return base + offset;        
     }
 }

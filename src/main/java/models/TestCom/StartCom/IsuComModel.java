@@ -253,7 +253,8 @@ public class IsuComModel extends StComModel {
         PreparedStatement prst = null;
         ResultSet rs = null;
         try {
-            query = "SELECT * FROM ISU_ELEMENT";
+//            query = "SELECT * FROM ISU_ELEMENT";
+            query = "SELECT * FROM ISU_ELEMENT_2018";
             prst = getDBC().prepareStatement(query);
             rs = prst.executeQuery();
             while (rs.next()) {
@@ -268,8 +269,8 @@ public class IsuComModel extends StComModel {
                 element.setValuePlus2(rs.getFloat(8));
                 element.setValuePlus1(rs.getFloat(9));
                 element.setBase(rs.getFloat(10));
-                element.setBaseV(rs.getFloat(11));
-                element.setBaseV1(rs.getFloat(12));
+                element.setBaseV(rs.getInt(11));
+                element.setBaseV1(rs.getInt(12));
                 element.setBaseV2(rs.getInt(13));
                 element.setValueMinus1(rs.getFloat(14));
                 element.setValueMinus2(rs.getFloat(15));
@@ -562,12 +563,20 @@ public class IsuComModel extends StComModel {
         float score;
         int elementNumber = 1;
 
+//        String withMarks = String.format("select IDType, IDisuElement, Info, Base, IDjudge, Mark " +
+//                "from (select IDcompetitionPerformanceAthleteLink, Base, Info, Mark, IDjudge, IDcompetition, IDathlete, IDisuElement " +
+//                "from ALL_RESULTS_ELEMENTS as ARE " +
+//                "join COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL on ARE.IDcompetitionPerformanceAthleteLink = CPAL.ID " +
+//                "where CPAL.IDcompetition = %d and IDathlete = %d) as tech " +
+//                "join (select E.FullNameRUS, E.Abbreviation, T.ID as IDType, T.FullName, E.ID from ISU_ELEMENT as E join ISU_ELEMENT_TYPE as T on E.IDelementType = T.ID) as elem " +
+//                "on tech.IDisuElement = elem.ID", competition.getId(), IDathlete);
+
         String withMarks = String.format("select IDType, IDisuElement, Info, Base, IDjudge, Mark " +
                 "from (select IDcompetitionPerformanceAthleteLink, Base, Info, Mark, IDjudge, IDcompetition, IDathlete, IDisuElement " +
                 "from ALL_RESULTS_ELEMENTS as ARE " +
                 "join COMPETITION_PERFORMANCE_ATHLETE_LINK as CPAL on ARE.IDcompetitionPerformanceAthleteLink = CPAL.ID " +
                 "where CPAL.IDcompetition = %d and IDathlete = %d) as tech " +
-                "join (select E.FullNameRUS, E.Abbreviation, T.ID as IDType, T.FullName, E.ID from ISU_ELEMENT as E join ISU_ELEMENT_TYPE as T on E.IDelementType = T.ID) as elem " +
+                "join (select E.FullNameRUS, E.Abbreviation, T.ID as IDType, T.FullName, E.ID from ISU_ELEMENT_2018 as E join ISU_ELEMENT_TYPE as T on E.IDelementType = T.ID) as elem " +
                 "on tech.IDisuElement = elem.ID", competition.getId(), IDathlete);
         try {
             System.out.println(withMarks);

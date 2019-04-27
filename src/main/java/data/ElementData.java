@@ -1,16 +1,16 @@
 package data;
 
 public class ElementData {
-    private int id;				
+    private Integer id;
     private int elementTypeId;
     private String fullNameEng;
     private String fullNameRus;
     private String abbreviation;
     private int level;
     private float base;	
-    private float baseV;	
-    private float baseV1;
-    private int baseV2;	
+    private Integer baseV;
+    private Integer baseV1;
+    private Integer baseV2;
     private float valuePlus1;	
     private float valuePlus2;
     private float valuePlus3;
@@ -78,19 +78,19 @@ public class ElementData {
         this.base = base;
     }
 
-    public float getBaseV() {
+    public int getBaseV() {
         return baseV;
     }
 
-    public void setBaseV(float baseV) {
+    public void setBaseV(int baseV) {
         this.baseV = baseV;
     }
 
-    public float getBaseV1() {
+    public int getBaseV1() {
         return baseV1;
     }
 
-    public void setBaseV1(float baseV1) {
+    public void setBaseV1(int baseV1) {
         this.baseV1 = baseV1;
     }
 
