@@ -45,6 +45,7 @@ public class IsuElementsData {
         factor.put(5, 1.8f);
         factor.put(6, 1.6f);
         factor.put(7, 1.6f);                             
+        factor.put(8, 1.8f);
     }
     
     public static void setData(HashMap<Integer, ElementData> elData) {
