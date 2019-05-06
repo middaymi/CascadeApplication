@@ -1,22 +1,26 @@
 package data;
 
 public class ElementData {
-    private int id;				
+    private Integer id;
     private int elementTypeId;
     private String fullNameEng;
     private String fullNameRus;
     private String abbreviation;
     private int level;
     private float base;	
-    private float baseV;	
-    private float baseV1;
-    private int baseV2;	
+    private Integer baseV;
+    private Integer baseV1;
+    private Integer baseV2;
     private float valuePlus1;	
     private float valuePlus2;
     private float valuePlus3;
+    private float valuePlus4;
+    private float valuePlus5;
     private float valueMinus1;
     private float valueMinus2;
     private float valueMinus3;
+    private float valueMinus4;
+    private float valueMinus5;
 
     public int getId() {
         return id;
@@ -74,19 +78,19 @@ public class ElementData {
         this.base = base;
     }
 
-    public float getBaseV() {
+    public int getBaseV() {
         return baseV;
     }
 
-    public void setBaseV(float baseV) {
+    public void setBaseV(int baseV) {
         this.baseV = baseV;
     }
 
-    public float getBaseV1() {
+    public int getBaseV1() {
         return baseV1;
     }
 
-    public void setBaseV1(float baseV1) {
+    public void setBaseV1(int baseV1) {
         this.baseV1 = baseV1;
     }
 
@@ -122,6 +126,22 @@ public class ElementData {
         this.valuePlus3 = valuePlus3;
     }
 
+    public float getValuePlus4() {
+        return valuePlus4;
+    }
+
+    public void setValuePlus4(float valuePlus4) {
+        this.valuePlus4 = valuePlus4;
+    }
+
+    public float getValuePlus5() {
+        return valuePlus5;
+    }
+
+    public void setValuePlus5(float valuePlus5) {
+        this.valuePlus5 = valuePlus5;
+    }
+
     public float getValueMinus1() {
         return valueMinus1;
     }
@@ -145,7 +165,22 @@ public class ElementData {
     public void setValueMinus3(float valueMinus3) {
         this.valueMinus3 = valueMinus3;
     }
-        
+
+    public float getValueMinus4() {
+        return valueMinus4;
+    }
+
+    public void setValueMinus4(float valueMinus4) {
+        this.valueMinus4 = valueMinus4;
+    }
+
+    public float getValueMinus5() {
+        return valueMinus5;
+    }
+
+    public void setValueMinus5(float valueMinus5) {
+        this.valueMinus5 = valueMinus5;
+    }
     @Override
     public String toString() {
         return this.fullNameRus + " (" + this.abbreviation + ")";
