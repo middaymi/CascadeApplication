@@ -275,6 +275,10 @@ public class IsuComModel extends StComModel {
                 element.setValueMinus1(rs.getFloat(14));
                 element.setValueMinus2(rs.getFloat(15));
                 element.setValueMinus3(rs.getFloat(16));
+                element.setValuePlus4(rs.getFloat(17));
+                element.setValuePlus5(rs.getFloat(18));
+                element.setValueMinus4(rs.getFloat(19));
+                element.setValueMinus5(rs.getFloat(20));
                 allElements.put(element.getId(), element);
             }
             IsuElementsData.setData(allElements);
