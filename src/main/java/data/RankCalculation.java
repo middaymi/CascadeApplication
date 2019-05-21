@@ -204,7 +204,13 @@ public class RankCalculation {
                     }
                 }
                 double average = 1.0 * sum / (valuesList.size() * valuesList.get(0).size());
-                if (average < THRESHOLD_V2019) result = false;
+                if (average < THRESHOLD_V2019) {
+                    result = false;
+                }
+                else {
+                    result = true;
+                }
+
 
                 break;
             }
